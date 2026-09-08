@@ -47,6 +47,7 @@ CREATE EXTENSION IF NOT EXISTS "vector";
 
 -- Enums
 CREATE TYPE user_role AS ENUM ('student', 'recruiter', 'admin');
+CREATE TYPE recruiter_verification_status AS ENUM ('none', 'pending', 'approved', 'rejected');
 CREATE TYPE league_tier AS ('bronze', 'silver', 'gold', 'llm_master', 'ai_architect');
 CREATE TYPE module_track AS ('gen_ai', 'machine_learning', 'deep_learning', 'nlp', 'computer_vision');
 CREATE TYPE module_status AS ('not_started', 'in_progress', 'completed');
@@ -69,6 +70,11 @@ CREATE TABLE public.profiles (
     region TEXT DEFAULT 'India',
     college_or_company TEXT,
     is_verified BOOLEAN DEFAULT FALSE,
+    verification_status recruiter_verification_status DEFAULT 'none',
+    work_email TEXT,
+    company_website TEXT,
+    recruiter_designation TEXT,
+    verified_at TIMESTAMPTZ,
     fcm_token TEXT,
     default_mobile_landing_page TEXT NOT NULL DEFAULT 'feed', -- 'feed', 'dashboard', 'coach', 'league'
     default_web_landing_page TEXT NOT NULL DEFAULT 'dashboard', -- 'feed', 'dashboard', 'coach', 'league'
@@ -388,6 +394,8 @@ ALTER TABLE public.job_applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.feed_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.feed_post_quizzes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.feed_user_interactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.resume_evaluations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.job_postings ENABLE ROW LEVEL SECURITY;
 
 -- Feed Posts & Quizzes: Publicly readable by all users
 CREATE POLICY "Anyone can view feed posts" ON public.feed_posts FOR SELECT USING (true);
@@ -416,6 +424,32 @@ ON public.ai_report_cards FOR SELECT USING (true);
 CREATE POLICY "Students manage their own coach submissions" 
 ON public.daily_coach_submissions FOR ALL USING (auth.uid() = student_id);
 
+-- Resumes: Candidate views own; ONLY APPROVED recruiters can view candidates
+CREATE POLICY "Strict Candidate Resume Access Control" 
+ON public.resume_evaluations FOR SELECT USING (
+    auth.uid() = user_id OR
+    EXISTS (
+        SELECT 1 FROM public.profiles 
+        WHERE id = auth.uid() 
+          AND role = 'recruiter' 
+          AND verification_status = 'approved'
+    )
+);
+
+-- Job Postings: Public can view active jobs; ONLY APPROVED recruiters can create/edit jobs
+CREATE POLICY "Public views active jobs" 
+ON public.job_postings FOR SELECT USING (is_active = true);
+
+CREATE POLICY "Only approved recruiters can manage jobs" 
+ON public.job_postings FOR ALL USING (
+    EXISTS (
+        SELECT 1 FROM public.profiles 
+        WHERE id = auth.uid() 
+          AND role = 'recruiter' 
+          AND verification_status = 'approved'
+    )
+);
+
 -- Job Applications: Recruiter or applicant student can view
 CREATE POLICY "Recruiters and Applicants can view job applications" 
 ON public.job_applications FOR SELECT USING (
@@ -432,12 +466,16 @@ ON public.job_applications FOR SELECT USING (
 ```sql
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+    user_email_prefix TEXT;
 BEGIN
+    user_email_prefix := SPLIT_PART(COALESCE(NEW.email, 'user'), '@', 1);
+
     INSERT INTO public.profiles (id, full_name, username, role, avatar_url)
     VALUES (
         NEW.id,
-        COALESCE(NEW.raw_user_meta_data->>'full_name', 'AIgnite Scholar'),
-        COALESCE(NEW.raw_user_meta_data->>'username', 'user_' || SUBSTRING(NEW.id::text, 1, 8)),
+        COALESCE(NEW.raw_user_meta_data->>'full_name', user_email_prefix),
+        COALESCE(NEW.raw_user_meta_data->>'username', user_email_prefix || '_' || SUBSTRING(NEW.id::text, 1, 4)),
         COALESCE((NEW.raw_user_meta_data->>'role')::user_role, 'student'),
         NEW.raw_user_meta_data->>'avatar_url'
     );
@@ -559,6 +597,11 @@ export const profiles = pgTable('profiles', {
   region: text('region').default('India'),
   collegeOrCompany: text('college_or_company'),
   isVerified: boolean('is_verified').default(false),
+  verificationStatus: text('verification_status', { enum: ['none', 'pending', 'approved', 'rejected'] }).default('none'),
+  workEmail: text('work_email'),
+  companyWebsite: text('company_website'),
+  recruiterDesignation: text('recruiter_designation'),
+  verifiedAt: timestamp('verified_at', { withTimezone: true }),
   fcmToken: text('fcm_token'),
   defaultMobileLandingPage: text('default_mobile_landing_page').default('feed').notNull(),
   defaultWebLandingPage: text('default_web_landing_page').default('dashboard').notNull(),

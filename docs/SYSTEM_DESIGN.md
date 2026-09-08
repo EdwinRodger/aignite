@@ -60,9 +60,10 @@ graph TB
 ```text
 app/
 ├── (auth)/
-│   ├── login/page.tsx               # Unified Student/Recruiter login
-│   ├── register/page.tsx            # Role selection (Student vs. Recruiter)
-│   └── callback/route.ts            # Supabase OAuth token exchange
+│   ├── login/page.tsx               # Student Passwordless Email OTP request screen
+│   ├── verify-otp/page.tsx          # Student 6-digit OTP verification code screen
+│   ├── onboarding/page.tsx          # First-time student profile setup (University, Bio)
+│   └── callback/route.ts            # Supabase token exchange & session cookie handler
 ├── (public)/
 │   ├── page.tsx                     # Main Landing Page
 │   ├── resume-analyzer/page.tsx     # Public resume uploader & ATS preview
@@ -89,10 +90,17 @@ app/
 │       └── preferences/page.tsx     # Launch page settings (Feed vs Dashboard vs Coach)
 ├── (recruiter)/
 │   ├── recruiter/
-│   │   ├── dashboard/page.tsx       # Talent overview & pipeline stats
-│   │   ├── talent-pool/page.tsx     # Filterable list (by league, badge, report score)
-│   │   ├── candidate/[id]/page.tsx  # Detailed AI Report Card & Resume view
+│   │   ├── login/page.tsx           # Corporate Recruiter Login
+│   │   ├── apply/page.tsx           # Recruiter verification request form (Company work email)
+│   │   ├── pending/page.tsx         # Quarantine holding screen ("Application Under Review")
+│   │   ├── dashboard/page.tsx       # Talent overview & hiring pipeline stats (Approved only)
+│   │   ├── talent-pool/page.tsx     # Filterable candidate list (by league, badge, score)
+│   │   ├── candidate/[id]/page.tsx  # Detailed AI Report Card & Resume viewer
 │   │   └── jobs/page.tsx            # Job postings management
+├── (admin)/
+│   └── admin/
+│       ├── verifications/page.tsx   # Manual Recruiter Verification & Whitelisting Console
+│       └── metrics/page.tsx         # SIH system telemetry & abuse monitoring
 ├── api/                             # Internal proxy API routes
 │   ├── ai/evaluate-coach/route.ts   # Edge proxy for voice coach evaluation
 │   ├── ai/resume-analyze/route.ts   # Resume parsing endpoint
@@ -153,13 +161,48 @@ To support the requirement of instant micro-learning in 5-10 minute downtime poc
 
 ## 3. BaaS Architecture (Supabase)
 
-### 3.1. Authentication & Role-Based Access Control (RBAC)
-- Built on `supabase.auth`.
-- User Metadata contains `user_role`: `'student' | 'recruiter' | 'admin'`.
-- Next.js Middleware verifies the JWT cookie and routes:
-  - Unauthenticated users attempting to access `/dashboard` ➔ `/login`.
-  - Recruiters attempting to access student modules ➔ redirected to `/recruiter/dashboard`.
-  - Students attempting to access recruiter talent portal ➔ redirected to `/dashboard`.
+### 3.1. Authentication Architecture: Dual-Track Auth & Anti-Impersonation
+
+To prevent students from impersonating recruiters and accessing sensitive candidate resumes, AIgnite implements two completely isolated authentication pipelines:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Student as Student / Learner
+    actor Recruiter as Corporate Recruiter
+    participant Web as Next.js Web Client
+    participant Admin as Platform Admin
+    participant SupaAuth as Supabase Auth
+    participant DB as PostgreSQL (RLS Protected)
+
+    Note over Student,DB: Pipeline A: Student Instant Passwordless OTP
+    Student->>Web: Enters personal/college email on /login
+    Web->>SupaAuth: signInWithOtp({ email, options: { data: { role: 'student' } } })
+    SupaAuth-->>Student: Sends 6-digit verification code
+    Student->>Web: Inputs 6-digit OTP
+    Web->>SupaAuth: verifyOtp({ email, token, type: 'email' })
+    SupaAuth->>DB: Role assigned strictly as 'student' (cannot elevate)
+    Web-->>Student: Enters /feed or /dashboard
+
+    Note over Recruiter,DB: Pipeline B: Recruiter Corporate Gated Onboarding
+    Recruiter->>Web: Enters corporate email & company info on /recruiter/apply
+    Web->>Web: Edge check: Rejects @gmail, @yahoo, etc.
+    Web->>SupaAuth: Signs up with corporate email
+    SupaAuth->>DB: Inserts profile with role='recruiter', verification_status='pending'
+    Web-->>Recruiter: Redirects to /recruiter/pending ("Under Review")
+    Note over Recruiter,DB: Talent pool & resumes locked via PostgreSQL RLS
+    Admin->>Web: Reviews application on /admin/verifications
+    Admin->>DB: Sets verification_status='approved', is_verified=true
+    DB-->>Recruiter: Approval Email delivered; access to /recruiter/dashboard unlocked
+```
+
+#### Anti-Impersonation & Security Enforcements:
+1. **No Self-Selection**: Students cannot toggle their role to "Recruiter" in user settings or client state.
+2. **Database-Level Quarantine**:
+   - The PostgreSQL RLS policy on student profiles and resumes checks `auth.uid() IN (SELECT id FROM profiles WHERE role = 'recruiter' AND verification_status = 'approved')`.
+   - A compromised or forged client token with `role: 'recruiter'` will still fail because `verification_status` remains `'pending'` in the database.
+3. **Domain Whitelist / Blacklist Middleware**:
+   - `lib/auth/domainCheck.ts` intercepts recruiter submissions and blocks all public webmail providers.
 
 ### 3.2. Data Layer: The Supabase + Drizzle ORM Hybrid Pattern
 To achieve maximum type safety, sub-millisecond query execution, and rapid hackathon iteration, AIgnite implements a **Hybrid Data Access Pattern**:
@@ -368,3 +411,4 @@ Every component in the AIgnite technical stack is specifically selected to opera
 | **Mobile Shell** | React Native + Expo | 100% Open Source, free local EAS builds, Expo Go testing. | No developer fees required for testing on physical devices. |
 | **Vector DB** | PostgreSQL `pgvector` | Included free in Supabase PostgreSQL. | No need for paid Pinecone or Weaviate clusters. |
 | **AI News Sources** | ArXiv API & Hugging Face Papers | Open, free public APIs without authorization fees. | Daily batch cron pulls once every 24 hours. |
+| **Email OTP Delivery** | Resend Free Tier / Supabase Mailer | 3,000 free emails/mo (100 emails/day) via Resend or Supabase built-in SMTP. | Zero-cost OTP email delivery with instant delivery (<1s). |

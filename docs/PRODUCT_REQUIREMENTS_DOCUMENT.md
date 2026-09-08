@@ -58,6 +58,19 @@ Instead of charging for a single 100-hour generic course, AIgnite offers laser-t
 ### 3.5. Problem of the Day (POTD) Preview
 - Displays today's scenario question on the landing page to hook visitors into creating an account to maintain their streak.
 
+### 3.6. Dual-Track Authentication: Student Instant OTP vs. Recruiter Gated Access
+To prevent student impersonation and safeguard student privacy, AIgnite enforces a strict **Dual-Track Authentication Model**:
+- **Track 1: Students (Instant Passwordless Email OTP)**:
+  1. Student enters their personal/college email.
+  2. Supabase Auth dispatches a secure 6-digit OTP code.
+  3. Student enters OTP (with mobile autofill support) and immediately enters their learning feed or dashboard.
+  4. Students can **never** self-elevate to a recruiter role.
+- **Track 2: Recruiters (Corporate Domain + Manual Admin Verification)**:
+  1. Recruiters must enter through a dedicated portal (`/recruiter/apply` & `/recruiter/login`).
+  2. Free webmail domains (`@gmail.com`, `@yahoo.com`, `@outlook.com`) are strictly rejected.
+  3. All recruiter registrations enter a locked `pending_verification` state.
+  4. Platform admins manually vet company legitimacy before granting access to candidate resumes or job postings.
+
 ---
 
 ## 4. Student Learning Suite (Authenticated)
@@ -166,9 +179,26 @@ Non-fungible verified skill badges displayed on profile:
 
 ## 6. Recruiter Portal & B2B Talent Pipeline
 
-### 6.1. Recruiter Verification
-- Registration with work email and company domain verification.
-- Recruiter dashboard for talent scouting.
+### 6.1. Recruiter Anti-Impersonation & Manual Verification System
+- **Threat Model**: If recruiter registration were open to self-selection, students or unauthorized actors could pose as hiring managers to scrape peer student resumes, harvest personal phone numbers/emails, view private mock interview evaluations, or post fraudulent jobs.
+- **Strict Multi-Stage Gated Access**:
+  1. **Dedicated Corporate Portal**:
+     - Recruiters do not use the general `/login` screen. They must register via `/recruiter/apply`.
+  2. **Corporate Domain Whitelisting**:
+     - Automated validation rejects public email domains (`@gmail.com`, `@yahoo.com`, `@outlook.com`, `@hotmail.com`, `@proton.me`, disposable domains).
+     - Only valid company domain addresses (e.g. `hr@google.com`, `recruiter@zomato.com`) are accepted.
+  3. **Verification Application Submission**:
+     - Applicants submit: Company Legal Name, Official Website, Work Email, Recruiter Title/Designation, and Corporate LinkedIn Profile URL.
+  4. **Strict Sandbox / Quarantine Phase (`verification_status: 'pending'`)**:
+     - Newly registered accounts are held in a secure staging queue.
+     - While pending, **all student talent pools, resume downloads, and job posting permissions are locked at the database RLS layer**.
+     - Recruiter sees a transparent status portal: *"Application Under Review by AIgnite Trust & Safety Team"*.
+  5. **Manual Admin Vetting Console (`/admin/verifications`)**:
+     - Platform administrators review corporate email MX records and company credentials.
+     - With a single click, the Admin approves (`verification_status: 'approved'`) or rejects the account.
+  6. **Secure Login for Approved Recruiters**:
+     - Approved recruiters receive an activation notification and sign in securely to `/recruiter/dashboard`.
+     - Option for Admin to directly pre-provision verified recruiter accounts for partner companies during SIH demo.
 
 ### 6.2. Talent Discovery & Advanced Filtering
 Recruiters do not search through unvetted keywords; they filter through verified skill metrics:
@@ -197,6 +227,7 @@ AIgnite is engineered to run **completely free of cost** during development and 
 | **Mobile Runtime & Build** | **React Native + Expo Application Services (Free Tier)** | Open-source framework, local Android/iOS builds, free Expo Go testing. |
 | **Database Vector Search** | **PostgreSQL `pgvector`** | Bundled free inside Supabase without requiring external paid vector databases (like Pinecone). |
 | **ORM & Schema Migrations** | **Drizzle ORM (`drizzle-orm` + `drizzle-kit`)** | 100% Free, open-source TypeScript ORM with zero serverless cold-start overhead. |
+| **Email OTP Delivery** | **Resend Free Tier / Supabase SMTP** | 3,000 free transactional emails per month (100 emails/day), ensuring zero-cost OTP verification. |
 
 ---
 

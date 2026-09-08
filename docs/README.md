@@ -15,7 +15,8 @@ Unlike conventional platforms that dump 50+ hours of static video tutorials on g
 5. **Automated AI Assessments**: Multi-metric **AI Interview Report Cards** evaluating knowledge, confidence, communication, and industry readiness.
 6. **Direct Recruiter Pipeline**: Recruiter dashboard filtering talent based on verified badges, mock interview performance, and resume scoring.
 7. **100% Free-Tier Architecture**: Built completely on zero-cost tiers (Supabase Free, Gemini 2.0 Flash Free Tier, Vercel Free, Expo/React Native, Hugging Face/Groq Free APIs).
-8. **Cross-Platform Access**: Web application built on **Next.js** and mobile application implemented via **React Native WebView** with native hardware integration.
+8. **Friction-Free Passwordless Auth**: Instantaneous 6-digit Email OTP sign-in via Supabase Auth, eliminating passwords and supporting mobile keyboard autofill.
+9. **Cross-Platform Access**: Web application built on **Next.js** and mobile application implemented via **React Native WebView** with native hardware integration.
 
 ---
 
@@ -40,7 +41,7 @@ graph TD
     Drizzle["Drizzle ORM (Type-Safe Server Actions & Migrations)"]
     
     subgraph Supabase BaaS
-        Auth["Supabase Auth (OAuth / JWT / RBAC)"]
+        Auth["Supabase Auth (Passwordless Email OTP / RBAC)"]
         DB[("PostgreSQL 16 Database + pgvector")]
         Storage["Supabase Storage (Resumes, Audio, Thumbnails)"]
         Edge["Supabase Edge Functions (Deno / TypeScript)"]

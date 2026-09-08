@@ -253,3 +253,25 @@ To ensure high daily engagement (a core scoring metric for SIH judges):
 - **Deep Linking**: Tapping the notification deep-links straight to `/coach` or `/feed` inside the WebView.
 - **Micro-Breaks Notification (Optional 2:00 PM Afternoon Nudge)**:
   > ⚡ *Got 3 minutes while standing in line? Check today's trending DeepSeek-R1 paper in AI Feed & solve a 5-second quiz.*
+
+---
+
+## 6. Mobile OTP Sign-In UX & Keyboard Autofill
+
+By adopting **Supabase Email OTP login**, mobile users bypass awkward virtual-keyboard password entry:
+
+1. **One-Tap Code Autofill**:
+   - The OTP verification page in the Next.js app specifies:
+     ```html
+     <input 
+       type="text" 
+       inputMode="numeric" 
+       autoComplete="one-time-code" 
+       maxLength={6} 
+       pattern="\d{6}" 
+     />
+     ```
+   - Both iOS QuickType and Android keyboard automatically display the 6-digit code received via email, allowing 1-tap submission.
+2. **Persistent Session Management**:
+   - `react-native-webview` retains cookies across app closes via `domStorageEnabled={true}` and native cookie managers.
+   - Once verified, the user remains logged in perpetually until manual sign-out, eliminating repetitive logins during daily 5-minute chores.
