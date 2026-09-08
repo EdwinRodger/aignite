@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-primary: var(--primary);
+  --color-primary-glow: var(--primary-glow);
+}
+
 :root {
   --background: #0B0F17;
   --foreground: #F8FAFC;
@@ -15,7 +24,6 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  overflow-x: hidden;
 }
 
 /* Custom glassmorphism and glow effects */
@@ -50,3 +58,9 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Mobile Safe Area Inset */
+.safe-area-pb {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+

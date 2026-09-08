@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
@@ -43,8 +41,8 @@ export default function HomePage() {
       name: 'OpenAI Pack',
       company: 'OpenAI',
       icon: '⚪',
-      color: 'from-purple-600/20 to-indigo-600/20',
-      borderColor: 'border-purple-500/30',
+      color: 'from-emerald-950/40 to-slate-900/60',
+      borderColor: 'border-emerald-500/30',
       badge: 'Function Calling',
       description: 'Tool use, agentic JSON schema calling, embedding fine-tuning, and structured reasoning.',
       modules: 4,
@@ -80,17 +78,17 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col selection:bg-indigo-500/30 pb-20 md:pb-0">
+    <div className="min-h-screen bg-background text-slate-100 flex flex-col selection:bg-indigo-500/30 pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* ========================================================================= */}
         {/* HERO SECTION */}
         {/* ========================================================================= */}
         <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
-          {/* Ambient background glows */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute top-1/3 left-1/4 w-[350px] h-[250px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
+          {/* Ambient background glows: lightweight radial gradients instead of heavy blur shaders */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[radial-gradient(ellipse_at_center,_rgba(99,102,241,0.18)_0%,_rgba(99,102,241,0.03)_50%,_transparent_75%)] pointer-events-none" />
+          <div className="absolute top-1/3 left-1/4 w-[350px] h-[250px] bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.12)_0%,_transparent_70%)] pointer-events-none" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -106,7 +104,7 @@ export default function HomePage() {
 
                 <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tight text-white leading-[1.15]">
                   Master Applied AI in{' '}
-                  <span className="bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent">
+                  <span className="text-indigo-400">
                     5-Minute Daily Sparks
                   </span>{' '}
                   — Not 50-Hour Videos.
@@ -122,14 +120,14 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
                   <Link
                     href="/login"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500 hover:opacity-95 text-white shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-transform active:scale-95"
+                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500 text-white shadow-xl shadow-indigo-600/25 flex items-center justify-center gap-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   >
                     <span>Start Learning (Email OTP)</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
                     href="/recruiter/apply"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 flex items-center justify-center gap-2 transition-colors"
+                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   >
                     <ShieldCheck className="w-4 h-4 text-indigo-400" />
                     <span>Recruiter Portal</span>
@@ -137,18 +135,18 @@ export default function HomePage() {
                 </div>
 
                 {/* Feature Highlights Ticker */}
-                <div className="pt-4 grid grid-cols-3 gap-3 border-t border-slate-800/80 text-left max-w-lg mx-auto lg:mx-0">
-                  <div>
-                    <div className="text-lg font-black text-white font-mono">5–10m</div>
-                    <div className="text-[11px] text-slate-400">Micro-Habit Daily</div>
+                <div className="pt-4 grid grid-cols-3 gap-2 sm:gap-4 border-t border-slate-800/80 text-left max-w-lg mx-auto lg:mx-0">
+                  <div className="min-w-0">
+                    <div className="text-base sm:text-lg font-black text-white font-mono truncate">5–10m</div>
+                    <div className="text-[11px] text-slate-400 truncate">Micro-Habit Daily</div>
                   </div>
-                  <div>
-                    <div className="text-lg font-black text-indigo-400 font-mono">5 Tiers</div>
-                    <div className="text-[11px] text-slate-400">Interview League</div>
+                  <div className="min-w-0">
+                    <div className="text-base sm:text-lg font-black text-indigo-400 font-mono truncate">5 Tiers</div>
+                    <div className="text-[11px] text-slate-400 truncate">Interview League</div>
                   </div>
-                  <div>
-                    <div className="text-lg font-black text-emerald-400 font-mono">100% Free</div>
-                    <div className="text-[11px] text-slate-400">Open BaaS Stack</div>
+                  <div className="min-w-0">
+                    <div className="text-base sm:text-lg font-black text-emerald-400 font-mono truncate">100% Free</div>
+                    <div className="text-[11px] text-slate-400 truncate">Open BaaS Stack</div>
                   </div>
                 </div>
               </div>
@@ -275,11 +273,11 @@ export default function HomePage() {
               ))}
 
               {/* RAG Master Pipeline Game Teaser */}
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-950/50 to-purple-950/50 border border-purple-500/40 bg-slate-900/60 backdrop-blur-sm flex flex-col justify-between">
+              <div className="p-6 rounded-2xl bg-slate-900/80 border border-indigo-500/30 backdrop-blur-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <Boxes className="w-7 h-7 text-purple-400" />
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    <Boxes className="w-7 h-7 text-indigo-400" />
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
                       Pipeline Mini-Game
                     </span>
                   </div>
@@ -417,7 +415,7 @@ export default function HomePage() {
         {/* ========================================================================= */}
         {/* RECRUITER MODE & ANTI-IMPERSONATION */}
         {/* ========================================================================= */}
-        <section className="py-16 border-t border-slate-800/80 bg-gradient-to-b from-[#0B0F17] to-slate-950">
+        <section className="py-16 border-t border-slate-800/80 bg-gradient-to-b from-background to-slate-950">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-400">
               <Lock className="w-3.5 h-3.5" />
@@ -436,14 +434,14 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
               <Link
                 href="/recruiter/apply"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-colors"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
                 <span>Apply for Recruiter Access (Company Email)</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
               <Link
                 href="/recruiter/login"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-700/80 flex items-center justify-center gap-2 transition-colors"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-700/80 flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
                 <span>Approved Recruiter Sign In</span>
               </Link>
@@ -459,11 +457,11 @@ export default function HomePage() {
             <span className="font-bold text-white font-mono">AIgnite</span>
             <span>— Smart India Hackathon (SIH) 2026</span>
           </div>
-          <div className="flex items-center gap-4 text-slate-400">
-            <Link href="/roadmap" className="hover:text-white transition-colors">AI Roadmap</Link>
-            <Link href="/packs" className="hover:text-white transition-colors">Company Packs</Link>
-            <Link href="/league" className="hover:text-white transition-colors">League</Link>
-            <Link href="/recruiter/apply" className="hover:text-white transition-colors">Recruiters</Link>
+          <div className="flex flex-wrap items-center justify-center gap-2 text-slate-400">
+            <Link href="/roadmap" className="min-h-[44px] inline-flex items-center px-2 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-lg">AI Roadmap</Link>
+            <Link href="/packs" className="min-h-[44px] inline-flex items-center px-2 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-lg">Company Packs</Link>
+            <Link href="/league" className="min-h-[44px] inline-flex items-center px-2 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-lg">League</Link>
+            <Link href="/recruiter/apply" className="min-h-[44px] inline-flex items-center px-2 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-lg">Recruiters</Link>
           </div>
         </div>
       </footer>

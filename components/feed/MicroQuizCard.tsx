@@ -26,14 +26,20 @@ export function MicroQuizCard() {
     if (options[index].isCorrect) {
       setPointsEarned(true);
       try {
-        confetti({
-          particleCount: 65,
-          spread: 55,
-          origin: { y: 0.7 },
-          colors: ['#6366F1', '#10B981', '#F59E0B'],
-        });
+        const prefersReducedMotion =
+          typeof window !== 'undefined' &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+          confetti({
+            particleCount: 65,
+            spread: 55,
+            origin: { y: 0.7 },
+            colors: ['#6366F1', '#10B981', '#F59E0B'],
+          });
+        }
       } catch {
-        // Fallback for environments where canvas is restricted
+        // Fallback for environments where canvas or matchMedia is restricted
       }
     }
   };
@@ -44,7 +50,7 @@ export function MicroQuizCard() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto rounded-2xl bg-gradient-to-b from-slate-900 to-[#0F172A] border border-indigo-500/30 p-5 shadow-2xl shadow-indigo-950/40 relative overflow-hidden">
+    <div className="w-full max-w-md mx-auto rounded-2xl bg-gradient-to-b from-card to-background border border-indigo-500/30 p-5 shadow-2xl shadow-indigo-950/40 relative overflow-hidden">
       {/* Decorative ambient glow */}
       <div className="absolute -top-12 -right-12 w-36 h-36 bg-indigo-500/15 rounded-full blur-2xl pointer-events-none" />
       <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -93,22 +99,28 @@ export function MicroQuizCard() {
       {/* The 5-Second Interactive Micro-Quiz */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+          <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5" id="quiz-question-title">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>5-Second Check: Why does GRPO save ~60% VRAM?</span>
           </span>
           {selectedIdx !== null && (
             <button
+              type="button"
               onClick={resetQuiz}
-              className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
+              aria-label="Retry this quiz question"
+              className="min-h-[44px] min-w-[44px] px-2.5 py-1.5 text-xs text-slate-400 hover:text-white inline-flex items-center justify-center gap-1.5 transition-colors rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             >
-              <RotateCcw className="w-2.5 h-2.5" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Retry</span>
             </button>
           )}
         </div>
 
-        <div className="space-y-1.5 pt-1">
+        <div
+          role="radiogroup"
+          aria-labelledby="quiz-question-title"
+          className="space-y-1.5 pt-1"
+        >
           {options.map((option, idx) => {
             const isSelected = selectedIdx === idx;
             const hasAnswered = selectedIdx !== null;
@@ -128,9 +140,12 @@ export function MicroQuizCard() {
             return (
               <button
                 key={idx}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
                 onClick={() => handleSelect(idx)}
                 disabled={hasAnswered}
-                className={`w-full text-left p-2.5 rounded-xl border text-xs transition-all flex items-center justify-between group ${buttonStyle}`}
+                className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${buttonStyle}`}
               >
                 <span className="font-medium pr-2">{option.text}</span>
                 {hasAnswered && option.isCorrect && (
@@ -145,30 +160,32 @@ export function MicroQuizCard() {
         </div>
       </div>
 
-      {/* Feedback & Takeaway Drawer */}
-      {selectedIdx !== null && (
-        <div className="mt-3.5 p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-xs animate-in fade-in slide-in-from-top-2 duration-300">
-          {options[selectedIdx].isCorrect ? (
-            <div>
-              <div className="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
-                <span>🔥 Correct! +5 League Points Awarded</span>
+      {/* Feedback & Takeaway Drawer (Screen reader live region) */}
+      <div role="status" aria-live="polite" aria-atomic="true">
+        {selectedIdx !== null && (
+          <div className="mt-3.5 p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-xs animate-in fade-in slide-in-from-top-2 duration-300">
+            {options[selectedIdx].isCorrect ? (
+              <div>
+                <div className="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
+                  <span>🔥 Correct! +5 League Points Awarded</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  By comparing outputs against the group average, GRPO bypasses training a separate value critic network, liberating gigabytes of GPU memory.
+                </p>
               </div>
-              <p className="text-slate-300 text-[11px] leading-relaxed">
-                By comparing outputs against the group average, GRPO bypasses training a separate value critic network, liberating gigabytes of GPU memory.
-              </p>
-            </div>
-          ) : (
-            <div>
-              <div className="font-bold text-rose-400 flex items-center gap-1.5 mb-1">
-                <span>Insight for Revision</span>
+            ) : (
+              <div>
+                <div className="font-bold text-rose-400 flex items-center gap-1.5 mb-1">
+                  <span>Insight for Revision</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  The key breakthrough is Option B: GRPO computes relative rewards within sampled generations, completely removing the second critic model.
+                </p>
               </div>
-              <p className="text-slate-300 text-[11px] leading-relaxed">
-                The key breakthrough is Option B: GRPO computes relative rewards within sampled generations, completely removing the second critic model.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
