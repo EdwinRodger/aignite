@@ -40,10 +40,11 @@ Unlike general coding or EdTech platforms that teach basic Python or passive the
 ## Brand Commitments
 - **Name:** AIgnite (pronounced *ignite*, the 'A' is silent).
 - **Tone & Voice:** Crisp, intellectually demanding yet motivating, punchy, modern engineering rigor without corporate fluff.
-- **Design Ambition:** Dark/high-contrast modern developer aesthetic, responsive across all screen sizes, snappy tactile micro-interactions (confetti, node snaps, audio cues).
+- **Design Ambition:** "Warm Flame" high-contrast modern developer aesthetic powered by OKLCH color space (`oklch(0.6404 0.2153 35.9003)` primary flame accent, deep obsidian & crisp bone surfaces), dual light/dark mode support, typographic triad pairing Plus Jakarta Sans with Lora and IBM Plex Mono, and snappy tactile micro-interactions (confetti, node snaps, audio cues). Documented in [DESIGN.md](file:///d:/dev/SIH2026/aignite/DESIGN.md).
 
 ## Evidence on Hand
-- System documentation in `docs/`:
+- System documentation:
+  - [DESIGN.md](file:///d:/dev/SIH2026/aignite/DESIGN.md) (comprehensive OKLCH design system, typography hierarchy, component patterns, Tailwind v4 tokens)
   - `docs/PRODUCT_REQUIREMENTS_DOCUMENT.md` (complete feature requirements, persona definitions, game designs)
   - `docs/SYSTEM_DESIGN.md` (architecture, zero-cost pipeline, flow diagrams)
   - `docs/DATABASE_SCHEMA.md` (PostgreSQL schemas, Drizzle tables, RLS policies)

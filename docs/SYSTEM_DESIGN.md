@@ -157,6 +157,17 @@ To support the requirement of instant micro-learning in 5-10 minute downtime poc
 3. **Friction-Free Transition**:
    - The `/feed` route is pre-rendered with Server Components for sub-second LCP, hydrating instant swipe gestures and 5-second quiz taps without loading spinners.
 
+### 2.4. Design System & Theming Architecture (OKLCH + Tailwind CSS v4)
+The frontend implements the **Warm Flame** high-contrast developer design system documented in detail in [DESIGN.md](file:///d:/dev/SIH2026/aignite/DESIGN.md):
+- **Color Space & Uniformity**: Fully defined in the **OKLCH** color space for perceptually linear luminance and wide-gamut reproduction. Primary brand accent is Warm Flame `oklch(0.6404 0.2153 35.9003)`.
+- **Dual-Mode Theming**: Supported natively via `@custom-variant dark (&:is(.dark *))` and CSS custom property swaps between `:root` (crisp white `#FCFCFC`) and `.dark` (deep obsidian `#151515`).
+- **Tailwind CSS v4 Inline Theme**: Configured with `@theme inline` in `app/globals.css`, binding semantic tokens (`--color-primary`, `--color-card`, `--color-border`, etc.) directly into utility classes without external configuration files.
+- **Typography Triad**:
+  - `Plus Jakarta Sans` (`--font-sans`): Primary UI, navigation, and display headers.
+  - `Lora` (`--font-serif`): Narrative case studies, scenario prompts, and pedagogical explanations.
+  - `IBM Plex Mono` (`--font-mono`): Code snippets, real-time telemetry, token counters, and latency displays.
+- **Elevation & Radii**: Uniform container rounding (`--radius: 1.4rem`) paired with 6-stage depth shadows (`--shadow-2xs` to `--shadow-2xl`) and touch-target accessibility standards.
+
 ---
 
 ## 3. BaaS Architecture (Supabase)
