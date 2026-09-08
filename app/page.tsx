@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
+import { MobileLaunchRedirector } from '@/components/navigation/MobileLaunchRedirector';
 import { MicroQuizCard } from '@/components/feed/MicroQuizCard';
 import {
   Sparkles,
@@ -80,6 +81,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/25 pb-20 md:pb-0">
       <Navbar />
+      <MobileLaunchRedirector />
 
       <main id="main-content" className="flex-1">
         {/* ========================================================================= */}
@@ -160,6 +162,15 @@ export default function HomePage() {
                   </span>
                 </div>
                 <MicroQuizCard />
+                <div className="mt-3 text-center">
+                  <Link
+                    href="/feed"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline group"
+                  >
+                    <span>Explore all 8+ AI Sparks & Full Feed</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -216,6 +227,17 @@ export default function HomePage() {
                   Configurable in preferences if you prefer the dashboard or voice coach first.
                 </p>
               </div>
+            </div>
+
+            <div className="mt-10 text-center">
+              <Link
+                href="/feed"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-xl shadow-primary/20 transition-all active:scale-95"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Launch Interactive AI Sparks Feed</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
         </section>
