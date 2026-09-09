@@ -1,0 +1,160 @@
+'use client';
+
+import React from 'react';
+import { CandidateTalent } from '@/lib/recruiter-data';
+import { Award, FileText, Send, Sparkles, Trophy, CheckCircle2 } from 'lucide-react';
+
+interface CandidateCardProps {
+  candidate: CandidateTalent;
+  onInspect: (candidate: CandidateTalent) => void;
+  onInvite: (candidate: CandidateTalent) => void;
+}
+
+const TIER_META: Record<string, { label: string; icon: string; badgeClass: string }> = {
+  bronze: { label: 'Bronze AI Eng', icon: '🥉', badgeClass: 'bg-amber-700/15 border-amber-700/30 text-amber-600 dark:text-amber-400' },
+  silver: { label: 'Silver AI Eng', icon: '🥈', badgeClass: 'bg-slate-500/15 border-slate-500/30 text-slate-700 dark:text-slate-300' },
+  gold: { label: 'Gold AI Eng', icon: '🥇', badgeClass: 'bg-yellow-500/15 border-yellow-500/30 text-yellow-600 dark:text-yellow-400' },
+  diamond: { label: 'LLM Master', icon: '💎', badgeClass: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-600 dark:text-cyan-400' },
+  architect: { label: 'AI Architect', icon: '👑', badgeClass: 'bg-primary/15 border-primary/30 text-primary font-bold shadow-sm shadow-primary/20' },
+};
+
+export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardProps) {
+  const tierMeta = TIER_META[candidate.leagueTier] || TIER_META.bronze;
+  const rep = candidate.reportCard;
+
+  return (
+    <div className="rounded-3xl bg-card border border-border p-6 sm:p-7 shadow-lg shadow-black/5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between group">
+      {/* Header Info */}
+      <div className="space-y-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3.5">
+            <div
+              className={`w-13 h-13 rounded-2xl flex items-center justify-center font-bold text-base shadow-sm shrink-0 ${candidate.avatarBg}`}
+            >
+              {candidate.fullName
+                .split(' ')
+                .map((n) => n[0])
+                .join('')}
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-lg font-bold text-foreground font-sans group-hover:text-primary transition-colors">
+                  {candidate.fullName}
+                </h3>
+                <span title="AIgnite Verified Identity" className="text-primary inline-flex">
+                  <CheckCircle2 className="w-4 h-4 fill-primary text-background" />
+                </span>
+              </div>
+              <p className="text-xs font-mono text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                <span>{candidate.collegeOrCompany}</span>
+                <span>•</span>
+                <span>{candidate.region}</span>
+              </p>
+            </div>
+          </div>
+
+          {/* League Tier Badge */}
+          <div
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border shrink-0 ${tierMeta.badgeClass}`}
+          >
+            <span>{tierMeta.icon}</span>
+            <span>{tierMeta.label}</span>
+          </div>
+        </div>
+
+        {/* Headline */}
+        <p className="text-xs text-foreground/90 font-medium leading-relaxed line-clamp-2">
+          {candidate.headline}
+        </p>
+
+        {/* Verified Badges Chips */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground font-mono">
+            <span className="flex items-center gap-1">
+              <Award className="w-3.5 h-3.5 text-primary" />
+              <span>Verified Skill Badges</span>
+            </span>
+            <span className="text-primary font-bold">{candidate.verifiedBadges.length} Earned</span>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {candidate.verifiedBadges.map((b) => (
+              <span
+                key={b}
+                className="px-2.5 py-1 rounded-xl bg-muted border border-border text-[11px] font-medium text-foreground flex items-center gap-1 shadow-2xs"
+              >
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span>{b}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* 5-Axis Score Preview Card */}
+        <div className="p-3.5 rounded-2xl bg-muted/60 border border-border/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
+              <Trophy className="w-3.5 h-3.5 text-chart-5" />
+              <span>AI Speech & Systems Report Card</span>
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-black text-primary px-2 py-0.5 rounded-lg bg-primary/10 border border-primary/20">
+                {rep.overallScore.toFixed(1)} / 10
+              </span>
+              <span className="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                ATS: {candidate.resume.overallAtsScore}%
+              </span>
+            </div>
+          </div>
+
+          {/* Metric Bars */}
+          <div className="grid grid-cols-5 gap-1.5 pt-1">
+            {[
+              { label: 'Knowledge', val: rep.knowledgeScore },
+              { label: 'Confidence', val: rep.confidenceScore },
+              { label: 'Communication', val: rep.communicationScore },
+              { label: 'Examples', val: rep.examplesScore },
+              { label: 'Industry Fit', val: rep.industryLevelScore },
+            ].map((m) => (
+              <div key={m.label} className="space-y-1">
+                <div className="h-1.5 rounded-full bg-muted-foreground/20 overflow-hidden">
+                  <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{ width: `${(m.val / 10) * 100}%` }}
+                  />
+                </div>
+                <div className="text-[9px] font-mono text-muted-foreground truncate" title={m.label}>
+                  {m.label.slice(0, 4)}: {m.val.toFixed(1)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Model Answer Excerpt Preview */}
+        <div className="text-[11px] text-muted-foreground bg-card p-2.5 rounded-xl border border-border/60 italic line-clamp-2 font-serif">
+          {rep.recentModelAnswerExcerpt}
+        </div>
+      </div>
+
+      {/* Action Footer */}
+      <div className="pt-5 mt-4 border-t border-border flex items-center justify-between gap-2.5">
+        <button
+          type="button"
+          onClick={() => onInspect(candidate)}
+          className="flex-1 py-2.5 px-3 rounded-xl bg-muted hover:bg-muted/80 text-foreground text-xs font-semibold border border-border hover:border-primary/40 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <FileText className="w-3.5 h-3.5 text-primary" />
+          <span>Inspect Dossier</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onInvite(candidate)}
+          className="flex-1 py-2.5 px-3 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold shadow-md shadow-primary/20 active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <Send className="w-3.5 h-3.5" />
+          <span>Invite Candidate</span>
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   Brain,
   Boxes,
-  Lock
+  Lock,
+  AlertTriangle
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -126,6 +127,13 @@ export default function HomePage() {
                   >
                     <span>Start Learning (Email OTP)</span>
                     <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href="/resume-analyzer"
+                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-card hover:bg-muted text-foreground border border-border flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  >
+                    <Sparkles className="w-4 h-4 text-emerald-500" />
+                    <span>Free AI Resume ATS</span>
                   </Link>
                   <Link
                     href="/recruiter/apply"
@@ -434,6 +442,79 @@ export default function HomePage() {
                       <span>Daily Morning Coach Habit</span>
                     </span>
                     <span className="text-primary font-bold">🔥 7-Day Streak</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* PUBLIC AI RESUME ATS ANALYZER */}
+        {/* ========================================================================= */}
+        <section className="py-16 border-t border-border bg-gradient-to-b from-card/40 to-background">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid md:grid-cols-12 gap-8 items-center">
+              <div className="md:col-span-7 space-y-4 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Public Acquisition Engine • 100% Free</span>
+                </div>
+
+                <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+                  Public AI Resume ATS Analyzer &amp; Skill Gap Radar
+                </h2>
+
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Is your resume ready for modern AI systems roles? Upload or paste your resume to get an instant 0–100 ATS score, benchmark against NVIDIA and Google engineering bars, identify missing technical gaps (quantization, kernels, agent loops), and get direct links to AIgnite modules that close those gaps.
+                </p>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
+                  <Link
+                    href="/resume-analyzer"
+                    className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <span>Analyze Your AI Resume Now</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <span className="text-[11px] font-mono text-muted-foreground">
+                    ⚡ Instant feedback • Gemini 2.0 Flash powered
+                  </span>
+                </div>
+              </div>
+
+              {/* Mini Interactive Preview Card */}
+              <div className="md:col-span-5">
+                <div className="rounded-3xl bg-card border border-border p-6 shadow-xl space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold font-mono text-sm">
+                        94%
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-foreground">ATS Systems Compatibility</div>
+                        <div className="text-[10px] text-muted-foreground font-mono">Top 6% Percentile</div>
+                      </div>
+                    </div>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
+                      High Fit
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs">
+                    <div className="p-2.5 rounded-xl bg-muted/60 border border-border/80 flex items-center justify-between">
+                      <span className="text-muted-foreground font-mono text-[11px]">GenAI &amp; RAG Systems</span>
+                      <span className="text-primary font-bold">92%</span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-muted/60 border border-border/80 flex items-center justify-between">
+                      <span className="text-muted-foreground font-mono text-[11px]">CUDA &amp; Triton Acceleration</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold">88%</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-[11px] text-destructive flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>Missing: Cross-Encoder Reranking in RAG</span>
                   </div>
                 </div>
               </div>

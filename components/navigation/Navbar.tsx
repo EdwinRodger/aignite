@@ -80,6 +80,13 @@ export function Navbar() {
             <span>Interview League</span>
           </Link>
           <Link
+            href="/resume-analyzer"
+            className="px-3 py-1.5 rounded-lg hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <Sparkles className="w-4 h-4 text-emerald-500" />
+            <span>Resume ATS</span>
+          </Link>
+          <Link
             href="/recruiter/apply"
             className="px-3 py-1.5 rounded-lg hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
