@@ -359,6 +359,23 @@ export async function getRecruiterStatus(email: string) {
       const list: StoredRecruiterRecord[] = JSON.parse(pendingCookie);
       const found = list.find((item) => item.workEmail === email);
       if (found) {
+        if (found.status === 'approved') {
+          cookieStore.set(
+            'aignite_recruiter_session',
+            JSON.stringify({
+              email,
+              role: 'recruiter',
+              company: found.companyName,
+              authenticatedAt: Date.now(),
+            }),
+            {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              maxAge: 60 * 60 * 24 * 7,
+            }
+          );
+        }
         return { found: true, status: found.status, company: found.companyName };
       }
     } catch {
@@ -368,6 +385,21 @@ export async function getRecruiterStatus(email: string) {
 
   // Pre-approved demo accounts
   if (email.includes('google.com') || email.includes('nvidia.com') || email === 'demo@company.com') {
+    cookieStore.set(
+      'aignite_recruiter_session',
+      JSON.stringify({
+        email,
+        role: 'recruiter',
+        company: 'Partner Enterprise',
+        authenticatedAt: Date.now(),
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+      }
+    );
     return { found: true, status: 'approved', company: 'Partner Enterprise' };
   }
 
@@ -475,5 +507,62 @@ export async function signOutUser() {
   cookieStore.delete('aignite_recruiter_session');
   cookieStore.delete('aignite_demo_otp');
 
+  return { success: true };
+}
+
+/**
+ * 9. Get Current Authenticated User Status (Server Action)
+ */
+export async function getAuthUserAction(): Promise<{
+  loggedIn: boolean;
+  role: 'student' | 'recruiter' | null;
+  email?: string;
+}> {
+  const cookieStore = await cookies();
+
+  // 1. Check recruiter session first
+  const recruiterCookie = cookieStore.get('aignite_recruiter_session')?.value;
+  if (recruiterCookie) {
+    try {
+      const parsed = JSON.parse(recruiterCookie);
+      return { loggedIn: true, role: 'recruiter', email: parsed.email };
+    } catch {
+      // ignore
+    }
+  }
+
+  // 2. Check student session
+  const studentCookie = cookieStore.get('aignite_session')?.value;
+  if (studentCookie) {
+    try {
+      const parsed = JSON.parse(studentCookie);
+      return { loggedIn: true, role: 'student', email: parsed.email };
+    } catch {
+      // ignore
+    }
+  }
+
+  return { loggedIn: false, role: null };
+}
+
+/**
+ * 10. Set Recruiter Session Cookie
+ */
+export async function setRecruiterSession(email: string) {
+  const cookieStore = await cookies();
+  cookieStore.set(
+    'aignite_recruiter_session',
+    JSON.stringify({
+      email,
+      role: 'recruiter',
+      authenticatedAt: Date.now(),
+    }),
+    {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    }
+  );
   return { success: true };
 }

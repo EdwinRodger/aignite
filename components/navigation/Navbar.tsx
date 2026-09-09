@@ -1,10 +1,52 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Sparkles, Flame, Trophy, Map, Briefcase, Layers, ArrowRight, Mic } from 'lucide-react';
+import {
+  Sparkles,
+  Flame,
+  Trophy,
+  Map,
+  Briefcase,
+  Layers,
+  ArrowRight,
+  Mic,
+  ShieldCheck,
+  KeyRound,
+  LayoutDashboard,
+} from 'lucide-react';
+import { getAuthUserAction } from '@/app/actions/auth';
 
 export function Navbar() {
+  const [userRole, setUserRole] = useState<'student' | 'recruiter' | null>(null);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await getAuthUserAction();
+        if (res.loggedIn && res.role) {
+          setUserRole(res.role);
+          return;
+        }
+      } catch {
+        // ignore
+      }
+
+      if (typeof window !== 'undefined') {
+        const recruiterSession = localStorage.getItem('aignite_recruiter_session');
+        const studentStreak = localStorage.getItem('aignite_student_streak');
+        const studentSession = localStorage.getItem('aignite_student_session');
+        if (recruiterSession) {
+          setUserRole('recruiter');
+        } else if (studentStreak || studentSession) {
+          setUserRole('student');
+        } else {
+          setUserRole(null);
+        }
+      }
+    }
+    checkAuth();
+  }, []);
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-background/85 backdrop-blur-md">
       {/* Accessible Skip Link */}
@@ -152,51 +194,119 @@ export function Navbar() {
                   </div>
                 </div>
               </Link>
+              {/* Leaderboards moved into Explore Features at the bottom */}
+              <div className="pt-1 mt-1 border-t border-border/70">
+                <Link
+                  href="/league"
+                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-chart-5/10 border border-chart-5/20 text-chart-5 flex items-center justify-center shrink-0 mt-0.5">
+                    <Trophy className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors flex items-center gap-1.5">
+                      <span>Competitive Leaderboards</span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-chart-5/15 text-chart-5 font-mono font-semibold">Live</span>
+                    </div>
+                    <div className="text-[11px] text-muted-foreground leading-snug">
+                      Regional, National &amp; International ranks
+                    </div>
+                  </div>
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* Student Dashboard Direct Link */}
-          <Link
-            href="/dashboard"
-            className="px-3 py-1.5 rounded-lg hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span>Dashboard</span>
-          </Link>
+          {/* Consolidated Recruiter Dropdown (Apply & Login under 1 button) */}
+          <div className="relative group">
+            <button
+              type="button"
+              className="px-3.5 py-1.5 rounded-xl hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-medium text-sm cursor-pointer"
+            >
+              <Briefcase className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              <span>Recruiters</span>
+              <svg
+                className="w-3.5 h-3.5 text-muted-foreground group-hover:rotate-180 transition-transform duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
 
-          {/* Leaderboards Direct Link */}
-          <Link
-            href="/league"
-            className="px-3 py-1.5 rounded-lg hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Trophy className="w-4 h-4 text-chart-5" />
-            <span>Leaderboards</span>
-          </Link>
+            {/* Recruiter Popover */}
+            <div className="absolute top-full left-0 mt-1.5 w-64 rounded-2xl bg-card border border-border p-2 shadow-xl shadow-black/25 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-3 py-1.5">
+                Verified Recruiter Access
+              </div>
 
-          {/* Recruiters Link */}
-          <Link
-            href="/recruiter/apply"
-            className="px-3 py-1.5 rounded-lg hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Briefcase className="w-4 h-4 text-muted-foreground" />
-            <span>Recruiters</span>
-          </Link>
+              <Link
+                href="/recruiter/apply"
+                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                    Apply for Access
+                  </div>
+                  <div className="text-[11px] text-muted-foreground leading-snug">
+                    Corporate domain verification
+                  </div>
+                </div>
+              </Link>
+
+              <Link
+                href="/recruiter/login"
+                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
+              >
+                <div className="w-8 h-8 rounded-lg bg-secondary/20 border border-border text-foreground flex items-center justify-center shrink-0 mt-0.5">
+                  <KeyRound className="w-4 h-4 text-chart-2" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                    Recruiter Sign In
+                  </div>
+                  <div className="text-[11px] text-muted-foreground leading-snug">
+                    Search verified student talent
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
         </nav>
 
-        {/* Auth CTA */}
+        {/* Auth / Dashboard CTA */}
         <div className="flex items-center gap-3">
-          <Link
-            href="/recruiter/login"
-            className="hidden sm:inline-flex text-xs font-semibold text-muted-foreground hover:text-foreground px-3 py-2 transition-colors rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            Recruiter Login
-          </Link>
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span>Sign In with OTP</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          {userRole === 'student' ? (
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span>Dashboard</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          ) : userRole === 'recruiter' ? (
+            <Link
+              href="/recruiter/dashboard"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Briefcase className="w-3.5 h-3.5" />
+              <span>Recruiter Dashboard</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span>Sign In with OTP</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          )}
         </div>
       </div>
     </header>

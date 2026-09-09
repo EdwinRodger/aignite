@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { DAILY_COACH_QUESTIONS } from '@/lib/coach-data';
 import { AI_CAREER_ROADMAP } from '@/lib/roadmap-data';
+import { MultiScopeLeaderboard } from '@/components/dashboard/MultiScopeLeaderboard';
 
 export default function HomePage() {
   const companyPacks = [
@@ -861,6 +862,38 @@ export default function HomePage() {
                 <span>Approved Recruiter Sign In</span>
               </Link>
             </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* MULTI-SCOPE COMPETITIVE LEADERBOARDS OVERVIEW */}
+        {/* ========================================================================= */}
+        <section id="leaderboards" className="py-20 border-t border-border bg-gradient-to-b from-muted/20 via-background to-card/30 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-5/10 border border-chart-5/20 text-xs font-bold text-chart-5 mb-2">
+                  <Trophy className="w-3.5 h-3.5" />
+                  <span>Multi-Scope Competitive Leaderboard • Weekly League</span>
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+                  Regional, National &amp; International Rankings
+                </h2>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+                  Compete with peers from your university, state, across India, and globally. Rank based on daily consistency (flame streak) or verified engineering score (XP).
+                </p>
+              </div>
+              <Link
+                href="/league"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 transition-all active:scale-95 shrink-0"
+              >
+                <span>View Full Division Leagues</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Live Interactive Multi-Scope Leaderboard */}
+            <MultiScopeLeaderboard />
           </div>
         </section>
       </main>
