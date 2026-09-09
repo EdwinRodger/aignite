@@ -22,9 +22,9 @@ export async function getLeagueBracket(): Promise<{
   timeRemaining: string;
 }> {
   return {
-    tier: LEAGUE_TIERS[1], // Silver AI Engineer
+    tier: LEAGUE_TIERS[0], // Bronze AI Engineer
     members: INITIAL_BRACKET_MEMBERS,
-    userRank: 5,
+    userRank: INITIAL_BRACKET_MEMBERS.length > 0 ? 5 : 0,
     timeRemaining: '3d 14h 22m (Ends Sunday 23:59 UTC)',
   };
 }
@@ -39,13 +39,14 @@ export async function getAchievementBadges(): Promise<AchievementBadge[]> {
 
 export async function submitLeagueChallenge(
   challengeId: string,
-  _answerText: string
+  answerText: string
 ): Promise<{
   success: boolean;
   pointsAwarded: number;
   newRank: number;
   feedback: string;
 }> {
+  void answerText;
   const challenge = WEEKLY_LEAGUE_CHALLENGES.find((c) => c.id === challengeId);
   const points = challenge ? challenge.pointsAwarded : 50;
 

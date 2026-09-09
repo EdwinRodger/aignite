@@ -93,6 +93,7 @@ export async function getCandidateDossierAction(
 export async function sendInterviewInvitationAction(
   candidateId: string,
   payload: {
+    candidateName?: string;
     companyName: string;
     roleTitle: string;
     roundType: 'Screening Call' | 'Systems Architecture' | 'Coding & Live Inference' | 'Executive Bar Raiser';
@@ -100,9 +101,7 @@ export async function sendInterviewInvitationAction(
   }
 ): Promise<{ success: boolean; invitation?: InterviewInvitation; error?: string }> {
   const candidate = TALENT_POOL_SEEDS.find((c) => c.id === candidateId);
-  if (!candidate) {
-    return { success: false, error: 'Candidate not found' };
-  }
+  const candidateName = candidate?.fullName || payload.candidateName || 'Verified Candidate';
 
   const cookieStore = await cookies();
   const existingCookie = cookieStore.get('aignite_recruiter_invitations')?.value;
@@ -118,8 +117,8 @@ export async function sendInterviewInvitationAction(
 
   const newInvitation: InterviewInvitation = {
     id: `inv-${Date.now()}`,
-    candidateId: candidate.id,
-    candidateName: candidate.fullName,
+    candidateId: candidate?.id || candidateId,
+    candidateName,
     companyName: payload.companyName || 'Verified Enterprise',
     roleTitle: payload.roleTitle,
     roundType: payload.roundType,

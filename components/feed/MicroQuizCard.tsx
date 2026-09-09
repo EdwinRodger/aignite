@@ -58,13 +58,13 @@ export function MicroQuizCard() {
       {/* Card Header & Tag */}
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+          <span className="inline-flex items-center gap-1 text-sm font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
             <Brain className="w-3.5 h-3.5" />
             <span>LLM Post-Training</span>
           </span>
           <span className="text-sm text-muted-foreground font-mono">Today&apos;s Spark</span>
         </div>
-        <div className={`flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border transition-all ${
+        <div className={`flex items-center gap-1 text-sm font-semibold px-2 py-0.5 rounded-md border transition-all ${
           pointsEarned 
             ? 'bg-primary/20 text-primary border-primary/40 scale-105' 
             : 'text-primary bg-primary/10 border-primary/20'
@@ -84,8 +84,8 @@ export function MicroQuizCard() {
       </p>
 
       {/* Mini Architecture Diagram Representation */}
-      <div className="p-3 rounded-xl bg-muted/60 border border-border mb-4 font-mono text-[11px]">
-        <div className="text-muted-foreground text-[10px] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+      <div className="p-3 rounded-xl bg-muted/60 border border-border mb-4 font-mono text-sm">
+        <div className="text-muted-foreground text-sm uppercase tracking-wider mb-1.5 flex items-center justify-between">
           <span>Architecture Trade-Off</span>
           <span className="text-primary font-bold">VRAM Savings: ~60%</span>
         </div>
@@ -108,7 +108,7 @@ export function MicroQuizCard() {
               type="button"
               onClick={resetQuiz}
               aria-label="Retry this quiz question"
-              className="min-h-[44px] min-w-[44px] px-2.5 py-1.5 text-sm text-muted-foreground hover:text-foreground inline-flex items-center justify-center gap-1.5 transition-colors rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="min-h-[44px] min-w-[44px] px-2.5 py-1.5 text-sm text-muted-foreground hover:text-foreground inline-flex items-center justify-center gap-1.5 transition-colors rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Retry</span>
@@ -145,7 +145,7 @@ export function MicroQuizCard() {
                 aria-checked={isSelected}
                 onClick={() => handleSelect(idx)}
                 disabled={hasAnswered}
-                className={`w-full text-left p-3 rounded-xl border text-sm transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${buttonStyle}`}
+                className={`w-full text-left p-3 rounded-xl border text-sm transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background cursor-pointer ${buttonStyle}`}
               >
                 <span className="font-medium pr-2">{option.text}</span>
                 {hasAnswered && option.isCorrect && (
@@ -169,7 +169,7 @@ export function MicroQuizCard() {
                 <div className="font-bold text-primary flex items-center gap-1.5 mb-1">
                   <span>🔥 Correct! +5 League Points Awarded</span>
                 </div>
-                <p className="text-muted-foreground text-[11px] leading-relaxed">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   By comparing outputs against the group average, GRPO bypasses training a separate value critic network, liberating gigabytes of GPU memory.
                 </p>
               </div>
@@ -178,7 +178,7 @@ export function MicroQuizCard() {
                 <div className="font-bold text-destructive flex items-center gap-1.5 mb-1">
                   <span>Insight for Revision</span>
                 </div>
-                <p className="text-muted-foreground text-[11px] leading-relaxed">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   The key breakthrough is Option B: GRPO computes relative rewards within sampled generations, completely removing the second critic model.
                 </p>
               </div>

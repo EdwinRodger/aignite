@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { db } from '@/lib/db';
 import { profiles } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 // Disallowed public email domains for recruiters
 const PUBLIC_EMAIL_DOMAINS = [
@@ -352,20 +352,22 @@ export async function submitRecruiterApplication(data: RecruiterApplicationData)
  */
 export async function getRecruiterStatus(email: string) {
   const cookieStore = await cookies();
+  const normalizedEmail = email.trim().toLowerCase();
   const pendingCookie = cookieStore.get('aignite_pending_recruiters')?.value;
 
   if (pendingCookie) {
     try {
       const list: StoredRecruiterRecord[] = JSON.parse(pendingCookie);
-      const found = list.find((item) => item.workEmail === email);
+      const found = list.find((item) => item.workEmail.toLowerCase() === normalizedEmail);
       if (found) {
         if (found.status === 'approved') {
           cookieStore.set(
             'aignite_recruiter_session',
             JSON.stringify({
-              email,
+              email: found.workEmail,
               role: 'recruiter',
               company: found.companyName,
+              status: 'approved',
               authenticatedAt: Date.now(),
             }),
             {
@@ -383,24 +385,41 @@ export async function getRecruiterStatus(email: string) {
     }
   }
 
-  // Pre-approved demo accounts
-  if (email.includes('google.com') || email.includes('nvidia.com') || email === 'demo@company.com') {
-    cookieStore.set(
-      'aignite_recruiter_session',
-      JSON.stringify({
-        email,
-        role: 'recruiter',
-        company: 'Partner Enterprise',
-        authenticatedAt: Date.now(),
-      }),
-      {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7,
+  // If Drizzle DB is connected, check profiles table
+  if (db) {
+    try {
+      const profile = await db.query.profiles.findFirst({
+        where: eq(profiles.workEmail, normalizedEmail),
+      });
+      if (profile && profile.role === 'recruiter') {
+        const status = profile.verificationStatus || 'pending';
+        if (status === 'approved') {
+          cookieStore.set(
+            'aignite_recruiter_session',
+            JSON.stringify({
+              email: profile.workEmail || normalizedEmail,
+              role: 'recruiter',
+              company: profile.collegeOrCompany || 'Enterprise Partner',
+              status: 'approved',
+              authenticatedAt: Date.now(),
+            }),
+            {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              maxAge: 60 * 60 * 24 * 7,
+            }
+          );
+        }
+        return {
+          found: true,
+          status,
+          company: profile.collegeOrCompany || 'Enterprise Partner',
+        };
       }
-    );
-    return { found: true, status: 'approved', company: 'Partner Enterprise' };
+    } catch {
+      // ignore
+    }
   }
 
   return { found: false, status: 'none' };
@@ -413,60 +432,44 @@ export async function getPendingRecruiters() {
   const cookieStore = await cookies();
   const pendingCookie = cookieStore.get('aignite_pending_recruiters')?.value;
 
-  // Default seed applications for demo evaluation
-  const defaultSeeds = [
-    {
-      id: 'rec_101',
-      fullName: 'Aarav Sharma',
-      companyName: 'NVIDIA India',
-      companyWebsite: 'https://nvidia.com',
-      workEmail: 'aarav.sharma@nvidia.com',
-      linkedinUrl: 'https://linkedin.com/in/aarav-nvidia-ai',
-      recruiterDesignation: 'Senior Technical Recruiter (Applied AI & CUDA)',
-      status: 'pending',
-      appliedAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-    },
-    {
-      id: 'rec_102',
-      fullName: 'Priya Venkatesh',
-      companyName: 'Google DeepMind',
-      companyWebsite: 'https://deepmind.google',
-      workEmail: 'pvenkatesh@google.com',
-      linkedinUrl: 'https://linkedin.com/in/priya-deepmind-hiring',
-      recruiterDesignation: 'Talent Acquisition Lead (GenAI & Gemma)',
-      status: 'approved',
-      appliedAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-    },
-    {
-      id: 'rec_103',
-      fullName: 'Devansh Roy',
-      companyName: 'Sarvam AI',
-      companyWebsite: 'https://sarvam.ai',
-      workEmail: 'devansh@sarvam.ai',
-      linkedinUrl: 'https://linkedin.com/in/devansh-sarvam',
-      recruiterDesignation: 'Head of Engineering Talent',
-      status: 'pending',
-      appliedAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
-    },
-  ];
+  let combined: StoredRecruiterRecord[] = [];
 
   if (pendingCookie) {
     try {
       const stored: StoredRecruiterRecord[] = JSON.parse(pendingCookie);
-      // Merge with default seeds
-      const combined = [...stored];
-      for (const seed of defaultSeeds) {
-        if (!combined.some((item) => item.workEmail === seed.workEmail)) {
-          combined.push(seed);
-        }
-      }
-      return combined;
+      combined = [...stored];
     } catch {
-      return defaultSeeds;
+      combined = [];
     }
   }
 
-  return defaultSeeds;
+  // If Drizzle DB is connected, fetch recruiter profiles and merge
+  if (db) {
+    try {
+      const dbRecruiters = await db.query.profiles.findMany({
+        where: eq(profiles.role, 'recruiter'),
+      });
+      for (const r of dbRecruiters) {
+        if (r.workEmail && !combined.some((item) => item.workEmail.toLowerCase() === r.workEmail?.toLowerCase())) {
+          combined.push({
+            id: r.id,
+            fullName: r.fullName,
+            companyName: r.collegeOrCompany || 'Enterprise Partner',
+            companyWebsite: r.companyWebsite || '',
+            workEmail: r.workEmail,
+            linkedinUrl: r.linkedinUrl || undefined,
+            recruiterDesignation: r.recruiterDesignation || 'Technical Recruiter',
+            status: r.verificationStatus || 'pending',
+            appliedAt: r.createdAt ? new Date(r.createdAt).toISOString() : new Date().toISOString(),
+          });
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  return combined;
 }
 
 /**
@@ -476,6 +479,7 @@ export async function toggleRecruiterVerification(recruiterId: string, status: '
   const cookieStore = await cookies();
 
   let list = await getPendingRecruiters();
+  const target = list.find((item) => item.id === recruiterId);
   list = list.map((item) => (item.id === recruiterId ? { ...item, status } : item));
 
   cookieStore.set('aignite_pending_recruiters', JSON.stringify(list), {
@@ -484,6 +488,50 @@ export async function toggleRecruiterVerification(recruiterId: string, status: '
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 30,
   });
+
+  // If the active recruiter session matches this approved or rejected applicant, update session
+  if (target) {
+    const sessionCookie = cookieStore.get('aignite_recruiter_session')?.value;
+    if (sessionCookie) {
+      try {
+        const session = JSON.parse(sessionCookie);
+        if (session.email?.toLowerCase() === target.workEmail?.toLowerCase()) {
+          cookieStore.set(
+            'aignite_recruiter_session',
+            JSON.stringify({
+              ...session,
+              status,
+              authenticatedAt: status === 'approved' ? Date.now() : undefined,
+            }),
+            {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              maxAge: 60 * 60 * 24 * 7,
+            }
+          );
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    // Also update Drizzle DB if connected
+    if (db) {
+      try {
+        await db
+          .update(profiles)
+          .set({
+            verificationStatus: status,
+            isVerified: status === 'approved',
+            verifiedAt: status === 'approved' ? new Date() : null,
+          })
+          .where(eq(profiles.workEmail, target.workEmail));
+      } catch (err) {
+        console.warn('DB error updating recruiter status:', err);
+      }
+    }
+  }
 
   return { success: true, updatedStatus: status };
 }
@@ -525,7 +573,9 @@ export async function getAuthUserAction(): Promise<{
   if (recruiterCookie) {
     try {
       const parsed = JSON.parse(recruiterCookie);
-      return { loggedIn: true, role: 'recruiter', email: parsed.email };
+      if (parsed.status === 'approved' || !parsed.status) {
+        return { loggedIn: true, role: 'recruiter', email: parsed.email };
+      }
     } catch {
       // ignore
     }
@@ -565,4 +615,96 @@ export async function setRecruiterSession(email: string) {
     }
   );
   return { success: true };
+}
+
+/**
+ * 11. Live Platform Infrastructure Health Telemetry
+ */
+export interface HealthIndicator {
+  status: 'connected' | 'not_configured' | 'error' | 'active';
+  label: string;
+  detail: string;
+  badge: string;
+  isHealthy: boolean;
+}
+
+export interface PlatformHealthStatus {
+  database: HealthIndicator;
+  auth: HealthIndicator;
+  firewall: HealthIndicator;
+  ai: HealthIndicator;
+}
+
+export async function getPlatformHealthAction(): Promise<PlatformHealthStatus> {
+  // 1. Live Database Check
+  let dbStatus: 'connected' | 'not_configured' | 'error' = 'not_configured';
+  let dbDetail = 'DATABASE_URL not configured (Standby / Local Session Mode)';
+  let dbBadge = 'Not Connected';
+  let dbHealthy = false;
+
+  if (process.env.DATABASE_URL && db) {
+    try {
+      await db.execute(sql`SELECT 1`);
+      dbStatus = 'connected';
+      dbDetail = 'Supabase PostgreSQL + Drizzle ORM (Connected)';
+      dbBadge = 'Operational';
+      dbHealthy = true;
+    } catch {
+      dbStatus = 'error';
+      dbDetail = 'DATABASE_URL set, but connection failed';
+      dbBadge = 'Unreachable';
+      dbHealthy = false;
+    }
+  }
+
+  // 2. Auth Provider Check
+  const supabaseConfigured = isSupabaseConfigured();
+  const authStatus: 'connected' | 'not_configured' = supabaseConfigured ? 'connected' : 'not_configured';
+  const authDetail = supabaseConfigured
+    ? 'Supabase Auth (Magic OTP & Row-Level Security)'
+    : 'Standalone Cookie Session Mode (Supabase keys not added)';
+  const authBadge = supabaseConfigured ? 'Supabase Auth' : 'Local Session Mode';
+
+  // 3. Recruiter Firewall Check
+  const firewallDetail = `Active filter on ${PUBLIC_EMAIL_DOMAINS.length} public domains (Gmail, Yahoo, Proton, etc.)`;
+
+  // 4. Gemini AI Key Check
+  const rawKey = process.env.GEMINI_API_KEY;
+  const hasGeminiKey = Boolean(rawKey && rawKey.trim() !== '' && !rawKey.includes('YourGeminiApiKeyHere'));
+  const aiStatus: 'connected' | 'not_configured' = hasGeminiKey ? 'connected' : 'not_configured';
+  const aiDetail = hasGeminiKey
+    ? 'Google Gemini 2.5 Flash API Connected'
+    : 'GEMINI_API_KEY not set in environment (mock analysis fallback)';
+  const aiBadge = hasGeminiKey ? 'Ready' : 'Not Configured';
+
+  return {
+    database: {
+      status: dbStatus,
+      label: 'Database Layer',
+      detail: dbDetail,
+      badge: dbBadge,
+      isHealthy: dbHealthy,
+    },
+    auth: {
+      status: authStatus,
+      label: 'Authentication Engine',
+      detail: authDetail,
+      badge: authBadge,
+      isHealthy: supabaseConfigured,
+    },
+    firewall: {
+      status: 'active',
+      label: 'Recruiter Domain Firewall',
+      detail: firewallDetail,
+      badge: 'Active (Strict)',
+      isHealthy: true,
+    },
+    ai: {
+      status: aiStatus,
+      label: 'AI Evaluation Pipeline',
+      detail: aiDetail,
+      badge: aiBadge,
+      isHealthy: hasGeminiKey,
+    },
+  };
 }

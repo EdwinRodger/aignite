@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
@@ -19,28 +19,66 @@ import {
 } from 'lucide-react';
 
 export default function StudentDashboardPage() {
-  const user = {
-    name: 'Aarav Sharma',
-    username: 'aarav_sharma',
-    college: 'IIT Bombay',
-    streakDays: 7,
-    totalXp: 1240,
-    leagueTier: 'Silver AI Engineer',
-    leagueRank: 4,
-    atsScore: 89,
-    earnedBadges: ['RAG Master', 'Vector Wizard', '7-Day Flame Streak'],
-  };
+  const [user, setUser] = useState({
+    name: 'AI Learner',
+    username: 'learner',
+    college: 'Student Campus',
+    streakDays: 0,
+    totalXp: 0,
+    leagueTier: 'Bronze AI Engineer',
+    leagueRank: 0,
+    atsScore: 0,
+    earnedBadges: [] as string[],
+  });
 
-  const reportCard = {
-    knowledgeScore: 9.2,
-    confidenceScore: 8.8,
-    communicationScore: 8.9,
-    examplesScore: 9.1,
-    industryLevelScore: 9.0,
-    overallScore: 9.0,
-    speechCadence: '142 WPM (Natural & Confident)',
-    fillerCount: 2,
-  };
+  const [reportCard, setReportCard] = useState<{
+    knowledgeScore: number;
+    confidenceScore: number;
+    communicationScore: number;
+    examplesScore: number;
+    industryLevelScore: number;
+    overallScore: number;
+    speechCadence: string;
+    fillerCount: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        const storedPoints = localStorage.getItem('aignite_student_points');
+        const storedStreak = localStorage.getItem('aignite_student_streak');
+        const storedReport = localStorage.getItem('aignite_user_report_card');
+        const storedUser = localStorage.getItem('aignite_user_profile');
+
+        if (storedUser) {
+          try {
+            const parsedUser = JSON.parse(storedUser);
+            setUser((prev) => ({ ...prev, ...parsedUser }));
+          } catch {
+            // fallback
+          }
+        }
+        if (storedPoints) {
+          const pts = parseInt(storedPoints, 10);
+          setUser((prev) => ({ ...prev, totalXp: pts }));
+        }
+        if (storedStreak) {
+          const str = parseInt(storedStreak, 10);
+          setUser((prev) => ({ ...prev, streakDays: str }));
+        }
+        if (storedReport) {
+          try {
+            const parsed = JSON.parse(storedReport);
+            setReportCard(parsed);
+          } catch {
+            // fallback
+          }
+        }
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Learning Suite active tool tab
   const [activeModuleTool, setActiveModuleTool] = useState<
@@ -57,6 +95,13 @@ export default function StudentDashboardPage() {
   // Interactive Decision Simulator state
   const [selectedDecision, setSelectedDecision] = useState<string | null>(null);
 
+  const userInitials = user.name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || 'AL';
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-12">
       <Navbar />
@@ -71,7 +116,7 @@ export default function StudentDashboardPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
             <div className="flex items-start sm:items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-accent text-primary-foreground font-black text-2xl flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-                AS
+                {userInitials}
               </div>
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
@@ -97,7 +142,7 @@ export default function StudentDashboardPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-foreground">{user.streakDays}-Day Streak</div>
-                  <div className="text-[10px] text-muted-foreground font-mono">Daily oral defense active</div>
+                  <div className="text-sm text-muted-foreground font-mono">Daily oral defense active</div>
                 </div>
               </div>
 
@@ -107,7 +152,9 @@ export default function StudentDashboardPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-foreground">{user.totalXp} Total XP</div>
-                  <div className="text-[10px] text-muted-foreground font-mono">Rank #4 in cohort</div>
+                  <div className="text-sm text-muted-foreground font-mono">
+                    {user.leagueRank > 0 ? `Rank #${user.leagueRank} in cohort` : 'Division: Bronze'}
+                  </div>
                 </div>
               </div>
 
@@ -116,11 +163,13 @@ export default function StudentDashboardPage() {
                 className="px-4 py-2.5 rounded-2xl bg-card border border-border flex items-center gap-2.5 shadow-sm hover:border-primary/40 transition-colors"
               >
                 <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold font-mono text-sm">
-                  {user.atsScore}%
+                  {user.atsScore > 0 ? `${user.atsScore}%` : 'Scan'}
                 </div>
                 <div>
                   <div className="text-sm font-bold text-foreground">ATS Score</div>
-                  <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Top 8% Fit</div>
+                  <div className="text-sm text-emerald-600 dark:text-emerald-400 font-mono">
+                    {user.atsScore > 0 ? 'Verified Match' : 'Upload Resume'}
+                  </div>
                 </div>
               </Link>
             </div>
@@ -145,14 +194,17 @@ export default function StudentDashboardPage() {
             </div>
 
             <div className="flex items-center gap-3 self-start sm:self-center">
-              <div className="text-right">
-                <span className="text-[10px] uppercase font-mono text-muted-foreground block">
-                  Composite Index
-                </span>
-                <span className="text-2xl font-black font-mono text-primary">
-                  {reportCard.overallScore.toFixed(1)} <span className="text-sm font-normal text-muted-foreground">/ 10</span>
-                </span>
-              </div>
+              {reportCard && (
+                <div className="text-right">
+                  <span className="text-sm uppercase font-mono text-muted-foreground block">
+                    Composite Index
+                  </span>
+                  <span className="text-2xl font-black font-mono text-primary">
+                    {reportCard.overallScore.toFixed(1)}{' '}
+                    <span className="text-sm font-normal text-muted-foreground">/ 10</span>
+                  </span>
+                </div>
+              )}
               <Link
                 href="/coach"
                 className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold flex items-center gap-1.5 shadow-md shadow-primary/20 hover:opacity-90 transition-all"
@@ -163,51 +215,76 @@ export default function StudentDashboardPage() {
             </div>
           </div>
 
-          {/* 5-Axis Score Breakdown */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
-            {[
-              { label: 'Knowledge Depth', score: reportCard.knowledgeScore, sub: 'Algorithms & Math' },
-              { label: 'Confidence & Pace', score: reportCard.confidenceScore, sub: reportCard.speechCadence },
-              { label: 'Communication', score: reportCard.communicationScore, sub: 'STAR Structure' },
-              { label: 'Practical Examples', score: reportCard.examplesScore, sub: 'VRAM & Latency Metrics' },
-              { label: 'Industry Readiness', score: reportCard.industryLevelScore, sub: 'Senior Staff Bar' },
-            ].map((axis) => (
-              <div key={axis.label} className="p-3.5 rounded-2xl bg-muted/50 border border-border/80 space-y-1.5">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block truncate">
-                  {axis.label}
-                </span>
-                <div className="text-xl font-black font-mono text-foreground">{axis.score.toFixed(1)}</div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full transition-all"
-                    style={{ width: `${(axis.score / 10) * 100}%` }}
-                  />
+          {/* If report card exists, render 5-axis breakdown; otherwise render clean motivating empty state */}
+          {reportCard ? (
+            <>
+              {/* 5-Axis Score Breakdown */}
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
+                {[
+                  { label: 'Knowledge Depth', score: reportCard.knowledgeScore, sub: 'Algorithms & Math' },
+                  { label: 'Confidence & Pace', score: reportCard.confidenceScore, sub: reportCard.speechCadence },
+                  { label: 'Communication', score: reportCard.communicationScore, sub: 'STAR Structure' },
+                  { label: 'Practical Examples', score: reportCard.examplesScore, sub: 'VRAM & Latency Metrics' },
+                  { label: 'Industry Readiness', score: reportCard.industryLevelScore, sub: 'Senior Staff Bar' },
+                ].map((axis) => (
+                  <div key={axis.label} className="p-3.5 rounded-2xl bg-muted/50 border border-border/80 space-y-1.5">
+                    <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider block truncate">
+                      {axis.label}
+                    </span>
+                    <div className="text-xl font-black font-mono text-foreground">{axis.score.toFixed(1)}</div>
+                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full transition-all"
+                        style={{ width: `${(axis.score / 10) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-sm font-mono text-muted-foreground block truncate">
+                      {axis.sub}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Spoken Telemetry Tags */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-sm font-mono text-muted-foreground">
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground">
+                    Cadence: {reportCard.speechCadence}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground">
+                    Speech Fillers: {reportCard.fillerCount} detected (Elite Bar)
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">
+                    ✓ Liveness Anti-Impersonation Checked
+                  </span>
                 </div>
-                <span className="text-[9px] font-mono text-muted-foreground block truncate">
-                  {axis.sub}
+
+                <span className="text-sm text-primary font-bold">
+                  Visible to approved Google &amp; NVIDIA recruiters
                 </span>
               </div>
-            ))}
-          </div>
-
-          {/* Spoken Telemetry Tags */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-sm font-mono text-muted-foreground">
-            <div className="flex flex-wrap gap-2">
-              <span className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground">
-                Cadence: {reportCard.speechCadence}
-              </span>
-              <span className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground">
-                Speech Fillers: {reportCard.fillerCount} detected (Elite Bar)
-              </span>
-              <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">
-                ✓ Liveness Anti-Impersonation Checked
-              </span>
+            </>
+          ) : (
+            <div className="p-8 text-center rounded-2xl bg-muted/30 border border-border/80 space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto text-xl font-bold">
+                🎙️
+              </div>
+              <h3 className="text-base font-bold text-foreground font-sans">No Spoken Defense Records Yet</h3>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                Answer today&apos;s AI Problem of the Day or take a mock interview on the Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified 5-axis report card.
+              </p>
+              <div className="pt-2">
+                <Link
+                  href="/coach"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md shadow-primary/20 hover:opacity-90 transition-all"
+                >
+                  <Mic className="w-4 h-4" />
+                  <span>Begin Voice Defense Session</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
-
-            <span className="text-[11px] text-primary font-bold">
-              Visible to approved Google &amp; NVIDIA recruiters
-            </span>
-          </div>
+          )}
         </section>
 
         {/* ========================================================================= */}
@@ -362,7 +439,7 @@ export default function StudentDashboardPage() {
                   { id: 'A', text: 'Vision Transformer (ViT-Huge/14) with 632M parameters', verdict: 'Fails SLA: ~160ms latency on T4.' },
                   { id: 'B', text: 'YOLOv11 / RT-DETR with TensorRT INT8 Quantization', verdict: '✓ Optimal: 18ms latency, 3.4GB VRAM footprint.' },
                   { id: 'C', text: 'Unquantized CLIP-ViT-L/14 with Float32 tensors', verdict: 'Fails VRAM limit: CUDA OOM under batch concurrency.' },
-                  { id: 'D', text: 'Stable Diffusion Latent Encoder Backbone', verdict: 'Fails Latency: Diffusion latents introduce &gt; 400ms overhead.' },
+                  { id: 'D', text: 'Stable Diffusion Latent Encoder Backbone', verdict: 'Fails Latency: Diffusion latents introduce > 400ms overhead.' },
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -383,7 +460,7 @@ export default function StudentDashboardPage() {
                       <span>{opt.text}</span>
                     </div>
                     {selectedDecision === opt.id && (
-                      <p className={`text-[11px] font-mono ${opt.id === 'B' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-destructive'}`}>
+                      <p className={`text-sm font-mono ${opt.id === 'B' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-destructive'}`}>
                         {opt.verdict}
                       </p>
                     )}
@@ -488,13 +565,13 @@ export default function StudentDashboardPage() {
                     className="p-5 rounded-2xl bg-muted/40 border border-border hover:border-primary/40 transition-all space-y-2 flex flex-col justify-between"
                   >
                     <div className="space-y-1.5">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">
+                      <span className="text-sm font-mono px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">
                         {item.tag}
                       </span>
                       <h4 className="text-sm font-bold text-foreground font-sans">{item.title}</h4>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">{item.desc}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
-                    <span className="text-[10px] font-mono text-muted-foreground block pt-2 border-t border-border/60">
+                    <span className="text-sm font-mono text-muted-foreground block pt-2 border-t border-border/60">
                       {item.readTime}
                     </span>
                   </div>

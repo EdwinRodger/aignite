@@ -37,7 +37,16 @@ export default async function HomePage() {
   }
   const recruiterSession = cookieStore.get('aignite_recruiter_session')?.value;
   if (recruiterSession) {
-    redirect('/recruiter/dashboard');
+    try {
+      const parsed = JSON.parse(recruiterSession);
+      if (parsed.status === 'pending') {
+        redirect('/recruiter/pending');
+      } else {
+        redirect('/recruiter/dashboard');
+      }
+    } catch {
+      redirect('/recruiter/dashboard');
+    }
   }
 
   const companyPacks = [
@@ -105,7 +114,7 @@ export default async function HomePage() {
     {
       title: 'Resume Analyser',
       badge: '100% Free • ATS Score',
-      description: 'Instant 0–100 score, missing skill gap radar, and company bar alignment (Google & NVIDIA).',
+      description: 'Instant 0-100 score, missing skill gap radar, and company bar alignment (Google & NVIDIA).',
       href: '/resume-analyzer',
       icon: FileText,
       iconColor: 'text-emerald-500',
@@ -164,7 +173,20 @@ export default async function HomePage() {
     },
   ];
 
-  const todayQuestion = DAILY_COACH_QUESTIONS[0];
+  const todayQuestion = DAILY_COACH_QUESTIONS[0] || {
+    id: 'q-default',
+    title: 'FlashAttention-3: Asynchronous TMA Kernel Execution',
+    track: 'Systems Architecture',
+    difficulty: 'Senior Bar',
+    questionText: 'Explain how FlashAttention-3 leverages Hopper Tensor Memory Accelerator (TMA) to decouple asynchronous memory transfers from tensor core math, and why this eliminates register file pressure.',
+    canonicalKeyPoints: [
+      'Warp specialization divides warps into producer and consumer roles',
+      'Asynchronous DMA directly transfers global memory to shared memory',
+      'Ping-pong buffering in SRAM eliminates register file bottlenecks',
+    ],
+    estimatedSpeakingTime: '90 - 120s',
+  };
+
   const roadmapPreviewStages = AI_CAREER_ROADMAP.slice(0, 4);
 
   return (
@@ -190,8 +212,6 @@ export default async function HomePage() {
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/90 border border-border text-sm font-semibold text-foreground shadow-sm">
                   <Flame className="w-4 h-4 text-primary" />
                   <span>Smart India Hackathon (SIH) 2026 Initiative</span>
-                  <span className="w-1 h-1 rounded-full bg-primary" />
-                  <span className="text-primary font-bold">100% Free Architecture</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.15]">
@@ -214,7 +234,7 @@ export default async function HomePage() {
                     href="/login"
                     className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
-                    <span>Start Learning (Email OTP)</span>
+                    <span>Start Learning</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
@@ -234,18 +254,14 @@ export default async function HomePage() {
                 </div>
 
                 {/* Feature Highlights Ticker */}
-                <div className="pt-4 grid grid-cols-3 gap-2 sm:gap-4 border-t border-border text-left max-w-lg mx-auto lg:mx-0">
+                <div className="pt-4 grid grid-cols-2 gap-4 border-t border-border text-left max-w-sm mx-auto lg:mx-0">
                   <div className="min-w-0">
-                    <div className="text-base sm:text-lg font-black text-foreground font-mono truncate">5–10m</div>
-                    <div className="text-[11px] text-muted-foreground truncate">Micro-Habit Daily</div>
+                    <div className="text-base sm:text-lg font-black text-foreground font-mono truncate">5-10m</div>
+                    <div className="text-sm text-muted-foreground truncate">Micro-Habit Daily</div>
                   </div>
                   <div className="min-w-0">
                     <div className="text-base sm:text-lg font-black text-primary font-mono truncate">5 Tiers</div>
-                    <div className="text-[11px] text-muted-foreground truncate">Interview League</div>
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-base sm:text-lg font-black text-foreground font-mono truncate">100% Free</div>
-                    <div className="text-[11px] text-muted-foreground truncate">Open BaaS Stack</div>
+                    <div className="text-sm text-muted-foreground truncate">Interview League</div>
                   </div>
                 </div>
               </div>
@@ -253,7 +269,7 @@ export default async function HomePage() {
               {/* Right Column: Live Interactive Feed Card (Playable on Landing Page) */}
               <div className="lg:col-span-5 flex flex-col items-center">
                 <div className="text-center mb-2">
-                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 justify-center">
+                  <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 justify-center">
                     <Sparkles className="w-3.5 h-3.5 text-primary" />
                     <span>Live Interactive Feed Preview (Try It)</span>
                   </span>
@@ -404,7 +420,7 @@ export default async function HomePage() {
                   </div>
 
                   <div className="p-4 rounded-2xl bg-muted/50 border border-border/80 space-y-2">
-                    <div className="text-[11px] font-bold font-mono uppercase tracking-wider text-primary flex items-center gap-1.5">
+                    <div className="text-sm font-bold font-mono uppercase tracking-wider text-primary flex items-center gap-1.5">
                       <Zap className="w-3.5 h-3.5" />
                       <span>Canonical Focus Points Expected by Interviewers</span>
                     </div>
@@ -716,7 +732,7 @@ export default async function HomePage() {
                 </h2>
 
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Is your resume ready for modern AI systems roles? Upload or paste your resume to get an instant 0–100 ATS score, benchmark against NVIDIA and Google engineering bars, identify missing technical gaps (quantization, kernels, agent loops), and get direct links to AIgnite modules that close those gaps.
+                  Is your resume ready for modern AI systems roles? Upload or paste your resume to get an instant 0-100 ATS score, benchmark against NVIDIA and Google engineering bars, identify missing technical gaps (quantization, kernels, agent loops), and get direct links to AIgnite modules that close those gaps.
                 </p>
 
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
@@ -806,7 +822,7 @@ export default async function HomePage() {
                   className="p-5 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-lg"
                 >
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                    <div className="flex items-center justify-between text-sm font-mono text-muted-foreground">
                       <span>{stage.estimatedHours}</span>
                       <span className="flex items-center gap-1 text-emerald-500 font-bold">
                         <Award className="w-3.5 h-3.5" />
@@ -821,7 +837,7 @@ export default async function HomePage() {
                     </p>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-border flex items-center justify-between text-[11px] font-mono">
+                  <div className="pt-4 mt-4 border-t border-border flex items-center justify-between text-sm font-mono">
                     <span className="text-muted-foreground">{stage.topics.length} In-Depth Topics</span>
                     <span className="text-primary font-bold">Stage {stage.stageNumber}</span>
                   </div>

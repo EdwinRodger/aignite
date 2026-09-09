@@ -138,7 +138,7 @@ export default function FeedPage() {
               <p className="text-sm text-muted-foreground">
                 🎉 You are all caught up on today&apos;s AI breakthroughs!
               </p>
-              <p className="text-[11px] text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Check back in the morning or try generating a fresh paper breakdown with Gemini.
               </p>
             </div>

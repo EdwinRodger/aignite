@@ -41,7 +41,7 @@ export default function RecruiterPendingPage() {
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold">Corporate Email Domain Passed</span>
-                  <p className="text-[11px] text-muted-foreground">Public webmails (@gmail, @yahoo) successfully filtered out.</p>
+                  <p className="text-sm text-muted-foreground">Public webmails (@gmail, @yahoo) successfully filtered out.</p>
                 </div>
               </div>
 
@@ -49,7 +49,7 @@ export default function RecruiterPendingPage() {
                 <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5 animate-pulse" />
                 <div>
                   <span className="font-semibold">Company Identity Validation</span>
-                  <p className="text-[11px] text-muted-foreground">Verification team is validating your official company domain and LinkedIn credentials.</p>
+                  <p className="text-sm text-muted-foreground">Verification team is validating your official company domain and LinkedIn credentials.</p>
                 </div>
               </div>
 
@@ -57,7 +57,7 @@ export default function RecruiterPendingPage() {
                 <ShieldAlert className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold">Talent Pool Access Activation</span>
-                  <p className="text-[11px]">Unlocks candidate AI report cards, verified skill badges, and job posting permissions.</p>
+                  <p className="text-sm">Unlocks candidate AI report cards, verified skill badges, and job posting permissions.</p>
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@ export default function RecruiterPendingPage() {
                 <span className="text-sm font-bold text-primary flex items-center gap-1.5">
                   <span>⚡ SIH Evaluator Fast-Track</span>
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary text-primary-foreground font-bold">
+                <span className="text-sm font-mono px-2 py-0.5 rounded bg-primary text-primary-foreground font-bold">
                   Demo Mode
                 </span>
               </div>

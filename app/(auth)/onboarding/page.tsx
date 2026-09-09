@@ -62,7 +62,7 @@ export default function OnboardingPage() {
           // ignore
         }
         setTimeout(() => {
-          router.push('/feed');
+          router.push('/dashboard');
         }, 600);
       } else {
         setError(res.error || 'Failed to complete onboarding.');

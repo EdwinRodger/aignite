@@ -87,6 +87,16 @@ export default function AdminVerificationsPage() {
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-border">
           <div>
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <Link
+                href="/admin"
+                className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Platform Admin
+              </Link>
+              <span className="text-sm text-muted-foreground">/</span>
+              <span className="text-sm font-bold text-foreground">Verifications</span>
+            </div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-sm font-bold text-primary mb-2">
               <Lock className="w-3.5 h-3.5" />
               <span>Platform Admin & Trust Console</span>
@@ -103,11 +113,11 @@ export default function AdminVerificationsPage() {
           <div className="flex items-center gap-3">
             <div className="px-4 py-2.5 rounded-2xl bg-card border border-border text-center">
               <div className="text-xl font-bold font-mono text-amber-500">{pendingCount}</div>
-              <div className="text-[10px] text-muted-foreground uppercase font-semibold">Pending Review</div>
+              <div className="text-sm text-muted-foreground uppercase font-semibold">Pending Review</div>
             </div>
             <div className="px-4 py-2.5 rounded-2xl bg-card border border-border text-center">
               <div className="text-xl font-bold font-mono text-emerald-500">{approvedCount}</div>
-              <div className="text-[10px] text-muted-foreground uppercase font-semibold">Verified Partners</div>
+              <div className="text-sm text-muted-foreground uppercase font-semibold">Verified Partners</div>
             </div>
           </div>
         </div>
@@ -186,20 +196,20 @@ export default function AdminVerificationsPage() {
                           {item.recruiterDesignation}
                         </span>
                         {isPending && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-                            <Clock className="w-3 h-3" />
+                          <span className="inline-flex items-center gap-1 text-sm font-bold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                            <Clock className="w-3.5 h-3.5" />
                             <span>Pending Review</span>
                           </span>
                         )}
                         {isApproved && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                            <CheckCircle2 className="w-3 h-3" />
+                          <span className="inline-flex items-center gap-1 text-sm font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>Verified Partner</span>
                           </span>
                         )}
                         {item.status === 'rejected' && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-destructive/10 text-destructive border border-destructive/30">
-                            <XCircle className="w-3 h-3" />
+                          <span className="inline-flex items-center gap-1 text-sm font-bold px-2.5 py-0.5 rounded-full bg-destructive/10 text-destructive border border-destructive/30">
+                            <XCircle className="w-3.5 h-3.5" />
                             <span>Rejected</span>
                           </span>
                         )}
@@ -215,15 +225,15 @@ export default function AdminVerificationsPage() {
                           href={item.companyWebsite.startsWith('http') ? item.companyWebsite : `https://${item.companyWebsite}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-1 text-primary hover:underline font-mono text-[11px]"
+                          className="flex items-center gap-1 text-primary hover:underline font-mono text-sm"
                         >
-                          <Globe className="w-3 h-3" />
+                          <Globe className="w-3.5 h-3.5" />
                           <span>{item.companyWebsite.replace(/^https?:\/\//, '')}</span>
-                          <ArrowUpRight className="w-3 h-3" />
+                          <ArrowUpRight className="w-3.5 h-3.5" />
                         </a>
 
-                        <div className="flex items-center gap-1 font-mono text-[11px]">
-                          <Mail className="w-3 h-3 text-muted-foreground" />
+                        <div className="flex items-center gap-1 font-mono text-sm">
+                          <Mail className="w-3.5 h-3.5 text-muted-foreground" />
                           <span>{item.workEmail}</span>
                         </div>
 
@@ -232,11 +242,11 @@ export default function AdminVerificationsPage() {
                             href={item.linkedinUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex items-center gap-1 text-primary hover:underline text-[11px]"
+                            className="flex items-center gap-1 text-primary hover:underline text-sm"
                           >
-                            <Link2 className="w-3 h-3" />
+                            <Link2 className="w-3.5 h-3.5" />
                             <span>LinkedIn Profile</span>
-                            <ArrowUpRight className="w-3 h-3" />
+                            <ArrowUpRight className="w-3.5 h-3.5" />
                           </a>
                         )}
                       </div>

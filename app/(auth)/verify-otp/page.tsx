@@ -102,7 +102,7 @@ function VerifyOtpContent() {
         if (res.needsOnboarding) {
           router.push('/onboarding');
         } else {
-          router.push('/feed');
+          router.push('/dashboard');
         }
       } else {
         setError(res.error || 'Invalid verification code.');

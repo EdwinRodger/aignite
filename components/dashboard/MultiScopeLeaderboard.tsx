@@ -16,29 +16,11 @@ interface LeaderboardEntry {
   topBadge: string;
 }
 
-const REGIONAL_ROSTER: LeaderboardEntry[] = [
-  { rank: 1, name: 'Aarav Sharma', username: 'aarav_sharma', institutionOrCountry: 'IIT Bombay, MH', streakDays: 28, scoreXp: 2420, rankChange: 0, isCurrentUser: true, avatarBg: 'bg-emerald-500/20 text-emerald-500', topBadge: 'RAG Master' },
-  { rank: 2, name: 'Rohan Deshmukh', username: 'rohan_cuda', institutionOrCountry: 'VJTI Mumbai, MH', streakDays: 22, scoreXp: 1890, rankChange: 1, avatarBg: 'bg-cyan-500/20 text-cyan-500', topBadge: 'TensorRT Specialist' },
-  { rank: 3, name: 'Tanvi Joshi', username: 'tanvi_ai', institutionOrCountry: 'COEP Pune, MH', streakDays: 19, scoreXp: 1740, rankChange: -1, avatarBg: 'bg-primary/20 text-primary', topBadge: 'Vector Wizard' },
-  { rank: 4, name: 'Aditya Kulkarni', username: 'aditya_k', institutionOrCountry: 'PICT Pune, MH', streakDays: 16, scoreXp: 1520, rankChange: 2, avatarBg: 'bg-chart-4/20 text-chart-4', topBadge: 'Agent Architect' },
-  { rank: 5, name: 'Neha More', username: 'neha_more', institutionOrCountry: 'SPIT Mumbai, MH', streakDays: 14, scoreXp: 1390, rankChange: 0, avatarBg: 'bg-chart-2/20 text-chart-2', topBadge: '7-Day Streak' },
-];
+const REGIONAL_ROSTER: LeaderboardEntry[] = [];
 
-const NATIONAL_ROSTER: LeaderboardEntry[] = [
-  { rank: 1, name: 'Aarav Sharma', username: 'aarav_sharma', institutionOrCountry: 'IIT Bombay (MH)', streakDays: 28, scoreXp: 2420, rankChange: 0, isCurrentUser: true, avatarBg: 'bg-emerald-500/20 text-emerald-500', topBadge: 'RAG Master' },
-  { rank: 2, name: 'Priya Patel', username: 'priya_ml', institutionOrCountry: 'BITS Pilani (RJ)', streakDays: 24, scoreXp: 2310, rankChange: 1, avatarBg: 'bg-primary/20 text-primary', topBadge: 'Agent Architect' },
-  { rank: 3, name: 'Karthik Raja', username: 'karthik_ann', institutionOrCountry: 'IIIT Hyderabad (TS)', streakDays: 21, scoreXp: 2150, rankChange: -1, avatarBg: 'bg-cyan-500/20 text-cyan-500', topBadge: 'TensorRT Specialist' },
-  { rank: 4, name: 'Ananya Iyer', username: 'ananya_cv', institutionOrCountry: 'IIT Delhi (DL)', streakDays: 19, scoreXp: 1980, rankChange: 2, avatarBg: 'bg-chart-4/20 text-chart-4', topBadge: 'Vision Titan' },
-  { rank: 5, name: 'Siddharth Sen', username: 'sid_rag', institutionOrCountry: 'IIT Kharagpur (WB)', streakDays: 17, scoreXp: 1840, rankChange: 0, avatarBg: 'bg-chart-5/20 text-chart-5', topBadge: 'Vector Wizard' },
-];
+const NATIONAL_ROSTER: LeaderboardEntry[] = [];
 
-const INTERNATIONAL_ROSTER: LeaderboardEntry[] = [
-  { rank: 1, name: 'Alex Chen', username: 'alex_triton', institutionOrCountry: 'Stanford University, USA', streakDays: 35, scoreXp: 3100, rankChange: 0, avatarBg: 'bg-purple-500/20 text-purple-500', topBadge: 'AI Architect' },
-  { rank: 2, name: 'Elena Rostova', username: 'elena_kernels', institutionOrCountry: 'ETH Zürich, Switzerland', streakDays: 31, scoreXp: 2890, rankChange: 1, avatarBg: 'bg-blue-500/20 text-blue-500', topBadge: 'TensorRT Specialist' },
-  { rank: 3, name: 'Aarav Sharma', username: 'aarav_sharma', institutionOrCountry: 'IIT Bombay, India', streakDays: 28, scoreXp: 2420, rankChange: 2, isCurrentUser: true, avatarBg: 'bg-emerald-500/20 text-emerald-500', topBadge: 'RAG Master' },
-  { rank: 4, name: 'Kenji Takahashi', username: 'kenji_vllm', institutionOrCountry: 'University of Tokyo, Japan', streakDays: 26, scoreXp: 2380, rankChange: -1, avatarBg: 'bg-amber-500/20 text-amber-500', topBadge: 'Agent Architect' },
-  { rank: 5, name: 'Priya Patel', username: 'priya_ml', institutionOrCountry: 'BITS Pilani, India', streakDays: 24, scoreXp: 2310, rankChange: 0, avatarBg: 'bg-primary/20 text-primary', topBadge: 'Agent Architect' },
-];
+const INTERNATIONAL_ROSTER: LeaderboardEntry[] = [];
 
 export function MultiScopeLeaderboard() {
   const [metric, setMetric] = useState<'streak' | 'score'>('streak');
@@ -111,7 +93,7 @@ export function MultiScopeLeaderboard() {
 
       {/* Scope Selector (Regional, National, International) */}
       <div role="tablist" aria-label="Leaderboard geographic scope" className="flex flex-wrap items-center gap-2 text-sm">
-        <span className="text-[11px] font-mono uppercase text-muted-foreground mr-1">Scope:</span>
+        <span className="text-sm font-mono uppercase text-muted-foreground mr-1">Scope:</span>
         <button
           type="button"
           role="tab"
@@ -164,108 +146,120 @@ export function MultiScopeLeaderboard() {
         </button>
       </div>
 
-      {/* Leaderboard Table */}
+      {/* Leaderboard Content */}
       <div id="leaderboard-roster-panel" role="tabpanel" aria-labelledby={metric === 'streak' ? 'tab-metric-streak' : 'tab-metric-score'} className="overflow-x-auto">
-        <table className="w-full text-left text-sm" aria-label="Competitive AI Leaderboard Roster">
-          <thead>
-            <tr className="border-b border-border/80 text-[10px] font-mono text-muted-foreground uppercase">
-              <th scope="col" className="py-2.5 px-3">Rank</th>
-              <th scope="col" className="py-2.5 px-3">Student Engineer</th>
-              <th scope="col" className="py-2.5 px-3">Region / Campus</th>
-              <th scope="col" className="py-2.5 px-3">Verified Skill</th>
-              <th scope="col" className="py-2.5 px-3 text-right">
-                {metric === 'streak' ? 'Daily Streak' : 'Total Points (XP)'}
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border/60 font-sans">
-            {sortedRoster.map((entry, idx) => (
-              <tr
-                key={entry.username}
-                className={`transition-colors ${
-                  entry.isCurrentUser
-                    ? 'bg-primary/10 hover:bg-primary/15 font-semibold'
-                    : 'hover:bg-muted/40'
-                }`}
-              >
-                {/* Rank */}
-                <td className="py-3 px-3 font-mono">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-sm ${
-                        idx === 0
-                          ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 font-black'
-                          : idx === 1
-                          ? 'bg-slate-500/20 text-slate-700 dark:text-slate-200 font-bold'
-                          : idx === 2
-                          ? 'bg-amber-600/20 text-amber-800 dark:text-amber-400 font-bold'
-                          : 'text-muted-foreground'
-                      }`}
-                    >
-                      {idx + 1}
-                    </span>
-                    {entry.rankChange > 0 && (
-                      <span aria-label={`Rank increased by ${entry.rankChange}`} className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">↑{entry.rankChange}</span>
-                    )}
-                    {entry.rankChange < 0 && (
-                      <span aria-label={`Rank decreased by ${Math.abs(entry.rankChange)}`} className="text-[10px] font-mono text-destructive font-bold">↓{Math.abs(entry.rankChange)}</span>
-                    )}
-                  </div>
-                </td>
-
-                {/* Candidate Name */}
-                <td className="py-3 px-3">
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 ${entry.avatarBg}`}
-                    >
-                      {entry.name.slice(0, 2).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="text-foreground flex items-center gap-1.5">
-                        <span>{entry.name}</span>
-                        {entry.isCurrentUser && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-primary text-primary-foreground font-bold uppercase">
-                            You
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[10px] font-mono text-muted-foreground">@{entry.username}</span>
-                    </div>
-                  </div>
-                </td>
-
-                {/* Institution */}
-                <td className="py-3 px-3 font-mono text-muted-foreground text-[11px]">
-                  {entry.institutionOrCountry}
-                </td>
-
-                {/* Top Badge */}
-                <td className="py-3 px-3">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-muted border border-border text-[10px] font-mono text-foreground">
-                    <Award className="w-3 h-3 text-primary" />
-                    <span>{entry.topBadge}</span>
-                  </span>
-                </td>
-
-                {/* Metric Value */}
-                <td className="py-3 px-3 text-right font-mono font-bold">
-                  {metric === 'streak' ? (
-                    <span className="text-orange-500 flex items-center justify-end gap-1">
-                      <span>🔥</span>
-                      <span>{entry.streakDays} Days</span>
-                    </span>
-                  ) : (
-                    <span className="text-primary flex items-center justify-end gap-1">
-                      <span>⚡</span>
-                      <span>{entry.scoreXp} XP</span>
-                    </span>
-                  )}
-                </td>
+        {sortedRoster.length === 0 ? (
+          <div className="py-12 px-4 text-center rounded-2xl bg-muted/30 border border-border/80 space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto text-xl font-bold">
+              🏆
+            </div>
+            <h4 className="text-base font-bold text-foreground">No Ranked Engineers in this Division Yet</h4>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              Be the first to complete a daily AI defense challenge or verify a technical capstone to claim rank #1 on the {scope} leaderboard!
+            </p>
+          </div>
+        ) : (
+          <table className="w-full text-left text-sm" aria-label="Competitive AI Leaderboard Roster">
+            <thead>
+              <tr className="border-b border-border/80 text-sm font-mono text-muted-foreground uppercase">
+                <th scope="col" className="py-2.5 px-3">Rank</th>
+                <th scope="col" className="py-2.5 px-3">Student Engineer</th>
+                <th scope="col" className="py-2.5 px-3">Region / Campus</th>
+                <th scope="col" className="py-2.5 px-3">Verified Skill</th>
+                <th scope="col" className="py-2.5 px-3 text-right">
+                  {metric === 'streak' ? 'Daily Streak' : 'Total Points (XP)'}
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-border/60 font-sans">
+              {sortedRoster.map((entry, idx) => (
+                <tr
+                  key={entry.username}
+                  className={`transition-colors ${
+                    entry.isCurrentUser
+                      ? 'bg-primary/10 hover:bg-primary/15 font-semibold'
+                      : 'hover:bg-muted/40'
+                  }`}
+                >
+                  {/* Rank */}
+                  <td className="py-3 px-3 font-mono">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-sm ${
+                          idx === 0
+                            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 font-black'
+                            : idx === 1
+                            ? 'bg-slate-500/20 text-slate-700 dark:text-slate-200 font-bold'
+                            : idx === 2
+                            ? 'bg-amber-600/20 text-amber-800 dark:text-amber-400 font-bold'
+                            : 'text-muted-foreground'
+                        }`}
+                      >
+                        {idx + 1}
+                      </span>
+                      {entry.rankChange > 0 && (
+                        <span aria-label={`Rank increased by ${entry.rankChange}`} className="text-sm font-mono text-emerald-600 dark:text-emerald-400 font-bold">↑{entry.rankChange}</span>
+                      )}
+                      {entry.rankChange < 0 && (
+                        <span aria-label={`Rank decreased by ${Math.abs(entry.rankChange)}`} className="text-sm font-mono text-destructive font-bold">↓{Math.abs(entry.rankChange)}</span>
+                      )}
+                    </div>
+                  </td>
+
+                  {/* Candidate Name */}
+                  <td className="py-3 px-3">
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 ${entry.avatarBg}`}
+                      >
+                        {entry.name.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="text-foreground flex items-center gap-1.5">
+                          <span>{entry.name}</span>
+                          {entry.isCurrentUser && (
+                            <span className="text-sm font-mono px-1.5 py-0.5 rounded bg-primary text-primary-foreground font-bold uppercase">
+                              You
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-sm font-mono text-muted-foreground">@{entry.username}</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Institution */}
+                  <td className="py-3 px-3 font-mono text-muted-foreground text-sm">
+                    {entry.institutionOrCountry}
+                  </td>
+
+                  {/* Top Badge */}
+                  <td className="py-3 px-3">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-muted border border-border text-sm font-mono text-foreground">
+                      <Award className="w-3 h-3 text-primary" />
+                      <span>{entry.topBadge}</span>
+                    </span>
+                  </td>
+
+                  {/* Metric Value */}
+                  <td className="py-3 px-3 text-right font-mono font-bold">
+                    {metric === 'streak' ? (
+                      <span className="text-orange-500 flex items-center justify-end gap-1">
+                        <span>🔥</span>
+                        <span>{entry.streakDays} Days</span>
+                      </span>
+                    ) : (
+                      <span className="text-primary flex items-center justify-end gap-1">
+                        <span>⚡</span>
+                        <span>{entry.scoreXp} XP</span>
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

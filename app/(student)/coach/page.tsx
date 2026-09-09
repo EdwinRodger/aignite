@@ -231,7 +231,7 @@ export default function CoachPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-primary font-mono">4.</span>
-                  <span><strong>Confidence & Pace (15%)</strong>: Natural cadence (120–150 WPM) with minimal filler words.</span>
+                  <span><strong>Confidence & Pace (15%)</strong>: Natural cadence (120-150 WPM) with minimal filler words.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-primary font-mono">5.</span>

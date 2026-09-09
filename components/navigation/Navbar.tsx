@@ -365,7 +365,7 @@ export function Navbar() {
               href="/login"
               className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span>Sign In with OTP</span>
+              <span>Sign In</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           )}

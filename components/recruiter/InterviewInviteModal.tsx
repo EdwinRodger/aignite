@@ -40,6 +40,7 @@ export function InterviewInviteModal({
 
     try {
       const res = await sendInterviewInvitationAction(candidate.id, {
+        candidateName: candidate.fullName,
         companyName: currentCompany,
         roleTitle: selectedJob,
         roundType,
@@ -162,7 +163,7 @@ export function InterviewInviteModal({
             <div className="space-y-1.5">
               <label className="font-semibold text-foreground flex items-center justify-between">
                 <span>Personalized Recruiter Invitation Note</span>
-                <span className="text-[10px] text-muted-foreground font-mono">Visible to Candidate</span>
+                <span className="text-sm text-muted-foreground font-mono">Visible to Candidate</span>
               </label>
               <textarea
                 rows={4}
@@ -173,7 +174,7 @@ export function InterviewInviteModal({
             </div>
 
             {/* Candidate Verification Summary */}
-            <div className="p-3 rounded-xl bg-muted/60 border border-border text-[11px] text-muted-foreground flex items-center justify-between">
+            <div className="p-3 rounded-xl bg-muted/60 border border-border text-sm text-muted-foreground flex items-center justify-between">
               <span>Candidate Match: {candidate.leagueTier.toUpperCase()} TIER</span>
               <span className="text-primary font-bold">Report Card: {candidate.reportCard.overallScore}/10</span>
             </div>

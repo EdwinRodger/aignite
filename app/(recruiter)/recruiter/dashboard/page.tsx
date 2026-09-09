@@ -10,7 +10,7 @@ import {
   getRecruiterJobsAction,
   getRecruiterInvitationsAction,
 } from '@/app/actions/recruiter';
-import { signOutUser } from '@/app/actions/auth';
+import { signOutUser, getAuthUserAction } from '@/app/actions/auth';
 import { CandidateCard } from '@/components/recruiter/CandidateCard';
 import { CandidateDossierModal } from '@/components/recruiter/CandidateDossierModal';
 import { InterviewInviteModal } from '@/components/recruiter/InterviewInviteModal';
@@ -53,15 +53,37 @@ export default function RecruiterDashboardPage() {
   const [isCreateJobOpen, setIsCreateJobOpen] = useState(false);
 
   // Recruiter Profile Information
-  const recruiterCompany = 'Google DeepMind';
-  const recruiterName = 'Priya Venkatesh';
-  const recruiterDesignation = 'Talent Acquisition Lead (GenAI & Systems)';
+  const [recruiterInfo, setRecruiterInfo] = useState({
+    company: 'Enterprise AI Partner',
+    name: 'Talent Acquisition Lead',
+    designation: 'GenAI & Systems Hiring Team',
+  });
 
   const [, startTransition] = useTransition();
 
   // Load initial data
   useEffect(() => {
+    const timer = setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('aignite_recruiter_profile');
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            setRecruiterInfo((prev) => ({ ...prev, ...parsed }));
+          } catch {
+            // fallback
+          }
+        }
+      }
+    }, 0);
+
     startTransition(async () => {
+      const auth = await getAuthUserAction();
+      if (!auth.loggedIn || auth.role !== 'recruiter') {
+        router.push('/recruiter/login');
+        return;
+      }
+
       const candRes = await getCandidateTalentPoolAction();
       if (candRes.success) setCandidates(candRes.candidates);
 
@@ -71,7 +93,9 @@ export default function RecruiterDashboardPage() {
       const invRes = await getRecruiterInvitationsAction();
       if (invRes.success) setInvitations(invRes.invitations);
     });
-  }, []);
+
+    return () => clearTimeout(timer);
+  }, [router]);
 
   // Filter Trigger
   const applyFilters = () => {
@@ -121,7 +145,7 @@ export default function RecruiterDashboardPage() {
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground font-sans tracking-tight">
-                    {recruiterCompany}
+                    {recruiterInfo.company}
                   </h1>
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold">
                     <ShieldCheck className="w-3.5 h-3.5" />
@@ -129,7 +153,7 @@ export default function RecruiterDashboardPage() {
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground font-mono">
-                  {recruiterName} • {recruiterDesignation}
+                  {recruiterInfo.name} • {recruiterInfo.designation}
                 </p>
               </div>
             </div>
@@ -159,46 +183,50 @@ export default function RecruiterDashboardPage() {
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t border-border/80">
             <div className="p-3.5 rounded-2xl bg-muted/60 border border-border">
-              <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1.5">
+              <span className="text-sm font-mono text-muted-foreground uppercase flex items-center gap-1.5">
                 <Users className="w-3.5 h-3.5 text-primary" />
                 <span>Talent Indexed</span>
               </span>
-              <div className="text-2xl font-black font-mono text-foreground mt-1">1,420+</div>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
-                Top 5% across India
+              <div className="text-2xl font-black font-mono text-foreground mt-1">
+                {candidates.length > 0 ? `${candidates.length} Profiles` : 'Ready to Index'}
+              </div>
+              <span className="text-sm text-emerald-600 dark:text-emerald-400 font-mono">
+                Verified Skills &amp; Reports
               </span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-muted/60 border border-border">
-              <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1.5">
+              <span className="text-sm font-mono text-muted-foreground uppercase flex items-center gap-1.5">
                 <Trophy className="w-3.5 h-3.5 text-chart-5" />
-                <span>Elite Architects</span>
+                <span>Architects</span>
               </span>
-              <div className="text-2xl font-black font-mono text-foreground mt-1">48 Available</div>
-              <span className="text-[10px] text-primary font-mono">
+              <div className="text-2xl font-black font-mono text-foreground mt-1">
+                {candidates.filter((c) => c.leagueTier === 'architect').length} Top Division
+              </div>
+              <span className="text-sm text-primary font-mono">
                 Scores &gt; 9.0 on Capstones
               </span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-muted/60 border border-border">
-              <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1.5">
+              <span className="text-sm font-mono text-muted-foreground uppercase flex items-center gap-1.5">
                 <Briefcase className="w-3.5 h-3.5 text-secondary-foreground" />
                 <span>Active Roles</span>
               </span>
               <div className="text-2xl font-black font-mono text-foreground mt-1">{jobs.length} Positions</div>
-              <span className="text-[10px] text-muted-foreground font-mono">
+              <span className="text-sm text-muted-foreground font-mono">
                 Threshold Gating Active
               </span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-muted/60 border border-border">
-              <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1.5">
+              <span className="text-sm font-mono text-muted-foreground uppercase flex items-center gap-1.5">
                 <Send className="w-3.5 h-3.5 text-chart-4" />
                 <span>Invites Dispatched</span>
               </span>
               <div className="text-2xl font-black font-mono text-foreground mt-1">{invitations.length} Sent</div>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
-                85% Response Rate
+              <span className="text-sm text-emerald-600 dark:text-emerald-400 font-mono">
+                Direct Fast-Track
               </span>
             </div>
           </div>
@@ -279,7 +307,7 @@ export default function RecruiterDashboardPage() {
               <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-border/60 text-sm">
                 {/* League Tier Filter */}
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1">
+                  <span className="text-sm font-mono text-muted-foreground uppercase flex items-center gap-1">
                     <Trophy className="w-3 h-3 text-chart-5" />
                     <span>Min Tier:</span>
                   </span>
@@ -302,7 +330,7 @@ export default function RecruiterDashboardPage() {
 
                 {/* Badge Requirement Filter */}
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1">
+                  <span className="text-sm font-mono text-muted-foreground uppercase flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-primary" />
                     <span>Required Badge:</span>
                   </span>
@@ -325,7 +353,7 @@ export default function RecruiterDashboardPage() {
 
                 {/* Min Report Score */}
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1">
+                  <span className="text-sm font-mono text-muted-foreground uppercase flex items-center gap-1">
                     <SlidersHorizontal className="w-3 h-3 text-chart-1" />
                     <span>Min Report Card:</span>
                   </span>
@@ -384,7 +412,7 @@ export default function RecruiterDashboardPage() {
                 <Users className="w-10 h-10 text-muted-foreground mx-auto" />
                 <h3 className="text-base font-bold text-foreground">No Candidates Matched Criteria</h3>
                 <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                  Try relaxing your minimum league tier or badge requirements to see more aspiring AI engineers.
+                  Try relaxing your minimum league tier or badge requirements, or wait for students to complete capstones and oral defense rounds.
                 </p>
                 <button
                   type="button"
@@ -428,88 +456,106 @@ export default function RecruiterDashboardPage() {
               </button>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-5">
-              {jobs.map((job) => (
-                <div
-                  key={job.id}
-                  className="p-6 rounded-3xl bg-card border border-border space-y-4 shadow-sm hover:border-primary/40 transition-all"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-muted border border-border flex items-center justify-center text-2xl shadow-sm shrink-0">
-                        {job.companyLogo}
+            {jobs.length > 0 ? (
+              <div className="grid md:grid-cols-2 gap-5">
+                {jobs.map((job) => (
+                  <div
+                    key={job.id}
+                    className="p-6 rounded-3xl bg-card border border-border space-y-4 shadow-sm hover:border-primary/40 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-muted border border-border flex items-center justify-center text-2xl shadow-sm shrink-0">
+                          {job.companyLogo}
+                        </div>
+                        <div>
+                          <h3 className="text-base font-bold text-foreground font-sans">{job.title}</h3>
+                          <p className="text-sm text-muted-foreground font-mono mt-0.5">
+                            {job.companyName} • {job.roleCategory}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-base font-bold text-foreground font-sans">{job.title}</h3>
-                        <p className="text-sm text-muted-foreground font-mono mt-0.5">
-                          {job.companyName} • {job.roleCategory}
-                        </p>
-                      </div>
+
+                      <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold shrink-0">
+                        Active
+                      </span>
                     </div>
 
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold shrink-0">
-                      Active
-                    </span>
-                  </div>
+                    <p className="text-sm text-foreground/80 leading-relaxed line-clamp-2">
+                      {job.description}
+                    </p>
 
-                  <p className="text-sm text-foreground/80 leading-relaxed line-clamp-2">
-                    {job.description}
-                  </p>
-
-                  {/* Metadata */}
-                  <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-primary" />
-                      <span>{job.location}</span>
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>{job.salaryRange}</span>
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
-                      <span>{job.postedDate}</span>
-                    </span>
-                  </div>
-
-                  {/* Prerequisite Thresholds */}
-                  <div className="p-3 rounded-2xl bg-muted/60 border border-border/80 space-y-2">
-                    <span className="text-[10px] uppercase font-mono font-bold text-muted-foreground block">
-                      Automated Gate Requirements:
-                    </span>
-                    <div className="flex flex-wrap items-center gap-2 text-sm">
-                      <span className="px-2 py-1 rounded-lg bg-card border border-border text-foreground font-mono">
-                        Tier: {job.minLeagueTier.toUpperCase()}
+                    {/* Metadata */}
+                    <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        <span>{job.location}</span>
                       </span>
-                      <span className="px-2 py-1 rounded-lg bg-card border border-border text-primary font-mono font-bold">
-                        Min Score: {job.minReportScore.toFixed(1)}/10
+                      <span className="flex items-center gap-1">
+                        <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>{job.salaryRange}</span>
                       </span>
-                      {job.requiredBadges.map((b) => (
-                        <span
-                          key={b}
-                          className="px-2 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium"
-                        >
-                          🎖️ {b}
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                        <span>{job.postedDate}</span>
+                      </span>
+                    </div>
+
+                    {/* Prerequisite Thresholds */}
+                    <div className="p-3 rounded-2xl bg-muted/60 border border-border/80 space-y-2">
+                      <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
+                        Automated Gate Requirements:
+                      </span>
+                      <div className="flex flex-wrap items-center gap-2 text-sm">
+                        <span className="px-2 py-1 rounded-lg bg-card border border-border text-foreground font-mono">
+                          Tier: {job.minLeagueTier.toUpperCase()}
                         </span>
-                      ))}
+                        <span className="px-2 py-1 rounded-lg bg-card border border-border text-primary font-mono font-bold">
+                          Min Score: {job.minReportScore.toFixed(1)}/10
+                        </span>
+                        {job.requiredBadges.map((b) => (
+                          <span
+                            key={b}
+                            className="px-2 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium"
+                          >
+                            🎖️ {b}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between border-t border-border/80">
+                      <span className="text-sm font-mono text-muted-foreground">
+                        <strong className="text-foreground">{job.applicantsCount}</strong> Qualified Candidates Applied
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('talent')}
+                        className="text-sm font-bold text-primary hover:underline cursor-pointer"
+                      >
+                        Find Matching Talent &rarr;
+                      </button>
                     </div>
                   </div>
-
-                  <div className="pt-2 flex items-center justify-between border-t border-border/80">
-                    <span className="text-sm font-mono text-muted-foreground">
-                      <strong className="text-foreground">{job.applicantsCount}</strong> Qualified Candidates Applied
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('talent')}
-                      className="text-sm font-bold text-primary hover:underline cursor-pointer"
-                    >
-                      Find Matching Talent &rarr;
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-12 text-center rounded-3xl bg-card border border-border space-y-3">
+                <Briefcase className="w-10 h-10 text-muted-foreground mx-auto" />
+                <h3 className="text-base font-bold text-foreground">No Active Job Openings Posted Yet</h3>
+                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                  Post your first AI role with verified thresholds to attract candidates filtered by league tier and technical badges.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsCreateJobOpen(true)}
+                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm mt-2 cursor-pointer inline-flex items-center gap-1.5"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Post First AI Role</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -523,45 +569,62 @@ export default function RecruiterDashboardPage() {
               </p>
             </div>
 
-            <div className="space-y-3">
-              {invitations.map((inv) => (
-                <div
-                  key={inv.id}
-                  className="p-5 rounded-3xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
-                >
-                  <div className="space-y-1.5 flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-base font-bold text-foreground">{inv.candidateName}</h3>
-                      <span className="text-sm text-muted-foreground font-mono">• {inv.roleTitle}</span>
+            {invitations.length > 0 ? (
+              <div className="space-y-3">
+                {invitations.map((inv) => (
+                  <div
+                    key={inv.id}
+                    className="p-5 rounded-3xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
+                  >
+                    <div className="space-y-1.5 flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base font-bold text-foreground">{inv.candidateName}</h3>
+                        <span className="text-sm text-muted-foreground font-mono">• {inv.roleTitle}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground italic font-serif bg-muted/40 p-2.5 rounded-xl border border-border/50">
+                        &ldquo;{inv.customNote}&rdquo;
+                      </p>
+                      <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-muted-foreground pt-1">
+                        <span>Round: <strong>{inv.roundType}</strong></span>
+                        <span>•</span>
+                        <span>Company: <strong>{inv.companyName}</strong></span>
+                        <span>•</span>
+                        <span>Sent: <strong>{inv.sentAt}</strong></span>
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground italic font-serif bg-muted/40 p-2.5 rounded-xl border border-border/50">
-                      &ldquo;{inv.customNote}&rdquo;
-                    </p>
-                    <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-muted-foreground pt-1">
-                      <span>Round: <strong>{inv.roundType}</strong></span>
-                      <span>•</span>
-                      <span>Company: <strong>{inv.companyName}</strong></span>
-                      <span>•</span>
-                      <span>Sent: <strong>{inv.sentAt}</strong></span>
-                    </div>
-                  </div>
 
-                  <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
-                    <span
-                      className={`px-3 py-1.5 rounded-xl text-sm font-bold font-mono border ${
-                        inv.status === 'Scheduled'
-                          ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                          : inv.status === 'Accepted'
-                          ? 'bg-primary/15 border-primary/30 text-primary'
-                          : 'bg-muted border-border text-muted-foreground'
-                      }`}
-                    >
-                      ● {inv.status}
-                    </span>
+                    <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+                      <span
+                        className={`px-3 py-1.5 rounded-xl text-sm font-bold font-mono border ${
+                          inv.status === 'Scheduled'
+                            ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+                            : inv.status === 'Accepted'
+                            ? 'bg-primary/15 border-primary/30 text-primary'
+                            : 'bg-muted border-border text-muted-foreground'
+                        }`}
+                      >
+                        ● {inv.status}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-12 text-center rounded-3xl bg-card border border-border space-y-3">
+                <Send className="w-10 h-10 text-muted-foreground mx-auto" />
+                <h3 className="text-base font-bold text-foreground">No Interview Invitations Dispatched Yet</h3>
+                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                  Browse the verified candidate talent pool and dispatch direct technical interview invitations without preliminary screening calls.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('talent')}
+                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm mt-2 cursor-pointer"
+                >
+                  <span>Explore Candidate Talent Pool</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </main>
@@ -583,7 +646,7 @@ export default function RecruiterDashboardPage() {
         <InterviewInviteModal
           candidate={invitingCandidate}
           activeJobs={jobs}
-          currentCompany={recruiterCompany}
+          currentCompany={recruiterInfo.company}
           onClose={() => setInvitingCandidate(null)}
           onSuccess={handleInviteSuccess}
         />
@@ -592,7 +655,7 @@ export default function RecruiterDashboardPage() {
       {/* Create Job Posting Modal */}
       {isCreateJobOpen && (
         <CreateJobModal
-          currentCompany={recruiterCompany}
+          currentCompany={recruiterInfo.company}
           onClose={() => setIsCreateJobOpen(false)}
           onCreated={handleJobCreated}
         />
