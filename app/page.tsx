@@ -14,8 +14,16 @@ import {
   Brain,
   Boxes,
   Lock,
-  AlertTriangle
+  AlertTriangle,
+  FileText,
+  Map,
+  Layers,
+  CheckCircle2,
+  Award,
+  Zap,
 } from 'lucide-react';
+import { DAILY_COACH_QUESTIONS } from '@/lib/coach-data';
+import { AI_CAREER_ROADMAP } from '@/lib/roadmap-data';
 
 export default function HomePage() {
   const companyPacks = [
@@ -78,6 +86,72 @@ export default function HomePage() {
     { name: 'LLM Master', icon: '💎', color: 'text-cyan-400', border: 'border-cyan-400/40' },
     { name: 'AI Architect', icon: '👑', color: 'text-purple-400', border: 'border-purple-400/40' },
   ];
+
+  const publicFeatures = [
+    {
+      title: 'Resume Analyser',
+      badge: '100% Free • ATS Score',
+      description: 'Instant 0–100 score, missing skill gap radar, and company bar alignment (Google & NVIDIA).',
+      href: '/resume-analyzer',
+      icon: FileText,
+      iconColor: 'text-emerald-500',
+      iconBg: 'bg-emerald-500/10 border-emerald-500/20',
+      cta: 'Analyze Resume',
+    },
+    {
+      title: 'AI Mock Interview',
+      badge: 'Daily Voice Coach',
+      description: 'Oral technical defense simulation with live speech cadence, confidence, and system depth metrics.',
+      href: '/coach',
+      icon: Mic,
+      iconColor: 'text-chart-1',
+      iconBg: 'bg-chart-1/10 border-chart-1/20',
+      cta: 'Start Oral Defense',
+    },
+    {
+      title: 'Course Material',
+      badge: 'Company Packs',
+      description: 'Modular curriculum for NVIDIA CUDA/TensorRT, Google Gemma, OpenAI tool calling, and AWS Bedrock.',
+      href: '/packs',
+      icon: Layers,
+      iconColor: 'text-primary',
+      iconBg: 'bg-primary/10 border-primary/20',
+      cta: 'Explore Packs',
+    },
+    {
+      title: 'AI Career Roadmap',
+      badge: 'Competency Tree',
+      description: '6-stage progression from Math & PyTorch internals to Production RAG and GPU Kernel Engineering.',
+      href: '/roadmap',
+      icon: Map,
+      iconColor: 'text-chart-4',
+      iconBg: 'bg-chart-4/10 border-chart-4/20',
+      cta: 'View Roadmap',
+    },
+    {
+      title: 'Problem of the Day',
+      badge: 'Daily Streak Driver',
+      description: 'Daily high-yield applied AI question. Practice oral or conceptual defense to keep your flame streak alive.',
+      href: '#potd-spotlight',
+      icon: Flame,
+      iconColor: 'text-orange-500',
+      iconBg: 'bg-orange-500/10 border-orange-500/20',
+      cta: 'View Today’s POTD',
+    },
+    {
+      title: 'Coding Challenges & Lab',
+      badge: 'Interactive Sandbox',
+      description: 'Drag-and-drop RAG pipeline sequencer, PyTorch error hunter, and inference architecture tuner.',
+      href: '/dashboard',
+      icon: Boxes,
+      iconColor: 'text-purple-400',
+      iconBg: 'bg-purple-500/10 border-purple-500/20',
+      cta: 'Launch AI Lab',
+    },
+  ];
+
+  const todayQuestion = DAILY_COACH_QUESTIONS[0];
+  const roadmapPreviewStages = AI_CAREER_ROADMAP.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/25 pb-20 md:pb-0">
@@ -178,6 +252,167 @@ export default function HomePage() {
                     <span>Explore all 8+ AI Sparks & Full Feed</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* PUBLIC LEARNING & AI TOOLS SUITE (100% FREE ACCESS) */}
+        {/* ========================================================================= */}
+        <section className="py-16 border-t border-border bg-gradient-to-b from-card/30 via-background to-background relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary mb-2">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Public Features Hub • 100% Free &amp; Open Access</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  Everything You Need to Break into Applied AI Systems
+                </h2>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-2xl">
+                  Publicly accessible engineering tools designed to bridge academic theory with 2026 production standards.
+                </p>
+              </div>
+              <span className="text-xs font-mono text-muted-foreground mt-4 md:mt-0">
+                ⚡ No credit card required • Instant evaluation
+              </span>
+            </div>
+
+            {/* 6 Public Features Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {publicFeatures.map((feat) => {
+                const IconComponent = feat.icon;
+                return (
+                  <div
+                    key={feat.title}
+                    className="p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${feat.iconBg} ${feat.iconColor}`}>
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-muted border border-border text-muted-foreground">
+                          {feat.badge}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                        {feat.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                        {feat.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-border flex items-center justify-between text-xs">
+                      <Link
+                        href={feat.href}
+                        className="inline-flex items-center gap-1.5 font-bold text-primary hover:underline group/link"
+                      >
+                        <span>{feat.cta}</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* PROBLEM OF THE DAY (POTD) SPOTLIGHT */}
+        {/* ========================================================================= */}
+        <section id="potd-spotlight" className="py-16 border-t border-border bg-muted/15 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-500">
+                  <Flame className="w-4 h-4" />
+                  <span>Problem of the Day • Daily Streak Driver</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  Tackle Today&apos;s High-Yield Architecture Challenge
+                </h2>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Every morning at 06:00 IST, AIgnite drops one production interview scenario. Speak your answer into the voice coach or study key canonical trade-offs to keep your league streak burning.
+                </p>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                  <Link
+                    href="/coach"
+                    className="px-5 py-3 rounded-xl text-xs font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center gap-2 transition-transform active:scale-95"
+                  >
+                    <Mic className="w-4 h-4" />
+                    <span>Solve in Voice Mock Interview</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    href="/feed"
+                    className="px-5 py-3 rounded-xl text-xs font-bold bg-card hover:bg-muted text-foreground border border-border flex items-center gap-2 transition-colors"
+                  >
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    <span>Browse 5-Second Sparks</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Today's Question Card */}
+              <div className="lg:col-span-7">
+                <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl space-y-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                      <span className="text-xs font-bold font-mono text-foreground uppercase tracking-wider">
+                        Today&apos;s Active Challenge
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs font-mono">
+                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">
+                        {todayQuestion.track}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full bg-muted border border-border text-muted-foreground font-semibold">
+                        {todayQuestion.difficulty}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-base sm:text-lg font-black text-foreground mb-2">
+                      {todayQuestion.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                      &quot;{todayQuestion.questionText}&quot;
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-muted/50 border border-border/80 space-y-2">
+                    <div className="text-[11px] font-bold font-mono uppercase tracking-wider text-primary flex items-center gap-1.5">
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Canonical Focus Points Expected by Interviewers</span>
+                    </div>
+                    <ul className="space-y-1.5 text-xs text-muted-foreground">
+                      {todayQuestion.canonicalKeyPoints.slice(0, 3).map((point, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between text-xs font-mono">
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                      <span>Target Time:</span>
+                      <span className="text-foreground font-bold">{todayQuestion.estimatedSpeakingTime}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-orange-500 font-bold">
+                      <Flame className="w-4 h-4" />
+                      <span>+25 XP Streak Reward</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -518,6 +753,76 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* THE APPLIED AI SYSTEMS ROADMAP */}
+        {/* ========================================================================= */}
+        <section className="py-20 border-t border-border relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-4/10 border border-chart-4/20 text-xs font-bold text-chart-4 mb-2">
+                  <Map className="w-3.5 h-3.5" />
+                  <span>Public Competency Tree • 6-Stage Curriculum</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  The Applied AI Systems Roadmap
+                </h2>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
+                  Step-by-step career path from Mathematical Foundations to Distributed Training and Triton Kernels. Curated for 2026 AI systems hiring bars.
+                </p>
+              </div>
+              <Link
+                href="/roadmap"
+                className="mt-4 md:mt-0 text-xs font-bold text-primary hover:opacity-80 flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1"
+              >
+                <span>Explore Full Interactive Roadmap</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {roadmapPreviewStages.map((stage) => (
+                <div
+                  key={stage.id}
+                  className="p-5 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-lg"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                      <span>{stage.estimatedHours}</span>
+                      <span className="flex items-center gap-1 text-emerald-500 font-bold">
+                        <Award className="w-3.5 h-3.5" />
+                        <span>{stage.badgeAwarded.name}</span>
+                      </span>
+                    </div>
+                    <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                      {stage.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                      {stage.headline}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 mt-4 border-t border-border flex items-center justify-between text-[11px] font-mono">
+                    <span className="text-muted-foreground">{stage.topics.length} In-Depth Topics</span>
+                    <span className="text-primary font-bold">Stage {stage.stageNumber}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link
+                href="/roadmap"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs bg-card hover:bg-muted text-foreground border border-border transition-colors shadow-sm"
+              >
+                <Map className="w-4 h-4 text-chart-4" />
+                <span>View All 6 Milestone Stages &amp; Recruiter Badges</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
         </section>
