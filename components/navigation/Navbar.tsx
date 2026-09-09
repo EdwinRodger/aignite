@@ -69,19 +69,9 @@ export function Navbar() {
               <Flame className="w-5 h-5 text-primary transition-colors" />
             </div>
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xl font-black tracking-tight text-foreground font-mono">
-                <span className="text-primary font-extrabold underline decoration-primary/50 decoration-2 underline-offset-4">A</span>Ignite
-              </span>
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
-                SIH 2026
-              </span>
-            </div>
-            <span className="text-[11px] text-muted-foreground tracking-wide">
-              pr. <span className="text-foreground/80 font-medium">/ɪɡˈnaɪt/</span> (silent A)
-            </span>
-          </div>
+          <span className="text-xl font-black tracking-tight text-foreground font-mono">
+            <span className="text-primary font-extrabold underline decoration-primary/50 decoration-2 underline-offset-4">A</span>Ignite
+          </span>
         </Link>
 
         {/* Desktop Navigation Links */}
