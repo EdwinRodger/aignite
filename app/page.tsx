@@ -309,10 +309,17 @@ export default function HomePage() {
                     Embeddings, Vector Stores, and LLM nodes under tight latency and memory constraints.
                   </p>
                 </div>
-                <div className="pt-4 mt-4 border-t border-border">
+                <div className="pt-4 mt-4 border-t border-border flex items-center justify-between">
                   <span className="text-xs text-primary font-semibold flex items-center gap-1">
-                    <span>Unlocks &quot;RAG Master&quot; Verified Badge</span>
+                    <span>Unlocks &quot;RAG Master&quot; Badge</span>
                   </span>
+                  <Link
+                    href="/packs/nvidia-ai-pack"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+                  >
+                    <span>Play Now</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
                 </div>
               </div>
             </div>
