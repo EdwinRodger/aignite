@@ -22,11 +22,24 @@ import {
   Award,
   Zap,
 } from 'lucide-react';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { AuthRedirector } from '@/components/navigation/AuthRedirector';
 import { DAILY_COACH_QUESTIONS } from '@/lib/coach-data';
 import { AI_CAREER_ROADMAP } from '@/lib/roadmap-data';
 import { MultiScopeLeaderboard } from '@/components/dashboard/MultiScopeLeaderboard';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const cookieStore = await cookies();
+  const studentSession = cookieStore.get('aignite_session')?.value;
+  if (studentSession) {
+    redirect('/dashboard');
+  }
+  const recruiterSession = cookieStore.get('aignite_recruiter_session')?.value;
+  if (recruiterSession) {
+    redirect('/recruiter/dashboard');
+  }
+
   const companyPacks = [
     {
       name: 'Google AI Pack',
@@ -157,6 +170,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/25 pb-20 md:pb-0">
       <Navbar />
+      <AuthRedirector />
       <MobileLaunchRedirector />
 
       <main id="main-content" className="flex-1">
