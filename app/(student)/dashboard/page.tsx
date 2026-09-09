@@ -162,8 +162,8 @@ export default function StudentDashboardPage() {
                 </div>
               </Card>
 
-              <Card asChild className="px-4 py-2.5 flex items-center gap-2.5 shadow-sm hover:border-primary/40 transition-colors cursor-pointer">
-                <Link href="/resume-analyzer">
+              <Card className="px-4 py-2.5 shadow-sm hover:border-primary/40 transition-colors cursor-pointer">
+                <Link href="/resume-analyzer" className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold font-mono text-sm">
                     {user.atsScore > 0 ? `${user.atsScore}%` : 'Scan'}
                   </div>
