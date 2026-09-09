@@ -52,7 +52,7 @@ export default function HomePage() {
       name: 'OpenAI Pack',
       company: 'OpenAI',
       icon: '⚪',
-      color: 'from-emerald-950/40 to-slate-900/60',
+      color: 'from-emerald-950/40 to-muted/80',
       borderColor: 'border-emerald-500/30',
       badge: 'Function Calling',
       description: 'Tool use, agentic JSON schema calling, embedding fine-tuning, and structured reasoning.',
@@ -81,11 +81,11 @@ export default function HomePage() {
   ];
 
   const leagueTiers = [
-    { name: 'Bronze AI Engineer', icon: '🥉', color: 'text-amber-600', border: 'border-amber-700/40' },
-    { name: 'Silver AI Engineer', icon: '🥈', color: 'text-slate-300', border: 'border-slate-500/40' },
-    { name: 'Gold AI Engineer', icon: '🥇', color: 'text-amber-400', border: 'border-amber-400/40' },
-    { name: 'LLM Master', icon: '💎', color: 'text-cyan-400', border: 'border-cyan-400/40' },
-    { name: 'AI Architect', icon: '👑', color: 'text-purple-400', border: 'border-purple-400/40' },
+    { name: 'Bronze AI Engineer', icon: '🥉', color: 'text-amber-700 dark:text-amber-500', border: 'border-amber-700/40' },
+    { name: 'Silver AI Engineer', icon: '🥈', color: 'text-slate-700 dark:text-slate-200', border: 'border-slate-500/40' },
+    { name: 'Gold AI Engineer', icon: '🥇', color: 'text-amber-600 dark:text-amber-400', border: 'border-amber-400/40' },
+    { name: 'LLM Master', icon: '💎', color: 'text-cyan-600 dark:text-cyan-400', border: 'border-cyan-400/40' },
+    { name: 'AI Architect', icon: '👑', color: 'text-purple-600 dark:text-purple-400', border: 'border-purple-400/40' },
   ];
 
   const publicFeatures = [
@@ -145,7 +145,7 @@ export default function HomePage() {
       description: 'Drag-and-drop RAG pipeline sequencer, PyTorch error hunter, and inference architecture tuner.',
       href: '/dashboard',
       icon: Boxes,
-      iconColor: 'text-purple-400',
+      iconColor: 'text-purple-600 dark:text-purple-400',
       iconBg: 'bg-purple-500/10 border-purple-500/20',
       cta: 'Launch AI Lab',
     },
@@ -365,7 +365,7 @@ export default function HomePage() {
                 <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl space-y-5">
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border">
                     <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping motion-reduce:animate-none" />
                       <span className="text-xs font-bold font-mono text-foreground uppercase tracking-wider">
                         Today&apos;s Active Challenge
                       </span>
@@ -506,7 +506,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/packs"
-                className="mt-4 md:mt-0 text-xs font-bold text-primary hover:opacity-80 flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1"
+                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
               >
                 <span>View All Packs</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -559,7 +559,7 @@ export default function HomePage() {
                   </span>
                   <Link
                     href="/packs/nvidia-ai-pack"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+                    className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-primary hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span>Play Now</span>
                     <ArrowRight className="w-3 h-3" />
@@ -778,7 +778,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/roadmap"
-                className="mt-4 md:mt-0 text-xs font-bold text-primary hover:opacity-80 flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1"
+                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
               >
                 <span>Explore Full Interactive Roadmap</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -885,7 +885,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/league"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 transition-all active:scale-95 shrink-0"
+                className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 transition-all active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span>View Full Division Leagues</span>
                 <ArrowRight className="w-3.5 h-3.5" />

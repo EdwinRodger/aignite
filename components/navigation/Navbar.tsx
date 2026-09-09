@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -19,6 +19,36 @@ import { getAuthUserAction } from '@/app/actions/auth';
 
 export function Navbar() {
   const [userRole, setUserRole] = useState<'student' | 'recruiter' | null>(null);
+  const [featuresOpen, setFeaturesOpen] = useState(false);
+  const [recruiterOpen, setRecruiterOpen] = useState(false);
+
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const recruiterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (featuresRef.current && !featuresRef.current.contains(event.target as Node)) {
+        setFeaturesOpen(false);
+      }
+      if (recruiterRef.current && !recruiterRef.current.contains(event.target as Node)) {
+        setRecruiterOpen(false);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setFeaturesOpen(false);
+        setRecruiterOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     async function checkAuth() {
@@ -48,7 +78,7 @@ export function Navbar() {
     checkAuth();
   }, []);
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-background/85 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-md">
       {/* Accessible Skip Link */}
       <a
         href="#main-content"
@@ -77,15 +107,29 @@ export function Navbar() {
         {/* Desktop Navigation Links */}
         <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-1 text-sm font-medium text-muted-foreground">
           {/* Explore Features Dropdown */}
-          <div className="relative group">
+          <div ref={featuresRef} className="relative group">
             <button
               type="button"
-              className="px-3.5 py-1.5 rounded-xl hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-medium text-sm cursor-pointer"
+              id="features-menu-button"
+              aria-haspopup="true"
+              aria-expanded={featuresOpen}
+              aria-controls="features-menu"
+              onClick={() => {
+                setFeaturesOpen((prev) => !prev);
+                setRecruiterOpen(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') setFeaturesOpen(false);
+              }}
+              className="min-h-[44px] px-3.5 py-2 rounded-xl hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-medium text-sm cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-primary" />
               <span>Explore Features</span>
               <svg
-                className="w-3.5 h-3.5 text-muted-foreground group-hover:rotate-180 transition-transform duration-200"
+                aria-hidden="true"
+                className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${
+                  featuresOpen ? 'rotate-180' : 'group-hover:rotate-180'
+                }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -95,7 +139,14 @@ export function Navbar() {
             </button>
 
             {/* Dropdown Menu Popover */}
-            <div className="absolute top-full left-0 mt-1.5 w-72 rounded-2xl bg-card border border-border p-2 shadow-xl shadow-black/25 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+            <div
+              id="features-menu"
+              role="region"
+              aria-labelledby="features-menu-button"
+              className={`absolute top-full left-0 mt-1.5 w-72 rounded-2xl bg-card border border-border p-2 shadow-xl shadow-black/25 transition-all duration-150 z-50 group-hover:opacity-100 group-hover:visible focus-within:opacity-100 focus-within:visible ${
+                featuresOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+              }`}
+            >
               <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-3 py-1.5">
                 Public Learning &amp; AI Tools
               </div>
@@ -208,15 +259,29 @@ export function Navbar() {
           </div>
 
           {/* Consolidated Recruiter Dropdown (Apply & Login under 1 button) */}
-          <div className="relative group">
+          <div ref={recruiterRef} className="relative group">
             <button
               type="button"
-              className="px-3.5 py-1.5 rounded-xl hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-medium text-sm cursor-pointer"
+              id="recruiter-menu-button"
+              aria-haspopup="true"
+              aria-expanded={recruiterOpen}
+              aria-controls="recruiter-menu"
+              onClick={() => {
+                setRecruiterOpen((prev) => !prev);
+                setFeaturesOpen(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') setRecruiterOpen(false);
+              }}
+              className="min-h-[44px] px-3.5 py-2 rounded-xl hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-medium text-sm cursor-pointer"
             >
               <Briefcase className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
               <span>Recruiters</span>
               <svg
-                className="w-3.5 h-3.5 text-muted-foreground group-hover:rotate-180 transition-transform duration-200"
+                aria-hidden="true"
+                className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${
+                  recruiterOpen ? 'rotate-180' : 'group-hover:rotate-180'
+                }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -226,7 +291,14 @@ export function Navbar() {
             </button>
 
             {/* Recruiter Popover */}
-            <div className="absolute top-full left-0 mt-1.5 w-64 rounded-2xl bg-card border border-border p-2 shadow-xl shadow-black/25 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+            <div
+              id="recruiter-menu"
+              role="region"
+              aria-labelledby="recruiter-menu-button"
+              className={`absolute top-full left-0 mt-1.5 w-64 rounded-2xl bg-card border border-border p-2 shadow-xl shadow-black/25 transition-all duration-150 z-50 group-hover:opacity-100 group-hover:visible focus-within:opacity-100 focus-within:visible ${
+                recruiterOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+              }`}
+            >
               <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-3 py-1.5">
                 Verified Recruiter Access
               </div>
@@ -273,7 +345,7 @@ export function Navbar() {
           {userRole === 'student' ? (
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
               <span>Dashboard</span>
@@ -282,7 +354,7 @@ export function Navbar() {
           ) : userRole === 'recruiter' ? (
             <Link
               href="/recruiter/dashboard"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Briefcase className="w-3.5 h-3.5" />
               <span>Recruiter Dashboard</span>
@@ -291,7 +363,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span>Sign In with OTP</span>
               <ArrowRight className="w-3.5 h-3.5" />

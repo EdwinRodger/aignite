@@ -73,87 +73,107 @@ export function MultiScopeLeaderboard() {
         </div>
 
         {/* Metric Selector Tabs */}
-        <div className="flex items-center p-1 rounded-xl bg-muted border border-border self-start sm:self-center">
+        <div role="tablist" aria-label="Leaderboard ranking metric" className="flex items-center p-1 rounded-xl bg-muted border border-border self-start sm:self-center">
           <button
             type="button"
+            role="tab"
+            id="tab-metric-streak"
+            aria-selected={metric === 'streak'}
+            aria-controls="leaderboard-roster-panel"
             onClick={() => setMetric('streak')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+            className={`min-h-[40px] px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               metric === 'streak'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <Flame className="w-3.5 h-3.5" />
+            <Flame className="w-3.5 h-3.5" aria-hidden="true" />
             <span>By Streak (Habit)</span>
           </button>
           <button
             type="button"
+            role="tab"
+            id="tab-metric-score"
+            aria-selected={metric === 'score'}
+            aria-controls="leaderboard-roster-panel"
             onClick={() => setMetric('score')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+            className={`min-h-[40px] px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               metric === 'score'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <Zap className="w-3.5 h-3.5" />
+            <Zap className="w-3.5 h-3.5" aria-hidden="true" />
             <span>By Student Score (XP)</span>
           </button>
         </div>
       </div>
 
       {/* Scope Selector (Regional, National, International) */}
-      <div className="flex items-center gap-2 text-xs">
-        <span className="text-[11px] font-mono uppercase text-muted-foreground">Scope:</span>
+      <div role="tablist" aria-label="Leaderboard geographic scope" className="flex flex-wrap items-center gap-2 text-xs">
+        <span className="text-[11px] font-mono uppercase text-muted-foreground mr-1">Scope:</span>
         <button
           type="button"
+          role="tab"
+          id="tab-scope-regional"
+          aria-selected={scope === 'regional'}
+          aria-controls="leaderboard-roster-panel"
           onClick={() => setScope('regional')}
-          className={`px-3 py-1.5 rounded-xl border font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl border font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
             scope === 'regional'
               ? 'bg-primary/15 border-primary text-primary shadow-2xs'
               : 'bg-muted/50 border-border text-muted-foreground hover:text-foreground'
           }`}
         >
-          <MapPin className="w-3 h-3" />
+          <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
           <span>Regional (State / College)</span>
         </button>
 
         <button
           type="button"
+          role="tab"
+          id="tab-scope-national"
+          aria-selected={scope === 'national'}
+          aria-controls="leaderboard-roster-panel"
           onClick={() => setScope('national')}
-          className={`px-3 py-1.5 rounded-xl border font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl border font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
             scope === 'national'
               ? 'bg-primary/15 border-primary text-primary shadow-2xs'
               : 'bg-muted/50 border-border text-muted-foreground hover:text-foreground'
           }`}
         >
-          <Flag className="w-3 h-3" />
+          <Flag className="w-3.5 h-3.5" aria-hidden="true" />
           <span>National (All-India)</span>
         </button>
 
         <button
           type="button"
+          role="tab"
+          id="tab-scope-international"
+          aria-selected={scope === 'international'}
+          aria-controls="leaderboard-roster-panel"
           onClick={() => setScope('international')}
-          className={`px-3 py-1.5 rounded-xl border font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl border font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
             scope === 'international'
               ? 'bg-primary/15 border-primary text-primary shadow-2xs'
               : 'bg-muted/50 border-border text-muted-foreground hover:text-foreground'
           }`}
         >
-          <Globe className="w-3 h-3" />
+          <Globe className="w-3.5 h-3.5" aria-hidden="true" />
           <span>International (Global)</span>
         </button>
       </div>
 
       {/* Leaderboard Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+      <div id="leaderboard-roster-panel" role="tabpanel" aria-labelledby={metric === 'streak' ? 'tab-metric-streak' : 'tab-metric-score'} className="overflow-x-auto">
+        <table className="w-full text-left text-xs" aria-label="Competitive AI Leaderboard Roster">
           <thead>
             <tr className="border-b border-border/80 text-[10px] font-mono text-muted-foreground uppercase">
-              <th className="py-2.5 px-3">Rank</th>
-              <th className="py-2.5 px-3">Student Engineer</th>
-              <th className="py-2.5 px-3">Region / Campus</th>
-              <th className="py-2.5 px-3">Verified Skill</th>
-              <th className="py-2.5 px-3 text-right">
+              <th scope="col" className="py-2.5 px-3">Rank</th>
+              <th scope="col" className="py-2.5 px-3">Student Engineer</th>
+              <th scope="col" className="py-2.5 px-3">Region / Campus</th>
+              <th scope="col" className="py-2.5 px-3">Verified Skill</th>
+              <th scope="col" className="py-2.5 px-3 text-right">
                 {metric === 'streak' ? 'Daily Streak' : 'Total Points (XP)'}
               </th>
             </tr>
@@ -174,21 +194,21 @@ export function MultiScopeLeaderboard() {
                     <span
                       className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs ${
                         idx === 0
-                          ? 'bg-yellow-500/20 text-yellow-500 font-black'
+                          ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 font-black'
                           : idx === 1
-                          ? 'bg-slate-400/20 text-slate-300 font-bold'
+                          ? 'bg-slate-500/20 text-slate-700 dark:text-slate-200 font-bold'
                           : idx === 2
-                          ? 'bg-amber-600/20 text-amber-500 font-bold'
+                          ? 'bg-amber-600/20 text-amber-800 dark:text-amber-400 font-bold'
                           : 'text-muted-foreground'
                       }`}
                     >
                       {idx + 1}
                     </span>
                     {entry.rankChange > 0 && (
-                      <span className="text-[10px] font-mono text-emerald-500 font-bold">↑{entry.rankChange}</span>
+                      <span aria-label={`Rank increased by ${entry.rankChange}`} className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">↑{entry.rankChange}</span>
                     )}
                     {entry.rankChange < 0 && (
-                      <span className="text-[10px] font-mono text-destructive font-bold">↓{Math.abs(entry.rankChange)}</span>
+                      <span aria-label={`Rank decreased by ${Math.abs(entry.rankChange)}`} className="text-[10px] font-mono text-destructive font-bold">↓{Math.abs(entry.rankChange)}</span>
                     )}
                   </div>
                 </td>

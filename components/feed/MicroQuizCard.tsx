@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { Sparkles, CheckCircle2, XCircle, ArrowRight, Brain, Zap, RotateCcw } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 interface QuizOption {
   text: string;
@@ -19,7 +18,7 @@ export function MicroQuizCard() {
     { text: 'C) Truncates prompt context length to sub-2048 tokens', isCorrect: false },
   ];
 
-  const handleSelect = (index: number) => {
+  const handleSelect = async (index: number) => {
     if (selectedIdx !== null) return;
     setSelectedIdx(index);
 
@@ -31,11 +30,12 @@ export function MicroQuizCard() {
           window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (!prefersReducedMotion) {
+          const confetti = (await import('canvas-confetti')).default;
           confetti({
             particleCount: 65,
             spread: 55,
             origin: { y: 0.7 },
-            colors: ['#6366F1', '#10B981', '#F59E0B'],
+            colors: ['#F3582A', '#10B981', '#F59E0B'],
           });
         }
       } catch {
