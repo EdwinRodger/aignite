@@ -46,8 +46,9 @@ export async function evaluateCoachAnswerAction(
     if (geminiKey && geminiKey !== 'your_gemini_api_key_here') {
       try {
         const genAI = new GoogleGenerativeAI(geminiKey);
+        const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
         const model = genAI.getGenerativeModel({
-          model: 'gemini-2.0-flash',
+          model: modelName,
           generationConfig: { responseMimeType: 'application/json' },
         });
 

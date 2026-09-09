@@ -45,7 +45,7 @@ Evaluates a student's spoken answer to the Daily Interview Coach question or Mod
 
   const gemini = new GoogleGenerativeAI(Deno.env.get("GEMINI_API_KEY")!);
   const model = gemini.getGenerativeModel({ 
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     generationConfig: { responseMimeType: "application/json" }
   });
 
@@ -151,7 +151,7 @@ Evaluates the student's system design in the AI Lab interactive sandbox.
       "chunkOverlap": 50,
       "retrievalStrategy": "hybrid_bm25_dense",
       "vectorIndex": "HNSW",
-      "llm": "gemini-2.0-flash",
+      "llm": "gemini-2.5-flash",
       "temperature": 0.2
     }
   }

@@ -123,10 +123,11 @@ When ready for strict public production:
 - [ ] Supabase project created with PostgreSQL 16 & `pgvector` extension enabled.
 - [ ] Environment variables set in Vercel / production host (.env.production):
   - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  - `SUPABASE_SERVICE_ROLE_KEY`
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+  - `SUPABASE_SECRET_KEY`
   - `DATABASE_URL` (Supabase Transaction Pooler port 6543)
   - `GEMINI_API_KEY`
+  - `GEMINI_MODEL` (e.g. `gemini-2.5-flash`)
   - `RESEND_API_KEY`
 - [ ] Schema migrated via `npx drizzle-kit push`.
 - [ ] Baseline seeds populated via `npx tsx scripts/seed.ts`.

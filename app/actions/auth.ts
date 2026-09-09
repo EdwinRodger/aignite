@@ -51,10 +51,10 @@ export interface OnboardingData {
  */
 function isSupabaseConfigured(): boolean {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return false;
   if (url.includes('placeholder') || url.includes('your-project-id') || url.includes('your-supabase')) return false;
-  if (key.includes('placeholder') || key.includes('your-anon-key') || key.includes('your-supabase')) return false;
+  if (key.includes('placeholder') || key.includes('your-publishable-key') || key.includes('your-supabase')) return false;
   return true;
 }
 

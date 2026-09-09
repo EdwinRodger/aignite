@@ -7,9 +7,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 // Helper to check if Supabase is properly configured
 function isSupabaseConfigured(): boolean {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anonKey) return false;
-  if (url.includes('placeholder.supabase.co') || anonKey.includes('placeholder-anon-key')) return false;
+  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !publishableKey) return false;
+  if (url.includes('placeholder.supabase.co') || publishableKey.includes('placeholder-publishable-key')) return false;
   return true;
 }
 
@@ -178,8 +178,9 @@ export async function generateAiSparkAction(topic: string): Promise<{ success: b
 
   try {
     const genAI = new GoogleGenerativeAI(geminiKey);
+    const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: modelName,
       generationConfig: { responseMimeType: 'application/json' },
     });
 
