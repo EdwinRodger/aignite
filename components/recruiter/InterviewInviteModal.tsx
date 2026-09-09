@@ -3,7 +3,16 @@
 import React, { useState } from 'react';
 import { CandidateTalent, RecruiterJob } from '@/lib/recruiter-data';
 import { sendInterviewInvitationAction } from '@/app/actions/recruiter';
-import { X, Send, Loader2, CheckCircle2, Briefcase, Calendar } from 'lucide-react';
+import { Send, Loader2, CheckCircle2, Briefcase, Calendar } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface InterviewInviteModalProps {
   candidate: CandidateTalent;
@@ -64,37 +73,23 @@ export function InterviewInviteModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div
-        className="relative w-full max-w-lg bg-card border border-border rounded-3xl shadow-2xl shadow-black/40 overflow-hidden flex flex-col"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="invite-title"
-      >
-        <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-muted/30">
+    <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-lg p-0 overflow-hidden flex flex-col rounded-3xl">
+        <DialogHeader className="px-6 py-5 border-b border-border bg-muted/30 text-left">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
               <Send className="w-4 h-4" />
             </div>
             <div>
-              <h2 id="invite-title" className="text-base font-bold text-foreground font-sans">
+              <DialogTitle className="text-base font-bold text-foreground font-sans">
                 Dispatch Interview Invitation
-              </h2>
-              <p className="text-sm text-muted-foreground font-mono">
+              </DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground font-mono">
                 To: {candidate.fullName} ({candidate.collegeOrCompany})
-              </p>
+              </DialogDescription>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close modal"
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+        </DialogHeader>
 
         {sent ? (
           <div className="p-8 text-center space-y-3">
@@ -123,7 +118,7 @@ export function InterviewInviteModal({
               <select
                 value={selectedJob}
                 onChange={(e) => setSelectedJob(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               >
                 {activeJobs.map((j) => (
                   <option key={j.id} value={j.title}>
@@ -150,7 +145,7 @@ export function InterviewInviteModal({
                       | 'Executive Bar Raiser'
                   )
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               >
                 <option value="Screening Call">Screening Call (30 mins)</option>
                 <option value="Systems Architecture">Systems Architecture & RAG Deep Dive (60 mins)</option>
@@ -165,11 +160,11 @@ export function InterviewInviteModal({
                 <span>Personalized Recruiter Invitation Note</span>
                 <span className="text-sm text-muted-foreground font-mono">Visible to Candidate</span>
               </label>
-              <textarea
+              <Textarea
                 rows={4}
                 value={customNote}
                 onChange={(e) => setCustomNote(e.target.value)}
-                className="w-full p-3 rounded-xl bg-muted border border-border text-foreground leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary resize-none font-sans"
+                className="leading-relaxed resize-none font-sans"
               />
             </div>
 
@@ -181,17 +176,13 @@ export function InterviewInviteModal({
 
             {/* Submit */}
             <div className="pt-2 flex items-center justify-end gap-2.5">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 rounded-xl border border-border text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-              >
+              <Button type="button" variant="outline" onClick={onClose} className="rounded-xl">
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
                 disabled={loading}
-                className="px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-bold shadow-md shadow-primary/20 flex items-center gap-1.5 active:scale-98 transition-all cursor-pointer"
+                className="rounded-xl font-bold shadow-md shadow-primary/20 gap-1.5"
               >
                 {loading ? (
                   <>
@@ -204,11 +195,11 @@ export function InterviewInviteModal({
                     <span>Send Verified Invitation</span>
                   </>
                 )}
-              </button>
+              </Button>
             </div>
           </form>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

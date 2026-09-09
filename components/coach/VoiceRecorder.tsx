@@ -11,6 +11,10 @@ import {
   AlertCircle,
   Volume2,
 } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 
 interface VoiceRecorderProps {
   onSubmitAnswer: (transcript: string, durationSeconds: number) => void;
@@ -164,7 +168,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
   };
 
   return (
-    <div className="w-full rounded-2xl bg-card border border-border p-5 sm:p-6 shadow-xl relative overflow-hidden space-y-5">
+    <Card className="w-full rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden space-y-5">
       {/* Header & Mode Switcher */}
       <div className="flex items-center justify-between border-b border-border/60 pb-3">
         <div className="flex items-center gap-2">
@@ -173,10 +177,10 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
             <span>Candidate Response Workspace</span>
           </span>
           {isRecording && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-destructive/20 text-destructive border border-destructive/30 animate-pulse">
-              <span className="w-1.5 h-1.5 rounded-full bg-destructive" />
+            <Badge variant="destructive" className="gap-1 text-sm font-mono px-2 py-0.5 rounded-full animate-pulse">
+              <span className="w-1.5 h-1.5 rounded-full bg-current" />
               <span>LIVE RECORDING ({formatTimer(secondsElapsed)})</span>
-            </span>
+            </Badge>
           )}
         </div>
 
@@ -185,7 +189,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
           <button
             type="button"
             onClick={() => setMode('voice')}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all font-medium ${
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all font-medium text-sm ${
               mode === 'voice'
                 ? 'bg-card text-foreground font-semibold shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
@@ -200,7 +204,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
               stopRecording();
               setMode('text');
             }}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all font-medium ${
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all font-medium text-sm ${
               mode === 'text'
                 ? 'bg-card text-foreground font-semibold shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
@@ -236,48 +240,53 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
           {/* Primary Record Button */}
           <div className="flex items-center gap-3">
             {!isRecording ? (
-              <button
+              <Button
                 type="button"
                 onClick={startRecording}
                 disabled={isEvaluating}
-                className="px-6 py-3.5 rounded-2xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/25 transition-transform active:scale-95 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="px-6 py-3.5 rounded-2xl font-bold text-sm gap-2"
+                size="lg"
               >
                 <Mic className="w-4 h-4" />
                 <span>Start Spoken Answer</span>
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
                 type="button"
+                variant="destructive"
                 onClick={stopRecording}
-                className="px-6 py-3.5 rounded-2xl font-bold text-sm bg-destructive hover:opacity-90 text-destructive-foreground shadow-lg shadow-destructive/25 transition-transform active:scale-95 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="px-6 py-3.5 rounded-2xl font-bold text-sm gap-2"
+                size="lg"
               >
                 <MicOff className="w-4 h-4" />
                 <span>Pause Spoken Answer</span>
-              </button>
+              </Button>
             )}
 
             {(transcript || secondsElapsed > 0) && (
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="icon"
                 onClick={handleReset}
                 aria-label="Re-record answer"
-                className="p-3 rounded-2xl border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                className="rounded-2xl"
                 title="Clear and Re-record"
               >
                 <RotateCcw className="w-4 h-4" />
-              </button>
+              </Button>
             )}
           </div>
 
-          <p className="text-[11px] text-muted-foreground max-w-sm">
+          <p className="text-sm text-muted-foreground max-w-sm">
             {isRecording
               ? 'Speaking... The AI coach analyzes clarity, terminology, pace, and filler words.'
-              : 'Tap to record. Speak at a confident, deliberate pace (120–150 WPM).'}
+              : 'Tap to record. Speak at a confident, deliberate pace (120-150 WPM).'}
           </p>
 
           {!speechApiAvailable && (
-            <div className="flex items-center gap-1.5 text-[11px] text-amber-500 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20">
-              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+            <div className="flex items-center gap-1.5 text-sm text-amber-500 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20">
+              <AlertCircle className="w-4 h-4 shrink-0" />
               <span>Speech recognition unavailable in this browser. Switch to Text Entry mode to type your answer!</span>
             </div>
           )}
@@ -288,12 +297,12 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
       <div className="space-y-1.5">
         <div className="flex items-center justify-between text-sm font-semibold text-foreground">
           <span>{mode === 'voice' ? 'Spoken Transcript (Editable):' : 'Type Your Technical Answer:'}</span>
-          <span className="text-[11px] font-mono text-muted-foreground">
+          <span className="text-sm font-mono text-muted-foreground">
             {transcript.trim().split(/\s+/).filter(Boolean).length} words
           </span>
         </div>
 
-        <textarea
+        <Textarea
           value={transcript}
           onChange={(e) => setTranscript(e.target.value)}
           placeholder={
@@ -302,35 +311,35 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
               : 'Provide your technical response explaining the architecture, trade-offs, and failure cases...'
           }
           rows={4}
-          className="w-full p-3.5 rounded-xl bg-muted/40 border border-border text-sm text-foreground placeholder:text-muted-foreground leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y font-sans"
+          className="w-full p-3.5 rounded-xl text-sm"
         />
       </div>
 
       {/* Submission Action Bar */}
       <div className="flex items-center justify-between pt-1 border-t border-border/60">
-        <span className="text-[11px] text-muted-foreground">
-          🎯 Target duration: 45–90s • Graded on 5 axes
+        <span className="text-sm text-muted-foreground">
+          🎯 Target duration: 45-90s - Graded on 5 axes
         </span>
 
-        <button
+        <Button
           type="button"
           onClick={handleSubmit}
           disabled={!transcript.trim() || isEvaluating}
-          className="px-5 py-2.5 rounded-xl text-sm font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-md shadow-primary/20 transition-all flex items-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="px-5 py-2.5 rounded-xl text-sm font-bold gap-2"
         >
           {isEvaluating ? (
             <>
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
               <span>Evaluating Speech with AI...</span>
             </>
           ) : (
             <>
-              <Send className="w-3.5 h-3.5" />
+              <Send className="w-4 h-4" />
               <span>Submit for AI Report Card</span>
             </>
           )}
-        </button>
+        </Button>
       </div>
-    </div>
+    </Card>
   );
 }

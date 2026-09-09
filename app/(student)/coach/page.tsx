@@ -7,6 +7,9 @@ import { VoiceRecorder } from '@/components/coach/VoiceRecorder';
 import { ReportCardModal } from '@/components/coach/ReportCardModal';
 import { DAILY_COACH_QUESTIONS, CoachQuestion, CoachEvaluationReport } from '@/lib/coach-data';
 import { evaluateCoachAnswerAction } from '@/app/actions/coach';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Mic,
   Flame,
@@ -57,12 +60,12 @@ export default function CoachPage() {
         {/* Page Banner / Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-6">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <Badge variant="outline" className="gap-1.5 px-3 py-1 text-sm font-bold bg-primary/10 text-primary border-primary/20">
                 <Mic className="w-3.5 h-3.5" />
                 <span>Daily Voice Coach</span>
-              </span>
-              <span className="text-sm text-muted-foreground font-mono">Morning Habit • 8:00 AM POTD</span>
+              </Badge>
+              <span className="text-sm text-muted-foreground font-mono">Morning Habit - 8:00 AM POTD</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">
               Audio-Based AI Mock Interview
@@ -73,7 +76,7 @@ export default function CoachPage() {
           </div>
 
           {/* Daily Streak Maintenance Badge */}
-          <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-card border border-border shrink-0 shadow-sm">
+          <Card className="p-3.5 flex items-center gap-3 shrink-0 shadow-sm">
             <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
               <Flame className="w-5 h-5 animate-pulse" />
             </div>
@@ -81,12 +84,12 @@ export default function CoachPage() {
               <div className="text-sm font-bold text-foreground font-mono">
                 {streakDays} Day Flame Streak
               </div>
-              <div className="text-[11px] text-primary font-semibold flex items-center gap-1">
-                <Zap className="w-3 h-3" />
+              <div className="text-sm text-primary font-semibold flex items-center gap-1">
+                <Zap className="w-3.5 h-3.5" />
                 <span>+25 XP per daily answer</span>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* 2-Column Responsive Layout */}
@@ -94,22 +97,22 @@ export default function CoachPage() {
           {/* Main Interview Practice Column */}
           <div className="lg:col-span-8 space-y-6">
             {/* Question of the Day Card */}
-            <div className="rounded-2xl bg-card border border-border p-6 shadow-xl relative overflow-hidden space-y-4">
+            <Card className="p-6 shadow-xl relative overflow-hidden space-y-4">
               <div className="absolute -top-16 -right-16 w-36 h-36 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
 
               {/* Question Meta Badges */}
               <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold font-mono px-2.5 py-0.5 rounded-md bg-muted text-foreground border border-border">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge variant="secondary" className="text-sm font-bold font-mono">
                     {selectedQuestion.topic}
-                  </span>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-semibold">
+                  </Badge>
+                  <Badge variant="outline" className="text-sm font-mono bg-primary/10 text-primary border-primary/20 font-semibold">
                     {selectedQuestion.track}
-                  </span>
-                  <span className="text-sm text-muted-foreground">• {selectedQuestion.difficulty}</span>
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">- {selectedQuestion.difficulty}</span>
                 </div>
 
-                <div className="flex items-center gap-1 text-[11px] font-mono text-muted-foreground">
+                <div className="flex items-center gap-1 text-sm font-mono text-muted-foreground">
                   <Clock className="w-3.5 h-3.5 text-primary" />
                   <span>Target: {selectedQuestion.estimatedSpeakingTime}</span>
                 </div>
@@ -121,7 +124,7 @@ export default function CoachPage() {
               </h2>
 
               {/* Context Hint Callout */}
-              <div className="p-3 rounded-xl bg-muted/40 border border-border/80 flex items-start gap-2.5 text-sm">
+              <div className="p-3.5 rounded-xl bg-muted/40 border border-border/80 flex items-start gap-2.5 text-sm">
                 <HelpCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold text-foreground block">Architectural Prompt Hint:</span>
@@ -130,15 +133,15 @@ export default function CoachPage() {
               </div>
 
               {/* Expected Key Concepts Expected */}
-              <div className="space-y-1.5 pt-1">
-                <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block">
+              <div className="space-y-2 pt-1">
+                <span className="text-sm uppercase font-mono tracking-wider text-muted-foreground block font-semibold">
                   Key Production Concepts Expected by Evaluator:
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedQuestion.canonicalKeyPoints.map((pt, idx) => (
                     <div
                       key={idx}
-                      className="p-2 rounded-lg bg-muted/30 border border-border text-[11px] text-muted-foreground flex items-start gap-2"
+                      className="p-2.5 rounded-lg bg-muted/30 border border-border text-sm text-muted-foreground flex items-start gap-2"
                     >
                       <span className="text-primary font-bold mt-0.5">✓</span>
                       <span>{pt}</span>
@@ -146,7 +149,7 @@ export default function CoachPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </Card>
 
             {/* Error Feedback if any */}
             {errorMessage && (
@@ -165,12 +168,12 @@ export default function CoachPage() {
           {/* Sidebar: Question Rotation & Past Assessments */}
           <aside aria-label="Question selector" className="lg:col-span-4 space-y-5">
             {/* Daily Questions Selector */}
-            <div className="rounded-2xl bg-card border border-border p-5 shadow-sm space-y-3">
+            <Card className="p-5 shadow-sm space-y-3">
               <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
                 <Calendar className="w-4 h-4 text-primary" />
-                <span>Today & Past Coach Questions</span>
+                <span>Today &amp; Past Coach Questions</span>
               </div>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Choose an interview challenge to practice:
               </p>
 
@@ -179,44 +182,41 @@ export default function CoachPage() {
                   const isSelected = selectedQuestion.id === q.id;
 
                   return (
-                    <button
+                    <Button
                       key={q.id}
                       type="button"
+                      variant={isSelected ? 'default' : 'outline'}
                       onClick={() => {
                         setSelectedQuestion(q);
                         setEvaluationReport(null);
                         setErrorMessage(null);
                       }}
-                      className={`w-full text-left p-3 rounded-xl border text-sm transition-all flex flex-col justify-between ${
-                        isSelected
-                          ? 'bg-primary/10 border-primary text-foreground font-semibold ring-1 ring-primary/30'
-                          : 'bg-muted/30 border-border text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                      } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+                      className="w-full text-left h-auto p-3 flex-col items-start justify-start gap-1"
                     >
-                      <div className="flex items-center justify-between gap-1 mb-1">
-                        <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-muted text-foreground border border-border">
+                      <div className="flex items-center justify-between w-full gap-1 mb-0.5">
+                        <Badge variant="secondary" className="text-sm font-mono uppercase">
                           {q.topic}
-                        </span>
-                        <span className="text-[10px] font-mono text-primary font-bold">
+                        </Badge>
+                        <span className="text-sm font-mono font-bold">
                           {q.difficulty}
                         </span>
                       </div>
-                      <div className="text-sm font-bold text-foreground leading-tight line-clamp-2">
+                      <div className="text-sm font-bold leading-tight line-clamp-2 text-left w-full whitespace-normal">
                         {q.title}
                       </div>
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
-            </div>
+            </Card>
 
             {/* Multi-Axis Scoring Criteria Card */}
-            <div className="rounded-2xl bg-card border border-border p-5 shadow-sm space-y-3">
+            <Card className="p-5 shadow-sm space-y-3">
               <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
                 <Brain className="w-4 h-4 text-primary" />
                 <span>AI Scoring Dimensions</span>
               </div>
-              <ul className="space-y-2 text-[11px] text-muted-foreground">
+              <ul className="space-y-2.5 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-primary font-mono">1.</span>
                   <span><strong>Knowledge Depth (35%)</strong>: Accuracy of hardware, algorithmic mechanisms, and loss functions.</span>
@@ -231,14 +231,14 @@ export default function CoachPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-primary font-mono">4.</span>
-                  <span><strong>Confidence & Pace (15%)</strong>: Natural cadence (120-150 WPM) with minimal filler words.</span>
+                  <span><strong>Confidence &amp; Pace (15%)</strong>: Natural cadence (120-150 WPM) with minimal filler words.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-primary font-mono">5.</span>
                   <span><strong>Concrete Examples (15%)</strong>: Real metrics, GPU microarchitectures, and frameworks.</span>
                 </li>
               </ul>
-            </div>
+            </Card>
           </aside>
         </div>
       </main>

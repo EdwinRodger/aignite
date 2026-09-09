@@ -21,6 +21,9 @@ import confetti from 'canvas-confetti';
 import { FeedPost } from '@/lib/feed-data';
 import { AudioReaderButton } from './AudioReaderButton';
 import { submitFeedQuizAnswer, toggleFeedPostLike, toggleFeedPostBookmark } from '@/app/actions/feed';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface FeedCardProps {
   post: FeedPost;
@@ -97,18 +100,18 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
   };
 
   return (
-    <article
+    <Card
       id={post.id}
-      className="w-full max-w-xl mx-auto rounded-2xl bg-card text-card-foreground border border-border shadow-xl relative overflow-hidden transition-all duration-300 hover:border-border/80 flex flex-col mb-6"
+      className="w-full max-w-xl mx-auto rounded-3xl bg-card text-card-foreground border border-border shadow-xl relative overflow-hidden transition-all duration-300 hover:border-border/80 flex flex-col mb-6"
     >
       {/* Decorative Warm Flame Ambient Glow */}
       <div className="absolute -top-16 -right-16 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-16 -left-16 w-40 h-40 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
 
       {/* Card Header */}
-      <div className="p-4 sm:p-5 border-b border-border/60 flex items-center justify-between gap-3 bg-muted/20">
+      <CardHeader className="p-4 sm:p-5 border-b border-border/60 flex flex-row items-center justify-between gap-3 bg-muted/20 space-y-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+          <Badge variant="outline" className="gap-1 bg-primary/10 text-primary border-primary/20 text-sm font-bold">
             {post.category === 'Agents & RL' ? (
               <Brain className="w-3.5 h-3.5" />
             ) : post.category === 'Inference & Infra' ? (
@@ -117,18 +120,19 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
               <Layers className="w-3.5 h-3.5" />
             )}
             <span>{post.tagBadge}</span>
-          </span>
+          </Badge>
           <span className="text-sm text-muted-foreground font-mono">{post.readTime}</span>
-          <span className="text-[11px] text-muted-foreground hidden sm:inline-block">• {post.createdAt}</span>
+          <span className="text-sm text-muted-foreground hidden sm:inline-block">- {post.createdAt}</span>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Web Speech API Audio TTS Readout */}
+          {/* Audio TTS Readout */}
           <AudioReaderButton title={post.title} textToRead={`${post.summary} ${post.keyTakeaway}`} />
 
           {/* League Points Badge */}
-          <div
-            className={`flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border transition-all ${
+          <Badge
+            variant="outline"
+            className={`gap-1 text-sm font-semibold transition-all ${
               isCorrect
                 ? 'bg-primary/20 text-primary border-primary/40 scale-105'
                 : 'text-primary bg-primary/10 border-primary/20'
@@ -136,12 +140,12 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
           >
             <Zap className="w-3 h-3" />
             <span>{isCorrect ? '+5 Claimed!' : '+5 XP'}</span>
-          </div>
+          </Badge>
         </div>
-      </div>
+      </CardHeader>
 
       {/* Main Content Body */}
-      <div className="p-4 sm:p-5 space-y-4">
+      <CardContent className="p-4 sm:p-5 space-y-4">
         {/* Title */}
         <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight leading-snug">
           {post.title}
@@ -168,7 +172,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                 key={idx}
                 className="p-2.5 rounded-xl bg-muted/40 border border-border flex flex-col justify-center"
               >
-                <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground">
+                <span className="text-sm uppercase font-mono tracking-wider text-muted-foreground">
                   {m.label}
                 </span>
                 <span className="text-sm font-bold text-foreground mt-0.5 font-mono">
@@ -181,8 +185,8 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
 
         {/* Visual Architecture Comparison Box */}
         {post.diagramComparison && (
-          <div className="p-3.5 rounded-xl bg-muted/60 border border-border font-mono text-[11px] space-y-2">
-            <div className="text-muted-foreground text-[10px] uppercase tracking-wider flex items-center justify-between">
+          <div className="p-3.5 rounded-xl bg-muted/60 border border-border font-mono text-sm space-y-2">
+            <div className="text-muted-foreground text-sm uppercase tracking-wider flex items-center justify-between">
               <span>Architecture Trade-Off</span>
               <span className="text-primary font-bold">Production Impact</span>
             </div>
@@ -190,18 +194,18 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             <div className="space-y-1.5">
               <div className="p-2 rounded bg-card/80 border border-border/80 text-muted-foreground flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-destructive/80 shrink-0" />
-                <span className="text-[11px] line-through">{post.diagramComparison.before}</span>
+                <span className="text-sm line-through">{post.diagramComparison.before}</span>
               </div>
-              <div className="p-2 rounded bg-card border border-primary/30 text-foreground font-semibold flex items-center justify-between gap-2 shadow-sm">
+              <div className="p-2 rounded bg-card border border-primary/30 text-foreground font-semibold flex items-center justify-between gap-2 shadow-xs">
                 <div className="flex items-center gap-2 truncate">
                   <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
-                  <span className="text-[11px] text-primary truncate">{post.diagramComparison.after}</span>
+                  <span className="text-sm text-primary truncate">{post.diagramComparison.after}</span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-primary shrink-0" />
               </div>
             </div>
 
-            <p className="text-[10px] text-muted-foreground italic tracking-normal font-sans pt-0.5">
+            <p className="text-sm text-muted-foreground italic tracking-normal font-sans pt-0.5">
               💡 {post.diagramComparison.advantage}
             </p>
           </div>
@@ -215,15 +219,16 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
               <span>5-Second Check: {post.quiz.questionText}</span>
             </span>
             {hasAnswered && (
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={handleReset}
                 aria-label="Retry quiz"
-                className="px-2 py-1 text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1 rounded-md hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="gap-1 text-muted-foreground hover:text-foreground text-sm h-8 px-2"
               >
                 <RotateCcw className="w-3 h-3" />
-                <span className="text-[11px]">Retry</span>
-              </button>
+                <span>Retry</span>
+              </Button>
             )}
           </div>
 
@@ -238,7 +243,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
               if (hasAnswered) {
                 if (isOptionCorrect) {
                   buttonStyle =
-                    'bg-primary/20 border-primary text-foreground shadow-sm shadow-primary/20 ring-1 ring-primary/40 font-semibold';
+                    'bg-primary/20 border-primary text-foreground shadow-xs shadow-primary/20 ring-1 ring-primary/40 font-semibold';
                 } else if (isSelected && !isOptionCorrect) {
                   buttonStyle = 'bg-destructive/20 border-destructive text-foreground';
                 } else {
@@ -254,7 +259,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                   aria-checked={isSelected}
                   onClick={() => handleSelect(idx)}
                   disabled={hasAnswered}
-                  className={`w-full text-left p-3 rounded-xl border text-sm transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${buttonStyle}`}
+                  className={`w-full text-left p-3 rounded-xl border text-sm transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer ${buttonStyle}`}
                 >
                   <span className="pr-2">{option}</span>
                   {hasAnswered && isOptionCorrect && (
@@ -278,7 +283,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                       <Zap className="w-3.5 h-3.5" />
                       <span>Spot On! +5 Points Added to Weekly League</span>
                     </div>
-                    <p className="text-muted-foreground text-[11px] leading-relaxed">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       {post.quiz.explanation}
                     </p>
                   </div>
@@ -287,7 +292,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                     <div className="font-bold text-destructive flex items-center gap-1.5 mb-1">
                       <span>Insight for Revision</span>
                     </div>
-                    <p className="text-muted-foreground text-[11px] leading-relaxed">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       {post.quiz.explanation}
                     </p>
                   </div>
@@ -296,17 +301,17 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             )}
           </div>
         </div>
-      </div>
+      </CardContent>
 
       {/* Engagement Footer Bar */}
-      <div className="p-4 border-t border-border/60 bg-muted/10 flex items-center justify-between text-sm text-muted-foreground">
+      <CardFooter className="p-4 border-t border-border/60 bg-muted/10 flex items-center justify-between text-sm text-muted-foreground">
         <div className="flex items-center gap-4">
           {/* Like Button */}
           <button
             type="button"
             onClick={handleToggleLike}
             aria-label={isLiked ? 'Unlike spark' : 'Like spark'}
-            className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 ${
+            className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 cursor-pointer ${
               isLiked ? 'text-primary font-semibold' : 'hover:text-foreground'
             }`}
           >
@@ -315,7 +320,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                 isLiked ? 'fill-primary text-primary' : ''
               }`}
             />
-            <span className="font-mono text-[11px]">{likes}</span>
+            <span className="font-mono text-sm">{likes}</span>
           </button>
 
           {/* Bookmark Button */}
@@ -323,7 +328,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             type="button"
             onClick={handleToggleBookmark}
             aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark spark for revision'}
-            className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 ${
+            className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 cursor-pointer ${
               isBookmarked ? 'text-primary font-semibold' : 'hover:text-foreground'
             }`}
           >
@@ -332,7 +337,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                 isBookmarked ? 'fill-primary text-primary' : ''
               }`}
             />
-            <span className="hidden sm:inline text-[11px]">{isBookmarked ? 'Saved' : 'Save'}</span>
+            <span className="hidden sm:inline text-sm">{isBookmarked ? 'Saved' : 'Save'}</span>
           </button>
 
           {/* Share Button */}
@@ -340,17 +345,17 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             type="button"
             onClick={handleShare}
             aria-label="Share spark"
-            className="flex items-center gap-1.5 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1"
+            className="flex items-center gap-1.5 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 cursor-pointer"
           >
             {copiedShare ? (
               <>
                 <Check className="w-4 h-4 text-primary" />
-                <span className="text-[11px] text-primary font-medium">Link Copied!</span>
+                <span className="text-sm text-primary font-medium">Link Copied!</span>
               </>
             ) : (
               <>
                 <Share2 className="w-4 h-4" />
-                <span className="hidden sm:inline text-[11px]">Share</span>
+                <span className="hidden sm:inline text-sm">Share</span>
               </>
             )}
           </button>
@@ -361,12 +366,12 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
           href={post.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1.5 py-0.5"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1.5 py-0.5"
         >
           <span className="truncate max-w-[130px] sm:max-w-[180px]">{post.sourceName}</span>
           <ExternalLink className="w-3 h-3 shrink-0" />
         </a>
-      </div>
-    </article>
+      </CardFooter>
+    </Card>
   );
 }

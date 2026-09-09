@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { COMPANY_PACKS } from '@/lib/learning-data';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Layers,
   ArrowRight,
@@ -35,10 +38,10 @@ export default function CompanyPacksPage() {
         {/* Header & Value Proposition */}
         <div className="mb-8 border-b border-border/60 pb-6">
           <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
+            <Badge variant="outline" className="gap-1.5 px-3 py-1 text-sm font-bold bg-primary/10 text-primary border-primary/20">
               <Layers className="w-3.5 h-3.5" />
               <span>Company-Specific AI Packs</span>
-            </span>
+            </Badge>
             <span className="text-sm text-muted-foreground font-mono">No 50-Hour Videos</span>
           </div>
 
@@ -52,18 +55,16 @@ export default function CompanyPacksPage() {
           {/* Track Filter Pills */}
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-4">
             {tracks.map((t) => (
-              <button
+              <Button
                 key={t}
                 type="button"
+                variant={selectedTrack === t ? 'default' : 'outline'}
+                size="sm"
                 onClick={() => setSelectedTrack(t)}
-                className={`px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
-                  selectedTrack === t
-                    ? 'bg-primary text-primary-foreground border-primary font-semibold shadow-sm'
-                    : 'bg-card text-muted-foreground hover:text-foreground border-border'
-                }`}
+                className="rounded-full text-sm font-semibold h-8"
               >
                 {t}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -71,9 +72,9 @@ export default function CompanyPacksPage() {
         {/* Company Packs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
           {filteredPacks.map((pack) => (
-            <div
+            <Card
               key={pack.slug}
-              className={`rounded-2xl bg-card border ${pack.borderColor} p-6 shadow-xl relative overflow-hidden flex flex-col justify-between transition-all hover:scale-[1.01]`}
+              className={`${pack.borderColor} p-6 shadow-xl relative overflow-hidden flex flex-col justify-between transition-all hover:scale-[1.01]`}
             >
               {/* Decorative Subtle Gradient Background */}
               <div
@@ -88,7 +89,7 @@ export default function CompanyPacksPage() {
                       {pack.badgeIcon}
                     </span>
                     <div>
-                      <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground">
+                      <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground block">
                         {pack.companyName}
                       </span>
                       <h2 className="text-lg font-bold text-foreground tracking-tight">
@@ -97,9 +98,9 @@ export default function CompanyPacksPage() {
                     </div>
                   </div>
 
-                  <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-muted/80 text-foreground border border-border shrink-0">
+                  <Badge variant="secondary" className="text-sm font-mono font-semibold shrink-0">
                     {pack.modulesCount} Modules
-                  </span>
+                  </Badge>
                 </div>
 
                 {/* Tagline */}
@@ -114,17 +115,18 @@ export default function CompanyPacksPage() {
 
                 {/* Skills Covered Chips */}
                 <div className="space-y-1.5 pt-1">
-                  <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block">
+                  <span className="text-sm uppercase font-mono tracking-wider text-muted-foreground block font-semibold">
                     Verified Competencies:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {pack.skillsCovered.map((skill, idx) => (
-                      <span
+                      <Badge
                         key={idx}
-                        className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-muted/60 text-muted-foreground border border-border"
+                        variant="outline"
+                        className="text-sm font-mono bg-muted/60 text-muted-foreground border-border"
                       >
                         {skill}
-                      </span>
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -134,7 +136,7 @@ export default function CompanyPacksPage() {
                   <div className="flex items-center gap-2">
                     <Trophy className="w-4 h-4 text-amber-500" />
                     <div>
-                      <span className="text-[10px] text-muted-foreground block">Earnable Recruiter Badge</span>
+                      <span className="text-sm text-muted-foreground block">Earnable Recruiter Badge</span>
                       <span className="font-semibold text-foreground">{pack.badgeName}</span>
                     </div>
                   </div>
@@ -149,15 +151,14 @@ export default function CompanyPacksPage() {
                   <span>Interactive Games Included</span>
                 </div>
 
-                <Link
-                  href={`/packs/${pack.slug}`}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <span>Launch Pack</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+                <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-md shadow-primary/20">
+                  <Link href={`/packs/${pack.slug}`}>
+                    <span>Launch Pack</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </Button>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       </main>

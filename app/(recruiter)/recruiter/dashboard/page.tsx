@@ -15,6 +15,10 @@ import { CandidateCard } from '@/components/recruiter/CandidateCard';
 import { CandidateDossierModal } from '@/components/recruiter/CandidateDossierModal';
 import { InterviewInviteModal } from '@/components/recruiter/InterviewInviteModal';
 import { CreateJobModal } from '@/components/recruiter/CreateJobModal';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   Users,
   Briefcase,
@@ -134,7 +138,7 @@ export default function RecruiterDashboardPage() {
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Recruiter Enterprise Header */}
-        <section className="rounded-3xl bg-gradient-to-r from-card via-card to-muted border border-border p-6 sm:p-8 shadow-xl shadow-black/10 relative overflow-hidden">
+        <Card className="p-6 sm:p-8 shadow-xl shadow-black/10 relative overflow-hidden bg-gradient-to-r from-card via-card to-muted border-border">
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
@@ -147,36 +151,37 @@ export default function RecruiterDashboardPage() {
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground font-sans tracking-tight">
                     {recruiterInfo.company}
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold">
+                  <Badge variant="outline" className="gap-1 px-2.5 py-0.5 bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    Verified Partner
-                  </span>
+                    <span>Verified Partner</span>
+                  </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground font-mono">
-                  {recruiterInfo.name} • {recruiterInfo.designation}
+                  {recruiterInfo.name} - {recruiterInfo.designation}
                 </p>
               </div>
             </div>
 
             {/* Quick Actions */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <button
+              <Button
                 type="button"
                 onClick={() => setIsCreateJobOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-sm font-bold shadow-md shadow-primary/20 flex items-center gap-1.5 transition-all cursor-pointer"
+                className="font-bold text-sm shadow-md shadow-primary/20 gap-1.5"
               >
                 <Plus className="w-4 h-4" />
                 <span>Post AI Engineering Role</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={handleSignOut}
-                className="px-3 py-2.5 rounded-xl border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="text-sm font-medium gap-1.5"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sign Out</span>
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -230,77 +235,68 @@ export default function RecruiterDashboardPage() {
               </span>
             </div>
           </div>
-        </section>
+        </Card>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 border-b border-border pb-3">
-          <button
+        <div className="flex items-center gap-2 border-b border-border pb-3 flex-wrap">
+          <Button
             type="button"
+            variant={activeTab === 'talent' ? 'default' : 'ghost'}
             onClick={() => setActiveTab('talent')}
-            className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'talent'
-                ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-            }`}
+            className="font-bold text-sm gap-2"
           >
             <Users className="w-4 h-4" />
             <span>AI Talent Discovery ({candidates.length})</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            variant={activeTab === 'jobs' ? 'default' : 'ghost'}
             onClick={() => setActiveTab('jobs')}
-            className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'jobs'
-                ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-            }`}
+            className="font-bold text-sm gap-2"
           >
             <Briefcase className="w-4 h-4" />
             <span>Job Openings ({jobs.length})</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            variant={activeTab === 'invitations' ? 'default' : 'ghost'}
             onClick={() => setActiveTab('invitations')}
-            className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'invitations'
-                ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-            }`}
+            className="font-bold text-sm gap-2"
           >
             <Send className="w-4 h-4" />
             <span>Interview Invitations ({invitations.length})</span>
-          </button>
+          </Button>
         </div>
 
         {/* TAB 1: TALENT DISCOVERY */}
         {activeTab === 'talent' && (
           <div className="space-y-6">
             {/* Filter Bar */}
-            <div className="rounded-2xl bg-card border border-border p-4 sm:p-5 space-y-4 shadow-sm">
+            <Card className="p-4 sm:p-5 space-y-4 shadow-sm">
               <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
                 {/* Search Input */}
                 <div className="relative flex-1">
                   <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
+                  <Input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
                     placeholder="Search candidates by name, college (e.g. IIT Bombay), skills (Triton, CUDA, vLLM)..."
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                    className="pl-10 text-sm font-medium"
                   />
                 </div>
 
-                <button
+                <Button
                   type="button"
                   onClick={applyFilters}
-                  className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  className="font-bold text-sm gap-1.5 shrink-0"
                 >
                   <Filter className="w-3.5 h-3.5" />
                   <span>Apply Filters</span>
-                </button>
+                </Button>
               </div>
 
               {/* Filter Chips */}
@@ -375,8 +371,10 @@ export default function RecruiterDashboardPage() {
 
                 {/* Reset Filters */}
                 {(selectedTier !== 'all' || selectedBadge !== 'all' || minReportScore > 0 || searchQuery) && (
-                  <button
+                  <Button
                     type="button"
+                    variant="link"
+                    size="sm"
                     onClick={() => {
                       setSelectedTier('all');
                       setSelectedBadge('all');
@@ -387,13 +385,13 @@ export default function RecruiterDashboardPage() {
                         if (res.success) setCandidates(res.candidates);
                       });
                     }}
-                    className="text-primary hover:underline text-sm font-mono ml-auto cursor-pointer"
+                    className="text-primary text-sm font-mono ml-auto p-0 h-auto"
                   >
                     Reset Filters
-                  </button>
+                  </Button>
                 )}
               </div>
-            </div>
+            </Card>
 
             {/* Candidates Grid */}
             {candidates.length > 0 ? (
@@ -408,13 +406,13 @@ export default function RecruiterDashboardPage() {
                 ))}
               </div>
             ) : (
-              <div className="p-12 text-center rounded-3xl bg-card border border-border space-y-3">
+              <Card className="p-12 text-center space-y-3">
                 <Users className="w-10 h-10 text-muted-foreground mx-auto" />
                 <h3 className="text-base font-bold text-foreground">No Candidates Matched Criteria</h3>
                 <p className="text-sm text-muted-foreground max-w-sm mx-auto">
                   Try relaxing your minimum league tier or badge requirements, or wait for students to complete capstones and oral defense rounds.
                 </p>
-                <button
+                <Button
                   type="button"
                   onClick={() => {
                     setSelectedTier('all');
@@ -426,11 +424,11 @@ export default function RecruiterDashboardPage() {
                       if (res.success) setCandidates(res.candidates);
                     });
                   }}
-                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm mt-2 cursor-pointer"
+                  className="font-bold text-sm mt-2"
                 >
                   Clear All Filters
-                </button>
-              </div>
+                </Button>
+              </Card>
             )}
           </div>
         )}
@@ -438,7 +436,7 @@ export default function RecruiterDashboardPage() {
         {/* TAB 2: JOB OPENINGS */}
         {activeTab === 'jobs' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="text-lg font-bold text-foreground font-sans">Active AI Engineering Openings</h2>
                 <p className="text-sm text-muted-foreground">
@@ -446,22 +444,22 @@ export default function RecruiterDashboardPage() {
                 </p>
               </div>
 
-              <button
+              <Button
                 type="button"
                 onClick={() => setIsCreateJobOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm flex items-center gap-1.5 shadow-md shadow-primary/20 hover:opacity-90 transition-all cursor-pointer shrink-0"
+                className="font-bold text-sm gap-1.5 shadow-md shadow-primary/20 shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>Post New AI Role</span>
-              </button>
+              </Button>
             </div>
 
             {jobs.length > 0 ? (
               <div className="grid md:grid-cols-2 gap-5">
                 {jobs.map((job) => (
-                  <div
+                  <Card
                     key={job.id}
-                    className="p-6 rounded-3xl bg-card border border-border space-y-4 shadow-sm hover:border-primary/40 transition-all"
+                    className="p-6 space-y-4 shadow-sm hover:border-primary/40 transition-all"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
@@ -471,14 +469,14 @@ export default function RecruiterDashboardPage() {
                         <div>
                           <h3 className="text-base font-bold text-foreground font-sans">{job.title}</h3>
                           <p className="text-sm text-muted-foreground font-mono mt-0.5">
-                            {job.companyName} • {job.roleCategory}
+                            {job.companyName} - {job.roleCategory}
                           </p>
                         </div>
                       </div>
 
-                      <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold shrink-0">
+                      <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold shrink-0">
                         Active
-                      </span>
+                      </Badge>
                     </div>
 
                     <p className="text-sm text-foreground/80 leading-relaxed line-clamp-2">
@@ -507,19 +505,20 @@ export default function RecruiterDashboardPage() {
                         Automated Gate Requirements:
                       </span>
                       <div className="flex flex-wrap items-center gap-2 text-sm">
-                        <span className="px-2 py-1 rounded-lg bg-card border border-border text-foreground font-mono">
+                        <Badge variant="secondary" className="font-mono text-sm">
                           Tier: {job.minLeagueTier.toUpperCase()}
-                        </span>
-                        <span className="px-2 py-1 rounded-lg bg-card border border-border text-primary font-mono font-bold">
+                        </Badge>
+                        <Badge variant="outline" className="text-primary font-mono font-bold text-sm bg-primary/10 border-primary/20">
                           Min Score: {job.minReportScore.toFixed(1)}/10
-                        </span>
+                        </Badge>
                         {job.requiredBadges.map((b) => (
-                          <span
+                          <Badge
                             key={b}
-                            className="px-2 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium"
+                            variant="outline"
+                            className="bg-primary/10 border-primary/20 text-primary font-medium text-sm"
                           >
                             🎖️ {b}
-                          </span>
+                          </Badge>
                         ))}
                       </div>
                     </div>
@@ -528,33 +527,34 @@ export default function RecruiterDashboardPage() {
                       <span className="text-sm font-mono text-muted-foreground">
                         <strong className="text-foreground">{job.applicantsCount}</strong> Qualified Candidates Applied
                       </span>
-                      <button
+                      <Button
                         type="button"
+                        variant="link"
                         onClick={() => setActiveTab('talent')}
-                        className="text-sm font-bold text-primary hover:underline cursor-pointer"
+                        className="text-sm font-bold text-primary p-0 h-auto"
                       >
                         Find Matching Talent &rarr;
-                      </button>
+                      </Button>
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             ) : (
-              <div className="p-12 text-center rounded-3xl bg-card border border-border space-y-3">
+              <Card className="p-12 text-center space-y-3">
                 <Briefcase className="w-10 h-10 text-muted-foreground mx-auto" />
                 <h3 className="text-base font-bold text-foreground">No Active Job Openings Posted Yet</h3>
                 <p className="text-sm text-muted-foreground max-w-sm mx-auto">
                   Post your first AI role with verified thresholds to attract candidates filtered by league tier and technical badges.
                 </p>
-                <button
+                <Button
                   type="button"
                   onClick={() => setIsCreateJobOpen(true)}
-                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm mt-2 cursor-pointer inline-flex items-center gap-1.5"
+                  className="font-bold text-sm mt-2 gap-1.5"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Post First AI Role</span>
-                </button>
-              </div>
+                </Button>
+              </Card>
             )}
           </div>
         )}
@@ -572,30 +572,31 @@ export default function RecruiterDashboardPage() {
             {invitations.length > 0 ? (
               <div className="space-y-3">
                 {invitations.map((inv) => (
-                  <div
+                  <Card
                     key={inv.id}
-                    className="p-5 rounded-3xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
+                    className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
                   >
                     <div className="space-y-1.5 flex-1">
                       <div className="flex items-center gap-2">
                         <h3 className="text-base font-bold text-foreground">{inv.candidateName}</h3>
-                        <span className="text-sm text-muted-foreground font-mono">• {inv.roleTitle}</span>
+                        <span className="text-sm text-muted-foreground font-mono">- {inv.roleTitle}</span>
                       </div>
                       <p className="text-sm text-muted-foreground italic font-serif bg-muted/40 p-2.5 rounded-xl border border-border/50">
                         &ldquo;{inv.customNote}&rdquo;
                       </p>
                       <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-muted-foreground pt-1">
                         <span>Round: <strong>{inv.roundType}</strong></span>
-                        <span>•</span>
+                        <span>-</span>
                         <span>Company: <strong>{inv.companyName}</strong></span>
-                        <span>•</span>
+                        <span>-</span>
                         <span>Sent: <strong>{inv.sentAt}</strong></span>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
-                      <span
-                        className={`px-3 py-1.5 rounded-xl text-sm font-bold font-mono border ${
+                      <Badge
+                        variant="outline"
+                        className={`text-sm font-bold font-mono px-3 py-1.5 ${
                           inv.status === 'Scheduled'
                             ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
                             : inv.status === 'Accepted'
@@ -604,26 +605,26 @@ export default function RecruiterDashboardPage() {
                         }`}
                       >
                         ● {inv.status}
-                      </span>
+                      </Badge>
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             ) : (
-              <div className="p-12 text-center rounded-3xl bg-card border border-border space-y-3">
+              <Card className="p-12 text-center space-y-3">
                 <Send className="w-10 h-10 text-muted-foreground mx-auto" />
                 <h3 className="text-base font-bold text-foreground">No Interview Invitations Dispatched Yet</h3>
                 <p className="text-sm text-muted-foreground max-w-sm mx-auto">
                   Browse the verified candidate talent pool and dispatch direct technical interview invitations without preliminary screening calls.
                 </p>
-                <button
+                <Button
                   type="button"
                   onClick={() => setActiveTab('talent')}
-                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm mt-2 cursor-pointer"
+                  className="font-bold text-sm mt-2"
                 >
                   <span>Explore Candidate Talent Pool</span>
-                </button>
-              </div>
+                </Button>
+              </Card>
             )}
           </div>
         )}

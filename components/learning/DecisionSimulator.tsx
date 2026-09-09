@@ -15,6 +15,10 @@ import {
 import confetti from 'canvas-confetti';
 import { DecisionScenario } from '@/lib/learning-data';
 import { submitDecisionSimulatorChoice } from '@/app/actions/learning';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 interface DecisionSimulatorProps {
   scenario: DecisionScenario;
@@ -70,16 +74,16 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
   };
 
   return (
-    <div className="w-full rounded-2xl bg-card border border-border p-5 sm:p-6 shadow-xl relative overflow-hidden space-y-6">
+    <Card className="w-full rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-chart-4/10 text-chart-4 border border-chart-4/20">
+            <Badge variant="outline" className="gap-1 text-sm font-bold px-2.5 py-0.5 bg-chart-4/10 text-chart-4 border-chart-4/20">
               <Brain className="w-3.5 h-3.5" />
               <span>AI Decision Simulator</span>
-            </span>
-            <span className="text-[11px] text-muted-foreground font-mono">• {scenario.companyContext}</span>
+            </Badge>
+            <span className="text-sm text-muted-foreground font-mono">- {scenario.companyContext}</span>
           </div>
           <h3 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
             {scenario.title}
@@ -87,44 +91,46 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1 text-sm font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
+          <Badge variant="outline" className="gap-1 text-sm font-semibold px-2.5 py-1 bg-primary/10 text-primary border-primary/20">
             <Zap className="w-3.5 h-3.5" />
             <span>+{scenario.pointsAwarded} XP</span>
-          </div>
+          </Badge>
           {selectedChoiceId && (
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={handleReset}
               aria-label="Try another architecture"
-              className="p-1.5 rounded-lg border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="p-1.5 rounded-lg border border-border"
               title="Reset Choice"
             >
               <RotateCcw className="w-4 h-4" />
-            </button>
+            </Button>
           )}
         </div>
       </div>
 
       {/* Hard Constraints Box */}
       <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-2">
-        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
+        <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground block">
           Hard Production Constraints & SLAs:
         </span>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm font-mono">
           <div className="p-2.5 rounded-lg bg-card border border-border">
-            <span className="text-[10px] text-muted-foreground block">Latency SLA</span>
+            <span className="text-sm text-muted-foreground block">Latency SLA</span>
             <span className="font-bold text-primary mt-0.5 block">{scenario.hardConstraints.slaLatency}</span>
           </div>
           <div className="p-2.5 rounded-lg bg-card border border-border">
-            <span className="text-[10px] text-muted-foreground block">VRAM Budget</span>
+            <span className="text-sm text-muted-foreground block">VRAM Budget</span>
             <span className="font-bold text-foreground mt-0.5 block">{scenario.hardConstraints.vramBudget}</span>
           </div>
           <div className="p-2.5 rounded-lg bg-card border border-border">
-            <span className="text-[10px] text-muted-foreground block">Cost Ceiling</span>
+            <span className="text-sm text-muted-foreground block">Cost Ceiling</span>
             <span className="font-bold text-foreground mt-0.5 block">{scenario.hardConstraints.costLimit}</span>
           </div>
           <div className="p-2.5 rounded-lg bg-card border border-border">
-            <span className="text-[10px] text-muted-foreground block">Accuracy Target</span>
+            <span className="text-sm text-muted-foreground block">Accuracy Target</span>
             <span className="font-bold text-secondary-foreground mt-0.5 block">{scenario.hardConstraints.accuracyTarget}</span>
           </div>
         </div>
@@ -156,17 +162,18 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
                     {option.title}
                   </h4>
                   {isSelected && result && (
-                    <span
-                      className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${
+                    <Badge
+                      variant={
                         result.verdict === 'optimal'
-                          ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30'
+                          ? 'success'
                           : result.verdict === 'acceptable'
-                          ? 'bg-amber-500/10 text-amber-500 border-amber-500/30'
-                          : 'bg-destructive/10 text-destructive border-destructive/30'
-                      }`}
+                          ? 'warning'
+                          : 'destructive'
+                      }
+                      className="text-sm font-mono font-bold uppercase px-2 py-0.5"
                     >
                       {result.verdict}
-                    </span>
+                    </Badge>
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed font-sans">
@@ -183,63 +190,48 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
         <div className="p-4 sm:p-5 rounded-xl bg-muted/60 border border-border space-y-4 animate-in fade-in slide-in-from-top-2">
           {/* Multi-Axis Metrics Evaluation */}
           <div>
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground block mb-2">
+            <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground block mb-2">
               Multi-Axis Architecture Scorecard:
             </span>
             <div className="grid grid-cols-3 gap-3">
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-mono">
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-sm font-mono">
                   <span className="text-muted-foreground flex items-center gap-1">
-                    <Gauge className="w-3 h-3 text-primary" />
+                    <Gauge className="w-3.5 h-3.5 text-primary" />
                     <span>Latency</span>
                   </span>
                   <span className="font-bold text-foreground">{result.metrics.latencyScore}/100</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full transition-all duration-500"
-                    style={{ width: `${result.metrics.latencyScore}%` }}
-                  />
-                </div>
+                <Progress value={result.metrics.latencyScore} className="h-2" />
               </div>
 
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-mono">
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-sm font-mono">
                   <span className="text-muted-foreground flex items-center gap-1">
-                    <DollarSign className="w-3 h-3 text-emerald-500" />
+                    <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
                     <span>Cost</span>
                   </span>
                   <span className="font-bold text-foreground">{result.metrics.costScore}/100</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                    style={{ width: `${result.metrics.costScore}%` }}
-                  />
-                </div>
+                <Progress value={result.metrics.costScore} className="h-2" />
               </div>
 
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-mono">
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-sm font-mono">
                   <span className="text-muted-foreground flex items-center gap-1">
-                    <Target className="w-3 h-3 text-chart-4" />
+                    <Target className="w-3.5 h-3.5 text-chart-4" />
                     <span>Accuracy</span>
                   </span>
                   <span className="font-bold text-foreground">{result.metrics.accuracyScore}/100</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full bg-chart-4 rounded-full transition-all duration-500"
-                    style={{ width: `${result.metrics.accuracyScore}%` }}
-                  />
-                </div>
+                <Progress value={result.metrics.accuracyScore} className="h-2" />
               </div>
             </div>
           </div>
 
           {/* Verdict Banner */}
           <div
-            className={`p-3 rounded-xl border text-sm flex items-start gap-2.5 ${
+            className={`p-3.5 rounded-xl border text-sm flex items-start gap-2.5 ${
               result.verdict === 'optimal'
                 ? 'bg-emerald-500/10 border-emerald-500/30 text-foreground'
                 : result.verdict === 'acceptable'
@@ -262,16 +254,16 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
                   ? 'Sub-Optimal Tradeoff (+10 XP Partial Credit)'
                   : 'Architecture Proposal Rejected'}
               </span>
-              <p className="text-muted-foreground text-[11px] leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {result.tradeoffSummary}
               </p>
-              <p className="text-foreground text-[11px] leading-relaxed mt-1.5 font-medium">
+              <p className="text-foreground text-sm leading-relaxed mt-1.5 font-medium">
                 💡 <span className="underline">Production Reasoning</span>: {result.productionReasoning}
               </p>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

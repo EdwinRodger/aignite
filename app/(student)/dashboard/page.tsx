@@ -6,6 +6,10 @@ import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { UserBuildsSandbox } from '@/components/dashboard/UserBuildsSandbox';
 import { MultiScopeLeaderboard } from '@/components/dashboard/MultiScopeLeaderboard';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import {
   Trophy,
   Mic,
@@ -110,7 +114,7 @@ export default function StudentDashboardPage() {
         {/* ========================================================================= */}
         {/* 1. STUDENT PROFILE & STREAK HEADER */}
         {/* ========================================================================= */}
-        <section className="rounded-3xl bg-gradient-to-r from-card via-card to-muted border border-border p-6 sm:p-8 shadow-xl shadow-black/10 relative overflow-hidden">
+        <Card className="p-6 sm:p-8 shadow-xl shadow-black/10 relative overflow-hidden bg-gradient-to-r from-card via-card to-muted border-border">
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
@@ -123,20 +127,20 @@ export default function StudentDashboardPage() {
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground font-sans tracking-tight">
                     Welcome back, {user.name}!
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-bold font-mono">
+                  <Badge variant="outline" className="gap-1 px-2.5 py-0.5 bg-primary/10 border-primary/20 text-primary text-sm font-bold font-mono">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    Verified Student
-                  </span>
+                    <span>Verified Student</span>
+                  </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground font-mono">
-                  {user.college} • @{user.username} • Next division: Gold AI Engineer
+                  {user.college} - @{user.username} - Next division: Gold AI Engineer
                 </p>
               </div>
             </div>
 
             {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-3">
-              <div className="px-4 py-2.5 rounded-2xl bg-card border border-border flex items-center gap-2.5 shadow-sm">
+              <Card className="px-4 py-2.5 flex items-center gap-2.5 shadow-sm">
                 <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center font-bold">
                   🔥
                 </div>
@@ -144,9 +148,9 @@ export default function StudentDashboardPage() {
                   <div className="text-sm font-bold text-foreground">{user.streakDays}-Day Streak</div>
                   <div className="text-sm text-muted-foreground font-mono">Daily oral defense active</div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="px-4 py-2.5 rounded-2xl bg-card border border-border flex items-center gap-2.5 shadow-sm">
+              <Card className="px-4 py-2.5 flex items-center gap-2.5 shadow-sm">
                 <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
                   ⚡
                 </div>
@@ -156,30 +160,29 @@ export default function StudentDashboardPage() {
                     {user.leagueRank > 0 ? `Rank #${user.leagueRank} in cohort` : 'Division: Bronze'}
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <Link
-                href="/resume-analyzer"
-                className="px-4 py-2.5 rounded-2xl bg-card border border-border flex items-center gap-2.5 shadow-sm hover:border-primary/40 transition-colors"
-              >
-                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold font-mono text-sm">
-                  {user.atsScore > 0 ? `${user.atsScore}%` : 'Scan'}
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground">ATS Score</div>
-                  <div className="text-sm text-emerald-600 dark:text-emerald-400 font-mono">
-                    {user.atsScore > 0 ? 'Verified Match' : 'Upload Resume'}
+              <Card asChild className="px-4 py-2.5 flex items-center gap-2.5 shadow-sm hover:border-primary/40 transition-colors cursor-pointer">
+                <Link href="/resume-analyzer">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold font-mono text-sm">
+                    {user.atsScore > 0 ? `${user.atsScore}%` : 'Scan'}
                   </div>
-                </div>
-              </Link>
+                  <div>
+                    <div className="text-sm font-bold text-foreground">ATS Score</div>
+                    <div className="text-sm text-emerald-600 dark:text-emerald-400 font-mono">
+                      {user.atsScore > 0 ? 'Verified Match' : 'Upload Resume'}
+                    </div>
+                  </div>
+                </Link>
+              </Card>
             </div>
           </div>
-        </section>
+        </Card>
 
         {/* ========================================================================= */}
         {/* 2. VERIFIED AI REPORT CARD & ORAL DEFENSE TELEMETRY */}
         {/* ========================================================================= */}
-        <section className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-6 shadow-sm">
+        <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
@@ -205,13 +208,12 @@ export default function StudentDashboardPage() {
                   </span>
                 </div>
               )}
-              <Link
-                href="/coach"
-                className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold flex items-center gap-1.5 shadow-md shadow-primary/20 hover:opacity-90 transition-all"
-              >
-                <Mic className="w-3.5 h-3.5" />
-                <span>Practice POTD</span>
-              </Link>
+              <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-md shadow-primary/20">
+                <Link href="/coach">
+                  <Mic className="w-3.5 h-3.5" />
+                  <span>Practice POTD</span>
+                </Link>
+              </Button>
             </div>
           </div>
 
@@ -232,12 +234,7 @@ export default function StudentDashboardPage() {
                       {axis.label}
                     </span>
                     <div className="text-xl font-black font-mono text-foreground">{axis.score.toFixed(1)}</div>
-                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all"
-                        style={{ width: `${(axis.score / 10) * 100}%` }}
-                      />
-                    </div>
+                    <Progress value={(axis.score / 10) * 100} className="h-1.5" />
                     <span className="text-sm font-mono text-muted-foreground block truncate">
                       {axis.sub}
                     </span>
@@ -248,15 +245,15 @@ export default function StudentDashboardPage() {
               {/* Spoken Telemetry Tags */}
               <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-sm font-mono text-muted-foreground">
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground">
+                  <Badge variant="secondary" className="text-sm font-mono">
                     Cadence: {reportCard.speechCadence}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground">
+                  </Badge>
+                  <Badge variant="secondary" className="text-sm font-mono">
                     Speech Fillers: {reportCard.fillerCount} detected (Elite Bar)
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">
+                  </Badge>
+                  <Badge variant="outline" className="text-sm font-bold bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                     ✓ Liveness Anti-Impersonation Checked
-                  </span>
+                  </Badge>
                 </div>
 
                 <span className="text-sm text-primary font-bold">
@@ -274,18 +271,17 @@ export default function StudentDashboardPage() {
                 Answer today&apos;s AI Problem of the Day or take a mock interview on the Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified 5-axis report card.
               </p>
               <div className="pt-2">
-                <Link
-                  href="/coach"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md shadow-primary/20 hover:opacity-90 transition-all"
-                >
-                  <Mic className="w-4 h-4" />
-                  <span>Begin Voice Defense Session</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+                <Button asChild className="font-bold text-sm shadow-md shadow-primary/20 gap-2">
+                  <Link href="/coach">
+                    <Mic className="w-4 h-4" />
+                    <span>Begin Voice Defense Session</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
               </div>
             </div>
           )}
-        </section>
+        </Card>
 
         {/* ========================================================================= */}
         {/* 3. THE AI MODULE LEARNING SUITE (THE BLUEPRINT WORKBENCH) */}
@@ -315,22 +311,20 @@ export default function StudentDashboardPage() {
               { id: 'mcq', label: '❓ Micro-Quiz (MCQs)', desc: '5s Knowledge Check' },
               { id: 'text', label: '📖 Text Content', desc: 'Curated Theory' },
             ].map((tab) => (
-              <button
+              <Button
                 key={tab.id}
                 type="button"
+                variant={activeModuleTool === tab.id ? 'default' : 'ghost'}
+                size="sm"
                 onClick={() =>
                   setActiveModuleTool(
                     tab.id as 'text' | 'bubble' | 'mcq' | 'error' | 'simulator' | 'builds'
                   )
                 }
-                className={`py-2 px-3.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
-                  activeModuleTool === tab.id
-                    ? 'bg-primary text-primary-foreground shadow-sm font-bold'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-card/60'
-                }`}
+                className="gap-1.5 font-bold text-sm h-9 px-3.5"
               >
                 <span>{tab.label}</span>
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -339,7 +333,7 @@ export default function StudentDashboardPage() {
 
           {/* Tab 2: PIPELINE BUBBLE GAME PREVIEW */}
           {activeModuleTool === 'bubble' && (
-            <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-6 shadow-sm">
+            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -350,13 +344,12 @@ export default function StudentDashboardPage() {
                     Drag, drop, and connect the nodes in the exact sequential order to build an enterprise RAG pipeline under sub-50ms SLA.
                   </p>
                 </div>
-                <Link
-                  href="/packs/openai-pack"
-                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold flex items-center gap-1.5 shadow-md hover:opacity-90 transition-all shrink-0"
-                >
-                  <span>Launch Full Screen Game</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+                <Button asChild className="font-bold text-sm gap-1.5 shadow-md shrink-0">
+                  <Link href="/packs/openai-pack">
+                    <span>Launch Full Screen Game</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </Button>
               </div>
 
               {/* Sample Bubble Pipeline Visual Representation */}
@@ -364,20 +357,20 @@ export default function StudentDashboardPage() {
                 {['Document Parser', 'Recursive Splitter', 'text-embedding-3', 'pgvector (HNSW)', 'Hybrid Retriever', 'Cohere Rerank', 'Prompt Template', 'LLM Generator'].map(
                   (node, i, arr) => (
                     <React.Fragment key={node}>
-                      <div className="px-3 py-2 rounded-xl bg-card border border-primary/40 text-primary font-bold shadow-xs">
+                      <Badge variant="outline" className="px-3 py-2 bg-card border-primary/40 text-primary font-bold shadow-xs text-sm">
                         {node}
-                      </div>
+                      </Badge>
                       {i < arr.length - 1 && <span className="text-muted-foreground font-black">&rarr;</span>}
                     </React.Fragment>
                   )
                 )}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Tab 3: ERROR CODE / ERROR HUNTER */}
           {activeModuleTool === 'error' && (
-            <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-6 shadow-sm">
+            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -388,9 +381,9 @@ export default function StudentDashboardPage() {
                     Inspect the code snippet below. Identify the silent performance bug causing gradients to accumulate indefinitely across training epochs.
                   </p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-destructive/10 text-destructive text-sm font-mono font-bold">
+                <Badge variant="outline" className="px-2.5 py-1 bg-destructive/10 text-destructive text-sm font-mono font-bold border-destructive/20">
                   Bug Detection: Active
-                </span>
+                </Badge>
               </div>
 
               {/* Broken Code Editor */}
@@ -410,20 +403,20 @@ export default function StudentDashboardPage() {
                 <p className="text-sm text-muted-foreground">
                   Without <code className="text-primary font-mono">optimizer.zero_grad()</code>, gradients from previous batches accumulate in tensor buffers.
                 </p>
-                <button
+                <Button
                   type="button"
                   onClick={() => setErrorFixed(!errorFixed)}
-                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow-sm hover:opacity-90 transition-all cursor-pointer"
+                  className="font-bold text-sm shadow-sm"
                 >
                   {errorFixed ? '✓ Production Fix Applied (+20 XP)' : 'Apply Production Fix'}
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Tab 4: AI DECISION SIMULATOR */}
           {activeModuleTool === 'simulator' && (
-            <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-6 shadow-sm">
+            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <Scale className="w-5 h-5 text-chart-4" />
@@ -467,12 +460,12 @@ export default function StudentDashboardPage() {
                   </button>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Tab 5: MCQs & MICRO-QUIZZES */}
           {activeModuleTool === 'mcq' && (
-            <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-6 shadow-sm">
+            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <HelpCircle className="w-5 h-5 text-primary" />
@@ -523,12 +516,12 @@ export default function StudentDashboardPage() {
                   <strong>Key Takeaway:</strong> GRPO computes baseline advantages by sampling a group of responses to the same prompt, removing the parameter-heavy critic model completely.
                 </div>
               )}
-            </div>
+            </Card>
           )}
 
           {/* Tab 6: TEXT CONTENT (CURATED THEORY) */}
           {activeModuleTool === 'text' && (
-            <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-6 shadow-sm">
+            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-primary" />
@@ -560,24 +553,24 @@ export default function StudentDashboardPage() {
                     desc: 'Hierarchical Navigable Small World graphs enable sub-10ms logarithmic time vector retrieval across millions of dense vectors.',
                   },
                 ].map((item) => (
-                  <div
+                  <Card
                     key={item.title}
-                    className="p-5 rounded-2xl bg-muted/40 border border-border hover:border-primary/40 transition-all space-y-2 flex flex-col justify-between"
+                    className="p-5 bg-muted/40 hover:border-primary/40 transition-all space-y-2 flex flex-col justify-between shadow-none"
                   >
                     <div className="space-y-1.5">
-                      <span className="text-sm font-mono px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">
+                      <Badge variant="outline" className="text-sm font-mono bg-primary/10 text-primary font-bold border-primary/20">
                         {item.tag}
-                      </span>
+                      </Badge>
                       <h4 className="text-sm font-bold text-foreground font-sans">{item.title}</h4>
                       <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
                     <span className="text-sm font-mono text-muted-foreground block pt-2 border-t border-border/60">
                       {item.readTime}
                     </span>
-                  </div>
+                  </Card>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
         </section>
 

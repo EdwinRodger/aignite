@@ -37,7 +37,7 @@ export function MobileTabBar() {
               <div className={cn('p-1 rounded-lg transition-transform', isActive && 'scale-110')}>
                 <Icon className={cn('w-5 h-5', isActive ? tab.activeColor : 'text-muted-foreground')} />
               </div>
-              <span className={cn('text-[11px] font-medium tracking-tight mt-0.5', isActive ? 'font-semibold text-primary' : 'text-muted-foreground')}>
+              <span className={cn('text-sm font-medium tracking-tight mt-0.5', isActive ? 'font-semibold text-primary' : 'text-muted-foreground')}>
                 {tab.label}
               </span>
             </Link>

@@ -3,6 +3,10 @@
 import React from 'react';
 import { CandidateTalent } from '@/lib/recruiter-data';
 import { Award, FileText, Send, Sparkles, Trophy, CheckCircle2 } from 'lucide-react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 interface CandidateCardProps {
   candidate: CandidateTalent;
@@ -23,13 +27,13 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
   const rep = candidate.reportCard;
 
   return (
-    <div className="rounded-3xl bg-card border border-border p-6 sm:p-7 shadow-lg shadow-black/5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between group">
-      {/* Header Info */}
-      <div className="space-y-4">
+    <Card className="p-6 sm:p-7 shadow-lg shadow-black/5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between group rounded-3xl">
+      <CardContent className="p-0 space-y-4">
+        {/* Header Info */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3.5">
             <div
-              className={`w-13 h-13 rounded-2xl flex items-center justify-center font-bold text-base shadow-sm shrink-0 ${candidate.avatarBg}`}
+              className={`w-13 h-13 rounded-2xl flex items-center justify-center font-bold text-base shadow-xs shrink-0 ${candidate.avatarBg}`}
             >
               {candidate.fullName
                 .split(' ')
@@ -47,7 +51,7 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
               </div>
               <p className="text-sm font-mono text-muted-foreground flex items-center gap-1.5 mt-0.5">
                 <span>{candidate.collegeOrCompany}</span>
-                <span>•</span>
+                <span>-</span>
                 <span>{candidate.region}</span>
               </p>
             </div>
@@ -69,7 +73,7 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
 
         {/* Verified Badges Chips */}
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground font-mono">
+          <div className="flex items-center justify-between text-sm text-muted-foreground font-mono">
             <span className="flex items-center gap-1">
               <Award className="w-3.5 h-3.5 text-primary" />
               <span>Verified Skill Badges</span>
@@ -78,13 +82,14 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
           </div>
           <div className="flex flex-wrap gap-1.5">
             {candidate.verifiedBadges.map((b) => (
-              <span
+              <Badge
                 key={b}
-                className="px-2.5 py-1 rounded-xl bg-muted border border-border text-[11px] font-medium text-foreground flex items-center gap-1 shadow-2xs"
+                variant="outline"
+                className="text-sm font-medium gap-1 rounded-xl shadow-2xs py-1"
               >
                 <Sparkles className="w-3 h-3 text-primary" />
                 <span>{b}</span>
-              </span>
+              </Badge>
             ))}
           </div>
         </div>
@@ -92,17 +97,17 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
         {/* 5-Axis Score Preview Card */}
         <div className="p-3.5 rounded-2xl bg-muted/60 border border-border/80 space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
+            <span className="text-sm font-bold text-foreground flex items-center gap-1.5">
               <Trophy className="w-3.5 h-3.5 text-chart-5" />
               <span>AI Speech & Systems Report Card</span>
             </span>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-mono font-black text-primary px-2 py-0.5 rounded-lg bg-primary/10 border border-primary/20">
+              <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 font-mono font-black">
                 {rep.overallScore.toFixed(1)} / 10
-              </span>
-              <span className="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+              </Badge>
+              <Badge variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-500/20 bg-emerald-500/10 font-mono font-bold">
                 ATS: {candidate.resume.overallAtsScore}%
-              </span>
+              </Badge>
             </div>
           </div>
 
@@ -116,13 +121,8 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
               { label: 'Industry Fit', val: rep.industryLevelScore },
             ].map((m) => (
               <div key={m.label} className="space-y-1">
-                <div className="h-1.5 rounded-full bg-muted-foreground/20 overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full transition-all"
-                    style={{ width: `${(m.val / 10) * 100}%` }}
-                  />
-                </div>
-                <div className="text-[9px] font-mono text-muted-foreground truncate" title={m.label}>
+                <Progress value={(m.val / 10) * 100} className="h-1.5" />
+                <div className="text-sm font-mono text-muted-foreground truncate" title={m.label}>
                   {m.label.slice(0, 4)}: {m.val.toFixed(1)}
                 </div>
               </div>
@@ -131,30 +131,29 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
         </div>
 
         {/* Model Answer Excerpt Preview */}
-        <div className="text-[11px] text-muted-foreground bg-card p-2.5 rounded-xl border border-border/60 italic line-clamp-2 font-serif">
+        <div className="text-sm text-muted-foreground bg-card p-2.5 rounded-xl border border-border/60 italic line-clamp-2 font-serif">
           {rep.recentModelAnswerExcerpt}
         </div>
-      </div>
+      </CardContent>
 
       {/* Action Footer */}
-      <div className="pt-5 mt-4 border-t border-border flex items-center justify-between gap-2.5">
-        <button
-          type="button"
+      <CardFooter className="p-0 pt-5 mt-4 border-t border-border flex items-center justify-between gap-2.5">
+        <Button
+          variant="outline"
           onClick={() => onInspect(candidate)}
-          className="flex-1 py-2.5 px-3 rounded-xl bg-muted hover:bg-muted/80 text-foreground text-sm font-semibold border border-border hover:border-primary/40 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          className="flex-1 rounded-xl text-sm font-semibold gap-1.5"
         >
           <FileText className="w-3.5 h-3.5 text-primary" />
           <span>Inspect Dossier</span>
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
           onClick={() => onInvite(candidate)}
-          className="flex-1 py-2.5 px-3 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-sm font-bold shadow-md shadow-primary/20 active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          className="flex-1 rounded-xl text-sm font-bold shadow-md shadow-primary/20 gap-1.5"
         >
           <Send className="w-3.5 h-3.5" />
           <span>Invite Candidate</span>
-        </button>
-      </div>
-    </div>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

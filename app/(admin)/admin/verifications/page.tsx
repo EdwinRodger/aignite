@@ -191,7 +191,7 @@ export default function AdminVerificationsPage() {
                         <span className="text-base font-bold text-foreground font-sans">
                           {item.fullName}
                         </span>
-                        <span className="text-sm text-muted-foreground">•</span>
+                        <span className="text-sm text-muted-foreground">-</span>
                         <span className="text-sm font-semibold text-primary">
                           {item.recruiterDesignation}
                         </span>

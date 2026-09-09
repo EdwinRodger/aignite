@@ -13,6 +13,10 @@ import {
 import confetti from 'canvas-confetti';
 import { WeeklyChallenge } from '@/lib/league-data';
 import { submitLeagueChallenge } from '@/app/actions/league';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface WeeklyChallengesCardProps {
   challenges: WeeklyChallenge[];
@@ -64,7 +68,7 @@ export function WeeklyChallengesCard({
           });
         }
       } catch {
-        // Fallback for restricted canvas
+        // Fallback
       }
 
       if (onChallengeCompleted) {
@@ -74,8 +78,8 @@ export function WeeklyChallengesCard({
   };
 
   return (
-    <div className="w-full rounded-3xl bg-card border border-border p-5 sm:p-6 shadow-xl space-y-4">
-      <div className="flex items-center justify-between border-b border-border/60 pb-3">
+    <Card className="rounded-3xl border-border shadow-xl">
+      <CardHeader className="p-5 sm:p-6 border-b border-border/60 pb-3 flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
             <Zap className="w-4 h-4" />
@@ -88,12 +92,12 @@ export function WeeklyChallengesCard({
           </div>
         </div>
 
-        <span className="text-sm font-mono font-bold text-primary px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20">
+        <Badge variant="outline" className="text-sm font-mono font-bold text-primary bg-primary/10 border-primary/20">
           {completedIds.length}/{challenges.length} Done
-        </span>
-      </div>
+        </Badge>
+      </CardHeader>
 
-      <div className="space-y-3">
+      <CardContent className="p-5 sm:p-6 space-y-3">
         {challenges.length === 0 ? (
           <div className="p-6 text-center rounded-2xl bg-muted/30 border border-border/70 space-y-2">
             <p className="text-sm font-semibold text-foreground">No Challenges Active This Week</p>
@@ -125,9 +129,9 @@ export function WeeklyChallengesCard({
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-mono font-semibold px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
+                      <Badge variant="secondary" className="text-sm font-mono font-semibold">
                         {challenge.category}
-                      </span>
+                      </Badge>
                       <span className="text-sm font-mono text-primary font-bold">
                         +{challenge.pointsAwarded} XP
                       </span>
@@ -139,10 +143,10 @@ export function WeeklyChallengesCard({
 
                   <div className="flex items-center gap-2 shrink-0 pt-1">
                     {isDone ? (
-                      <span className="inline-flex items-center gap-1 text-sm font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                      <Badge variant="outline" className="gap-1 text-sm font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Completed</span>
-                      </span>
+                      </Badge>
                     ) : isOpen ? (
                       <ChevronUp className="w-4 h-4 text-muted-foreground" />
                     ) : (
@@ -164,20 +168,20 @@ export function WeeklyChallengesCard({
                     </div>
 
                     <div className="space-y-1.5 pt-1">
-                      <textarea
+                      <Textarea
                         value={answerText}
                         onChange={(e) => setAnswerText(e.target.value)}
                         placeholder="Outline your architectural solution, trade-offs, and failure mode mitigations..."
                         rows={3}
-                        className="w-full p-3 rounded-xl bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="resize-none"
                       />
 
                       <div className="flex justify-end">
-                        <button
+                        <Button
                           type="button"
                           onClick={() => handleSubmit(challenge.id)}
                           disabled={!answerText.trim() || isSubmitting}
-                          className="px-4 py-2 rounded-xl text-sm font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-sm shadow-primary/20 transition-all flex items-center gap-1.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+                          className="rounded-xl text-sm font-bold shadow-xs shadow-primary/20 gap-1.5"
                         >
                           {isSubmitting ? (
                             <>
@@ -190,7 +194,7 @@ export function WeeklyChallengesCard({
                               <span>Submit Solution (+50 XP)</span>
                             </>
                           )}
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -198,7 +202,7 @@ export function WeeklyChallengesCard({
 
                 {/* Completion Feedback */}
                 {isDone && feedback && (
-                  <div className="p-3 border-t border-emerald-500/20 text-sm text-emerald-500 flex items-center gap-2">
+                  <div className="p-3 border-t border-emerald-500/20 text-sm text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     <span>{feedback}</span>
                   </div>
@@ -207,7 +211,7 @@ export function WeeklyChallengesCard({
             );
           })
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

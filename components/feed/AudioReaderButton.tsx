@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface AudioReaderButtonProps {
   textToRead: string;
@@ -65,28 +66,28 @@ export function AudioReaderButton({ textToRead, title }: AudioReaderButtonProps)
   if (!isSupported) return null;
 
   return (
-    <button
+    <Button
       type="button"
+      variant={isPlaying ? 'default' : 'outline'}
+      size="sm"
       onClick={handleTogglePlay}
       aria-label={isPlaying ? 'Stop audio readout' : 'Listen to 30-second audio summary'}
       title={isPlaying ? 'Stop audio' : 'Listen hands-free'}
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium border transition-all ${
-        isPlaying
-          ? 'bg-primary text-primary-foreground border-primary shadow-sm shadow-primary/30 animate-pulse'
-          : 'bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border'
-      } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+      className={`gap-1.5 text-sm font-medium ${
+        isPlaying ? 'shadow-sm shadow-primary/30 animate-pulse' : ''
+      }`}
     >
       {isPlaying ? (
         <>
-          <VolumeX className="w-3.5 h-3.5 animate-spin" />
-          <span className="text-[11px] font-mono">Listening...</span>
+          <VolumeX className="w-4 h-4 animate-spin" />
+          <span className="font-mono text-sm">Listening...</span>
         </>
       ) : (
         <>
-          <Volume2 className="w-3.5 h-3.5 text-primary" />
-          <span className="text-[11px]">Listen</span>
+          <Volume2 className="w-4 h-4 text-primary" />
+          <span className="text-sm">Listen</span>
         </>
       )}
-    </button>
+    </Button>
   );
 }

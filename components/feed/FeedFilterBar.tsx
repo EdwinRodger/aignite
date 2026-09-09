@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Sparkles, Brain, Cpu, Layers, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface FeedFilterBarProps {
   activeCategory: string;
@@ -27,19 +28,17 @@ export function FeedFilterBar({ activeCategory, onSelectCategory }: FeedFilterBa
         const isActive = activeCategory === cat.id;
 
         return (
-          <button
+          <Button
             key={cat.id}
             type="button"
+            variant={isActive ? 'default' : 'outline'}
+            size="sm"
             onClick={() => onSelectCategory(cat.id)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              isActive
-                ? 'bg-primary text-primary-foreground border-primary shadow-sm shadow-primary/30 font-semibold scale-[1.02]'
-                : 'bg-card text-muted-foreground hover:text-foreground hover:bg-muted/70 border-border'
-            }`}
+            className="rounded-full text-sm font-semibold shrink-0 gap-1.5"
           >
             <Icon className="w-3.5 h-3.5 shrink-0" />
             <span>{cat.label}</span>
-          </button>
+          </Button>
         );
       })}
     </nav>

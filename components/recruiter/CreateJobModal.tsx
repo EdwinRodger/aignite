@@ -3,7 +3,17 @@
 import React, { useState } from 'react';
 import { createJobPostingAction } from '@/app/actions/recruiter';
 import { RecruiterJob } from '@/lib/recruiter-data';
-import { X, Plus, Loader2, Award, Briefcase, DollarSign, MapPin, Trophy } from 'lucide-react';
+import { Plus, Loader2, Award, Briefcase, DollarSign, MapPin, Trophy } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 interface CreateJobModalProps {
   currentCompany: string;
@@ -82,37 +92,23 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div
-        className="relative w-full max-w-xl max-h-[90vh] bg-card border border-border rounded-3xl shadow-2xl shadow-black/40 overflow-hidden flex flex-col"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="job-create-title"
-      >
-        <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-muted/30">
+    <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-xl max-h-[90vh] p-0 overflow-hidden flex flex-col rounded-3xl">
+        <DialogHeader className="px-6 py-5 border-b border-border bg-muted/30 text-left">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
               <Briefcase className="w-4 h-4" />
             </div>
             <div>
-              <h2 id="job-create-title" className="text-base font-bold text-foreground font-sans">
+              <DialogTitle className="text-base font-bold text-foreground font-sans">
                 Post AI Engineering Opening
-              </h2>
-              <p className="text-sm text-muted-foreground font-mono">
+              </DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground font-mono">
                 Company: {currentCompany}
-              </p>
+              </DialogDescription>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close modal"
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+        </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4 text-sm">
           {error && (
@@ -124,13 +120,12 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
           {/* Title */}
           <div className="space-y-1.5">
             <label className="font-semibold text-foreground">Role Title</label>
-            <input
+            <Input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Senior AI Inference Systems Engineer"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
             />
           </div>
 
@@ -150,7 +145,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                       | 'Agent Architect'
                   )
                 }
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               >
                 <option value="AI Systems & Inference">AI Systems & Inference</option>
                 <option value="GenAI & LLM">GenAI & LLM</option>
@@ -165,14 +160,12 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                 <MapPin className="w-3 h-3 text-primary" />
                 <span>Location</span>
               </label>
-              <input
+              <Input
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="e.g. Bengaluru (Hybrid)"
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
-              >
-              </input>
+              />
             </div>
           </div>
 
@@ -183,12 +176,11 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                 <DollarSign className="w-3 h-3 text-emerald-500" />
                 <span>Salary / Compensation Band</span>
               </label>
-              <input
+              <Input
                 type="text"
                 value={salaryRange}
                 onChange={(e) => setSalaryRange(e.target.value)}
                 placeholder="₹28L - ₹45L CTC"
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               />
             </div>
 
@@ -203,7 +195,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
               <select
                 value={minReportScore}
                 onChange={(e) => setMinReportScore(Number(e.target.value))}
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               >
                 <option value={7.0}>7.0+ (Intermediate)</option>
                 <option value={7.5}>7.5+ (Proficient)</option>
@@ -236,7 +228,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                       tier.id as 'bronze' | 'silver' | 'gold' | 'diamond' | 'architect'
                     )
                   }
-                  className={`py-2 px-1 rounded-xl text-center font-bold text-[11px] border transition-all cursor-pointer ${
+                  className={`py-2 px-1 rounded-xl text-center font-bold text-sm border transition-all cursor-pointer ${
                     minLeagueTier === tier.id
                       ? 'bg-primary/15 border-primary text-primary shadow-xs'
                       : 'bg-muted border-border text-muted-foreground hover:text-foreground'
@@ -278,27 +270,23 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
           {/* Description */}
           <div className="space-y-1.5">
             <label className="font-semibold text-foreground">Role Description & Architecture Expectations</label>
-            <textarea
+            <Textarea
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-3 rounded-xl bg-muted border border-border text-foreground leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary resize-none text-sm"
+              className="resize-none"
             />
           </div>
 
           {/* Actions */}
           <div className="pt-2 flex items-center justify-end gap-2.5">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-border text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
+            <Button type="button" variant="outline" onClick={onClose} className="rounded-xl">
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-bold shadow-md shadow-primary/20 flex items-center gap-1.5 active:scale-98 transition-all cursor-pointer"
+              className="rounded-xl font-bold shadow-md shadow-primary/20 gap-1.5"
             >
               {loading ? (
                 <>
@@ -311,10 +299,10 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                   <span>Publish Role & Open Candidate Matching</span>
                 </>
               )}
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

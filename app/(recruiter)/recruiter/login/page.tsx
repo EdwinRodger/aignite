@@ -6,6 +6,10 @@ import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { getRecruiterStatus } from '@/app/actions/auth';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { Building2, Mail, ArrowRight, Loader2, AlertCircle, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function RecruiterLoginPage() {
@@ -60,7 +64,7 @@ export default function RecruiterLoginPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
 
         <div className="w-full max-w-md relative z-10">
-          <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl shadow-black/20 space-y-6">
+          <Card className="p-6 sm:p-8 shadow-xl shadow-black/20 space-y-6">
             {/* Header */}
             <div className="text-center space-y-2">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-accent border border-primary/20 text-primary mb-1 shadow-sm">
@@ -99,31 +103,28 @@ export default function RecruiterLoginPage() {
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold text-foreground flex items-center justify-between">
                   <span>Corporate Work Email</span>
-                  <span className="text-[10px] text-primary font-bold">Verified Domain</span>
+                  <Badge variant="outline" className="text-sm text-primary font-bold border-primary/20 bg-primary/5">Verified Domain</Badge>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
                     <Mail className="w-4 h-4" />
                   </div>
-                  <input
+                  <Input
                     type="email"
                     required
                     value={workEmail}
                     onChange={(e) => setWorkEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-muted/60 border border-border text-foreground text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all"
+                    className="pl-10 text-sm font-mono"
                   />
                 </div>
               </div>
 
-              <button
+              <Button
                 type="submit"
+                size="lg"
                 disabled={loading || !workEmail.trim()}
-                className={`w-full py-3.5 px-4 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${
-                  workEmail.trim() && !loading
-                    ? 'bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/25 active:scale-98 cursor-pointer'
-                    : 'bg-muted text-muted-foreground/60 border border-border cursor-not-allowed'
-                }`}
+                className="w-full font-bold text-sm shadow-lg shadow-primary/25 gap-2"
               >
                 {loading ? (
                   <>
@@ -137,41 +138,45 @@ export default function RecruiterLoginPage() {
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
-              </button>
+              </Button>
             </form>
 
             {/* SIH Quick Test Shortcuts */}
-            <div className="p-3.5 rounded-2xl bg-muted/60 border border-border text-[11px] text-muted-foreground space-y-1.5">
+            <div className="p-3.5 rounded-2xl bg-muted/60 border border-border text-sm text-muted-foreground space-y-2">
               <span className="font-bold text-foreground block">⚡ SIH Evaluator Quick-Test:</span>
               <div className="flex flex-wrap gap-1.5">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setWorkEmail('pvenkatesh@google.com')}
-                  className="px-2 py-1 rounded-lg bg-card border border-border text-foreground font-mono hover:border-primary transition-colors cursor-pointer"
+                  className="font-mono text-sm h-8"
                 >
                   pvenkatesh@google.com (Approved)
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setWorkEmail('aarav.sharma@nvidia.com')}
-                  className="px-2 py-1 rounded-lg bg-card border border-border text-foreground font-mono hover:border-primary transition-colors cursor-pointer"
+                  className="font-mono text-sm h-8"
                 >
                   aarav.sharma@nvidia.com (Pending)
-                </button>
+                </Button>
               </div>
             </div>
 
             {/* Link to Apply */}
             <div className="pt-4 border-t border-border/80 text-center text-sm text-muted-foreground">
-              <span>Not verified yet? </span>
+              <span>Don&apos;t have verified recruiter access? </span>
               <Link
                 href="/recruiter/apply"
                 className="text-primary font-semibold hover:underline underline-offset-2"
               >
-                Submit Corporate Application &rarr;
+                Apply for Company Access &rarr;
               </Link>
             </div>
-          </div>
+          </Card>
         </div>
       </main>
 

@@ -29,6 +29,11 @@ import { DAILY_COACH_QUESTIONS } from '@/lib/coach-data';
 import { AI_CAREER_ROADMAP } from '@/lib/roadmap-data';
 import { MultiScopeLeaderboard } from '@/components/dashboard/MultiScopeLeaderboard';
 
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+
 export default async function HomePage() {
   const cookieStore = await cookies();
   const studentSession = cookieStore.get('aignite_session')?.value;
@@ -113,7 +118,7 @@ export default async function HomePage() {
   const publicFeatures = [
     {
       title: 'Resume Analyser',
-      badge: '100% Free • ATS Score',
+      badge: '100% Free - ATS Score',
       description: 'Instant 0-100 score, missing skill gap radar, and company bar alignment (Google & NVIDIA).',
       href: '/resume-analyzer',
       icon: FileText,
@@ -209,10 +214,10 @@ export default async function HomePage() {
               {/* Left Column: Vision & Pitch */}
               <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
                 {/* SIH Pill Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/90 border border-border text-sm font-semibold text-foreground shadow-sm">
+                <Badge variant="outline" className="gap-2 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm">
                   <Flame className="w-4 h-4 text-primary" />
                   <span>Smart India Hackathon (SIH) 2026 Initiative</span>
-                </div>
+                </Badge>
 
                 <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.15]">
                   Master Applied AI in{' '}
@@ -230,27 +235,24 @@ export default async function HomePage() {
 
                 {/* Primary Action Buttons */}
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
-                  <Link
-                    href="/login"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  >
-                    <span>Start Learning</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <Link
-                    href="/resume-analyzer"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-card hover:bg-muted text-foreground border border-border flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  >
-                    <Sparkles className="w-4 h-4 text-emerald-500" />
-                    <span>Free AI Resume ATS</span>
-                  </Link>
-                  <Link
-                    href="/recruiter/apply"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-card hover:bg-muted text-foreground border border-border flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-primary" />
-                    <span>Recruiter Portal</span>
-                  </Link>
+                  <Button asChild size="lg" className="w-full sm:w-auto px-6 py-6 rounded-xl font-bold text-sm gap-2">
+                    <Link href="/login">
+                      <span>Start Learning</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="w-full sm:w-auto px-6 py-6 rounded-xl font-bold text-sm gap-2">
+                    <Link href="/resume-analyzer">
+                      <Sparkles className="w-4 h-4 text-emerald-500" />
+                      <span>Free AI Resume ATS</span>
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="w-full sm:w-auto px-6 py-6 rounded-xl font-bold text-sm gap-2">
+                    <Link href="/recruiter/apply">
+                      <ShieldCheck className="w-4 h-4 text-primary" />
+                      <span>Recruiter Portal</span>
+                    </Link>
+                  </Button>
                 </div>
 
                 {/* Feature Highlights Ticker */}
@@ -296,10 +298,10 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-sm font-bold text-primary mb-2">
+                <Badge variant="outline" className="gap-2 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary border-primary/20 mb-2">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Public Features Hub • 100% Free &amp; Open Access</span>
-                </div>
+                  <span>Public Features Hub - 100% Free &amp; Open Access</span>
+                </Badge>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   Everything You Need to Break into Applied AI Systems
                 </h2>
@@ -308,7 +310,7 @@ export default async function HomePage() {
                 </p>
               </div>
               <span className="text-sm font-mono text-muted-foreground mt-4 md:mt-0">
-                ⚡ No credit card required • Instant evaluation
+                ⚡ No credit card required - Instant evaluation
               </span>
             </div>
 
@@ -317,18 +319,18 @@ export default async function HomePage() {
               {publicFeatures.map((feat) => {
                 const IconComponent = feat.icon;
                 return (
-                  <div
+                  <Card
                     key={feat.title}
-                    className="p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5"
+                    className="p-6 rounded-2xl border-border hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${feat.iconBg} ${feat.iconColor}`}>
                           <IconComponent className="w-5 h-5" />
                         </div>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-muted border border-border text-muted-foreground">
+                        <Badge variant="outline" className="text-sm font-mono font-bold px-2 py-0.5">
                           {feat.badge}
-                        </span>
+                        </Badge>
                       </div>
                       <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                         {feat.title}
@@ -339,15 +341,14 @@ export default async function HomePage() {
                     </div>
 
                     <div className="pt-3 border-t border-border flex items-center justify-between text-sm">
-                      <Link
-                        href={feat.href}
-                        className="inline-flex items-center gap-1.5 font-bold text-primary hover:underline group/link"
-                      >
-                        <span>{feat.cta}</span>
-                        <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 transition-transform" />
-                      </Link>
+                      <Button asChild variant="link" className="p-0 h-auto font-bold text-sm text-primary gap-1.5 group/link">
+                        <Link href={feat.href}>
+                          <span>{feat.cta}</span>
+                          <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 transition-transform" />
+                        </Link>
+                      </Button>
                     </div>
-                  </div>
+                  </Card>
                 );
               })}
             </div>
@@ -361,10 +362,10 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-sm font-bold text-orange-500">
+                <Badge variant="outline" className="gap-2 px-3 py-1 rounded-full text-sm font-bold bg-orange-500/10 border-orange-500/20 text-orange-500">
                   <Flame className="w-4 h-4" />
-                  <span>Problem of the Day • Daily Streak Driver</span>
-                </div>
+                  <span>Problem of the Day - Daily Streak Driver</span>
+                </Badge>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   Tackle Today&apos;s High-Yield Architecture Challenge
                 </h2>
@@ -372,27 +373,25 @@ export default async function HomePage() {
                   Every morning at 06:00 IST, AIgnite drops one production interview scenario. Speak your answer into the voice coach or study key canonical trade-offs to keep your league streak burning.
                 </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-                  <Link
-                    href="/coach"
-                    className="px-5 py-3 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center gap-2 transition-transform active:scale-95"
-                  >
-                    <Mic className="w-4 h-4" />
-                    <span>Solve in Voice Mock Interview</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                  <Link
-                    href="/feed"
-                    className="px-5 py-3 rounded-xl text-sm font-bold bg-card hover:bg-muted text-foreground border border-border flex items-center gap-2 transition-colors"
-                  >
-                    <Sparkles className="w-4 h-4 text-primary" />
-                    <span>Browse 5-Second Sparks</span>
-                  </Link>
+                  <Button asChild className="gap-2 text-sm font-bold rounded-xl shadow-lg shadow-primary/20">
+                    <Link href="/coach">
+                      <Mic className="w-4 h-4" />
+                      <span>Solve in Voice Mock Interview</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="gap-2 text-sm font-bold rounded-xl">
+                    <Link href="/feed">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <span>Browse 5-Second Sparks</span>
+                    </Link>
+                  </Button>
                 </div>
               </div>
 
               {/* Today's Question Card */}
               <div className="lg:col-span-7">
-                <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl space-y-5">
+                <Card className="rounded-3xl p-6 sm:p-8 shadow-xl space-y-5">
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping motion-reduce:animate-none" />
@@ -401,12 +400,12 @@ export default async function HomePage() {
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm font-mono">
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">
+                      <Badge variant="outline" className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border-primary/20 font-semibold text-sm">
                         {todayQuestion.track}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-full bg-muted border border-border text-muted-foreground font-semibold">
+                      </Badge>
+                      <Badge variant="secondary" className="px-2 py-0.5 rounded-full font-semibold text-sm">
                         {todayQuestion.difficulty}
-                      </span>
+                      </Badge>
                     </div>
                   </div>
 
@@ -444,7 +443,7 @@ export default async function HomePage() {
                       <span>+25 XP Streak Reward</span>
                     </div>
                   </div>
-                </div>
+                </Card>
               </div>
             </div>
           </div>
@@ -469,7 +468,7 @@ export default async function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-colors">
+              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
                   <Sparkles className="w-5 h-5" />
                 </div>
@@ -478,9 +477,9 @@ export default async function HomePage() {
                   No generic software tutorials. Zero noise. Strictly deep-dive breakthroughs in LLMs,
                   FlashAttention, RAG architectures, and model quantization.
                 </p>
-              </div>
+              </Card>
 
-              <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-colors">
+              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
                   <Brain className="w-5 h-5" />
                 </div>
@@ -489,9 +488,9 @@ export default async function HomePage() {
                   Passive reading fails retention. Every card tests your comprehension with single-tap check questions
                   rewarding immediate points toward your league standing.
                 </p>
-              </div>
+              </Card>
 
-              <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-colors">
+              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
                   <Flame className="w-5 h-5" />
                 </div>
@@ -500,18 +499,17 @@ export default async function HomePage() {
                   Open the app on your phone and dive straight into the swipeable feed.
                   Configurable in preferences if you prefer the dashboard or voice coach first.
                 </p>
-              </div>
+              </Card>
             </div>
 
             <div className="mt-10 text-center">
-              <Link
-                href="/feed"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-xl shadow-primary/20 transition-all active:scale-95"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Launch Interactive AI Sparks Feed</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              <Button asChild size="lg" className="gap-2 px-6 py-6 rounded-xl font-bold text-sm shadow-xl shadow-primary/20">
+                <Link href="/feed">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Launch Interactive AI Sparks Feed</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -534,26 +532,25 @@ export default async function HomePage() {
                   engineered to match actual technical interview bars.
                 </p>
               </div>
-              <Link
-                href="/packs"
-                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
-              >
-                <span>View All Packs</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              <Button asChild variant="ghost" className="mt-4 md:mt-0 min-h-[44px] gap-1.5 px-3.5 py-2 text-sm font-bold text-primary rounded-xl">
+                <Link href="/packs">
+                  <span>View All Packs</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {companyPacks.map((pack) => (
-                <div
+                <Card
                   key={pack.name}
-                  className={`p-6 rounded-2xl bg-card border border-border hover:border-primary/40 relative group hover:scale-[1.02] transition-all`}
+                  className="p-6 rounded-2xl border-border hover:border-primary/40 relative group hover:scale-[1.02] transition-all"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-2xl">{pack.icon}</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-muted border border-border text-muted-foreground">
+                    <Badge variant="outline" className="text-sm font-bold px-2 py-0.5">
                       {pack.badge}
-                    </span>
+                    </Badge>
                   </div>
                   <h3 className="text-lg font-bold text-foreground mb-2">{pack.name}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4">
@@ -565,17 +562,17 @@ export default async function HomePage() {
                       <span>Includes Capstone Mock</span>
                     </span>
                   </div>
-                </div>
+                </Card>
               ))}
 
               {/* RAG Master Pipeline Game Teaser */}
-              <div className="p-6 rounded-2xl bg-card border border-primary/30 flex flex-col justify-between">
+              <Card className="p-6 rounded-2xl border-primary/30 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <Boxes className="w-7 h-7 text-primary" />
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/25">
+                    <Badge variant="default" className="text-sm font-bold px-2 py-0.5">
                       Pipeline Mini-Game
-                    </span>
+                    </Badge>
                   </div>
                   <h3 className="text-lg font-bold text-foreground mb-2">Bubble Game: RAG Master</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -587,19 +584,21 @@ export default async function HomePage() {
                   <span className="text-sm text-primary font-semibold flex items-center gap-1">
                     <span>Unlocks &quot;RAG Master&quot; Badge</span>
                   </span>
-                  <Link
-                    href="/packs/nvidia-ai-pack"
-                    className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-primary hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    <span>Play Now</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
+                  <Button asChild variant="link" className="p-0 h-auto font-bold text-sm text-primary gap-1.5">
+                    <Link href="/packs/nvidia-ai-pack">
+                      <span>Play Now</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </Button>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </section>
 
+        {/* ========================================================================= */}
+        {/* THE AI INTERVIEW LEAGUE & REPORT CARD */}
+        {/* ========================================================================= */}
         {/* ========================================================================= */}
         {/* THE AI INTERVIEW LEAGUE & REPORT CARD */}
         {/* ========================================================================= */}
@@ -608,10 +607,10 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               {/* Left Column: The League System */}
               <div className="lg:col-span-6 space-y-5">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-sm font-bold text-primary">
+                <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-sm font-bold text-primary">
                   <Trophy className="w-3.5 h-3.5" />
                   <span>The AI Interview League 🏆</span>
-                </div>
+                </Badge>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   Duolingo for Technical AI Interviews
                 </h2>
@@ -623,82 +622,72 @@ export default async function HomePage() {
                 {/* Division Tiers */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
                   {leagueTiers.map((tier) => (
-                    <div
+                    <Card
                       key={tier.name}
-                      className={`flex items-center gap-3 p-3 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors`}
+                      className="flex items-center gap-3 p-3 hover:border-primary/30 transition-colors shadow-none"
                     >
                       <span className="text-xl">{tier.icon}</span>
                       <div>
                         <div className="text-sm font-bold text-foreground">{tier.name}</div>
-                        <div className="text-[10px] text-muted-foreground">Weekly Top 20% Promotion</div>
+                        <div className="text-sm text-muted-foreground">Weekly Top 20% Promotion</div>
                       </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               </div>
 
               {/* Right Column: The 5-Metric AI Report Card */}
               <div className="lg:col-span-6">
-                <div className="p-6 rounded-2xl bg-card border border-border shadow-xl space-y-4">
+                <Card className="p-6 shadow-xl space-y-4">
                   <div className="flex items-center justify-between pb-3 border-b border-border">
                     <div>
                       <h3 className="text-sm font-bold text-foreground">AI Interview Report Card</h3>
-                      <p className="text-[11px] text-muted-foreground">Automated Speech & Concept Evaluation</p>
+                      <p className="text-sm text-muted-foreground">Automated Speech & Concept Evaluation</p>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full bg-primary/15 text-primary border border-primary/30 text-sm font-bold font-mono">
+                    <Badge variant="outline" className="px-2.5 py-1 bg-primary/15 text-primary border-primary/30 text-sm font-bold font-mono">
                       Overall: 8.2 / 10
-                    </span>
+                    </Badge>
                   </div>
 
-                  <div className="space-y-3 font-mono text-sm">
+                  <div className="space-y-4 font-mono text-sm">
                     <div>
-                      <div className="flex justify-between text-[11px] mb-1">
+                      <div className="flex justify-between text-sm mb-1.5">
                         <span className="text-muted-foreground">Knowledge Depth</span>
                         <span className="text-primary font-bold">8.7 / 10</span>
                       </div>
-                      <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full bg-primary rounded-full" style={{ width: '87%' }} />
-                      </div>
+                      <Progress value={87} className="h-2" />
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[11px] mb-1">
+                      <div className="flex justify-between text-sm mb-1.5">
                         <span className="text-muted-foreground">Confidence & Fluency</span>
                         <span className="text-chart-2 font-bold">6.8 / 10</span>
                       </div>
-                      <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full bg-chart-2 rounded-full" style={{ width: '68%' }} />
-                      </div>
+                      <Progress value={68} className="h-2" />
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[11px] mb-1">
+                      <div className="flex justify-between text-sm mb-1.5">
                         <span className="text-muted-foreground">Communication & Structure</span>
                         <span className="text-chart-4 font-bold">7.3 / 10</span>
                       </div>
-                      <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full bg-chart-4 rounded-full" style={{ width: '73%' }} />
-                      </div>
+                      <Progress value={73} className="h-2" />
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[11px] mb-1">
+                      <div className="flex justify-between text-sm mb-1.5">
                         <span className="text-muted-foreground">Real-World Production Examples</span>
                         <span className="text-chart-3 font-bold">5.9 / 10</span>
                       </div>
-                      <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full bg-chart-3 rounded-full" style={{ width: '59%' }} />
-                      </div>
+                      <Progress value={59} className="h-2" />
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[11px] mb-1">
+                      <div className="flex justify-between text-sm mb-1.5">
                         <span className="text-muted-foreground">Industry Readiness Index</span>
                         <span className="text-primary font-bold">6.2 / 10</span>
                       </div>
-                      <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full bg-primary rounded-full" style={{ width: '62%' }} />
-                      </div>
+                      <Progress value={62} className="h-2" />
                     </div>
                   </div>
 
@@ -709,7 +698,7 @@ export default async function HomePage() {
                     </span>
                     <span className="text-primary font-bold">🔥 7-Day Streak</span>
                   </div>
-                </div>
+                </Card>
               </div>
             </div>
           </div>
@@ -722,10 +711,10 @@ export default async function HomePage() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-12 gap-8 items-center">
               <div className="md:col-span-7 space-y-4 text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                <Badge variant="outline" className="gap-2 px-3 py-1 bg-emerald-500/10 border-emerald-500/20 text-sm font-bold text-emerald-600 dark:text-emerald-400">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Public Acquisition Engine • 100% Free</span>
-                </div>
+                  <span>Public Acquisition Engine - 100% Free</span>
+                </Badge>
 
                 <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                   Public AI Resume ATS Analyzer &amp; Skill Gap Radar
@@ -736,22 +725,21 @@ export default async function HomePage() {
                 </p>
 
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
-                  <Link
-                    href="/resume-analyzer"
-                    className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <span>Analyze Your AI Resume Now</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                  <span className="text-[11px] font-mono text-muted-foreground">
-                    ⚡ Instant feedback • Gemini 2.0 Flash powered
+                  <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-lg shadow-primary/20 gap-2">
+                    <Link href="/resume-analyzer">
+                      <span>Analyze Your AI Resume Now</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </Button>
+                  <span className="text-sm font-mono text-muted-foreground">
+                    ⚡ Instant feedback - Gemini 2.0 Flash powered
                   </span>
                 </div>
               </div>
 
               {/* Mini Interactive Preview Card */}
               <div className="md:col-span-5">
-                <div className="rounded-3xl bg-card border border-border p-6 shadow-xl space-y-4">
+                <Card className="p-6 shadow-xl space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold font-mono text-sm">
@@ -759,30 +747,30 @@ export default async function HomePage() {
                       </div>
                       <div>
                         <div className="text-sm font-bold text-foreground">ATS Systems Compatibility</div>
-                        <div className="text-[10px] text-muted-foreground font-mono">Top 6% Percentile</div>
+                        <div className="text-sm text-muted-foreground font-mono">Top 6% Percentile</div>
                       </div>
                     </div>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
+                    <Badge variant="outline" className="px-2.5 py-0.5 bg-primary/10 text-primary font-bold text-sm">
                       High Fit
-                    </span>
+                    </Badge>
                   </div>
 
-                  <div className="space-y-1.5 text-sm">
+                  <div className="space-y-2 text-sm">
                     <div className="p-2.5 rounded-xl bg-muted/60 border border-border/80 flex items-center justify-between">
-                      <span className="text-muted-foreground font-mono text-[11px]">GenAI &amp; RAG Systems</span>
+                      <span className="text-muted-foreground font-mono text-sm">GenAI &amp; RAG Systems</span>
                       <span className="text-primary font-bold">92%</span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-muted/60 border border-border/80 flex items-center justify-between">
-                      <span className="text-muted-foreground font-mono text-[11px]">CUDA &amp; Triton Acceleration</span>
+                      <span className="text-muted-foreground font-mono text-sm">CUDA &amp; Triton Acceleration</span>
                       <span className="text-emerald-600 dark:text-emerald-400 font-bold">88%</span>
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-[11px] text-destructive flex items-center gap-2">
+                  <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-sm text-destructive flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 shrink-0" />
                     <span>Missing: Cross-Encoder Reranking in RAG</span>
                   </div>
-                </div>
+                </Card>
               </div>
             </div>
           </div>
@@ -795,10 +783,10 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-4/10 border border-chart-4/20 text-sm font-bold text-chart-4 mb-2">
+                <Badge variant="outline" className="gap-2 px-3 py-1 bg-chart-4/10 border-chart-4/20 text-sm font-bold text-chart-4 mb-2">
                   <Map className="w-3.5 h-3.5" />
-                  <span>Public Competency Tree • 6-Stage Curriculum</span>
-                </div>
+                  <span>Public Competency Tree - 6-Stage Curriculum</span>
+                </Badge>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   The Applied AI Systems Roadmap
                 </h2>
@@ -806,20 +794,19 @@ export default async function HomePage() {
                   Step-by-step career path from Mathematical Foundations to Distributed Training and Triton Kernels. Curated for 2026 AI systems hiring bars.
                 </p>
               </div>
-              <Link
-                href="/roadmap"
-                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
-              >
-                <span>Explore Full Interactive Roadmap</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              <Button asChild variant="link" className="mt-4 md:mt-0 font-bold text-sm text-primary gap-1.5 p-0 h-auto">
+                <Link href="/roadmap">
+                  <span>Explore Full Interactive Roadmap</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </Button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {roadmapPreviewStages.map((stage) => (
-                <div
+                <Card
                   key={stage.id}
-                  className="p-5 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-lg"
+                  className="p-5 hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-lg"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-sm font-mono text-muted-foreground">
@@ -841,19 +828,18 @@ export default async function HomePage() {
                     <span className="text-muted-foreground">{stage.topics.length} In-Depth Topics</span>
                     <span className="text-primary font-bold">Stage {stage.stageNumber}</span>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
 
             <div className="mt-8 text-center">
-              <Link
-                href="/roadmap"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-card hover:bg-muted text-foreground border border-border transition-colors shadow-sm"
-              >
-                <Map className="w-4 h-4 text-chart-4" />
-                <span>View All 6 Milestone Stages &amp; Recruiter Badges</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              <Button asChild variant="outline" size="lg" className="font-bold text-sm gap-2">
+                <Link href="/roadmap">
+                  <Map className="w-4 h-4 text-chart-4" />
+                  <span>View All 6 Milestone Stages &amp; Recruiter Badges</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -863,10 +849,10 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         <section className="py-16 border-t border-border bg-gradient-to-b from-background to-muted/30">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-sm font-bold text-primary">
+            <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-sm font-bold text-primary">
               <Lock className="w-3.5 h-3.5" />
               <span>Gated Recruiter Mode & Anti-Impersonation</span>
-            </div>
+            </Badge>
 
             <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
               Direct Recruiter Pipeline Without Resume Fluff
@@ -878,19 +864,17 @@ export default async function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-              <Link
-                href="/recruiter/apply"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                <span>Apply for Recruiter Access (Company Email)</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-              <Link
-                href="/recruiter/login"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold bg-card hover:bg-muted text-foreground border border-border flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                <span>Approved Recruiter Sign In</span>
-              </Link>
+              <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-lg shadow-primary/20 gap-2">
+                <Link href="/recruiter/apply">
+                  <span>Apply for Recruiter Access (Company Email)</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto font-bold text-sm gap-2">
+                <Link href="/recruiter/login">
+                  <span>Approved Recruiter Sign In</span>
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -902,10 +886,10 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-5/10 border border-chart-5/20 text-sm font-bold text-chart-5 mb-2">
+                <Badge variant="outline" className="gap-2 px-3 py-1 bg-chart-5/10 border-chart-5/20 text-sm font-bold text-chart-5 mb-2">
                   <Trophy className="w-3.5 h-3.5" />
-                  <span>Multi-Scope Competitive Leaderboard • Weekly League</span>
-                </div>
+                  <span>Multi-Scope Competitive Leaderboard - Weekly League</span>
+                </Badge>
                 <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                   Regional, National &amp; International Rankings
                 </h2>
@@ -913,13 +897,12 @@ export default async function HomePage() {
                   Compete with peers from your university, state, across India, and globally. Rank based on daily consistency (flame streak) or verified engineering score (XP).
                 </p>
               </div>
-              <Link
-                href="/league"
-                className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 transition-all active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <span>View Full Division Leagues</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              <Button asChild size="lg" className="font-bold text-sm shadow-lg shadow-primary/20 gap-2 shrink-0">
+                <Link href="/league">
+                  <span>View Full Division Leagues</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </Button>
             </div>
 
             {/* Live Interactive Multi-Scope Leaderboard */}

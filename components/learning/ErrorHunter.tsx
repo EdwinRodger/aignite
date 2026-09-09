@@ -13,6 +13,9 @@ import {
 import confetti from 'canvas-confetti';
 import { ErrorHunterScenario } from '@/lib/learning-data';
 import { submitErrorHunterSolution } from '@/app/actions/learning';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface ErrorHunterProps {
   scenario: ErrorHunterScenario;
@@ -72,19 +75,19 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
   };
 
   return (
-    <div className="w-full rounded-2xl bg-card border border-border p-5 sm:p-6 shadow-xl relative overflow-hidden space-y-6">
+    <Card className="w-full rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-destructive/10 text-destructive border border-destructive/20">
+            <Badge variant="outline" className="gap-1 text-sm font-bold px-2.5 py-0.5 bg-destructive/10 text-destructive border-destructive/20">
               <Bug className="w-3.5 h-3.5" />
               <span>Error Hunter</span>
-            </span>
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
+            </Badge>
+            <Badge variant="outline" className="text-sm font-mono px-2 py-0.5">
               {scenario.framework}
-            </span>
-            <span className="text-[11px] text-muted-foreground">• {scenario.difficulty}</span>
+            </Badge>
+            <span className="text-sm text-muted-foreground">- {scenario.difficulty}</span>
           </div>
           <h3 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
             {scenario.title}
@@ -95,27 +98,29 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1 text-sm font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
+          <Badge variant="outline" className="gap-1 text-sm font-semibold px-2.5 py-1 bg-primary/10 text-primary border-primary/20">
             <Zap className="w-3.5 h-3.5" />
             <span>+{scenario.pointsAwarded} XP</span>
-          </div>
+          </Badge>
           {hasSubmitted && (
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={handleReset}
               aria-label="Retry bug scenario"
-              className="p-1.5 rounded-lg border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="p-1.5 rounded-lg border border-border"
               title="Retry Scenario"
             >
               <RotateCcw className="w-4 h-4" />
-            </button>
+            </Button>
           )}
         </div>
       </div>
 
       {/* Code Inspection Editor Preview */}
       <div className="rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-100 font-mono text-sm overflow-hidden shadow-2xl">
-        <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
+        <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-sm text-zinc-400">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
@@ -124,15 +129,15 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
             </div>
             <span className="text-zinc-300 font-medium ml-2">train_loop.py</span>
           </div>
-          <span className="text-zinc-500 text-[10px]">Inspect lines for bug</span>
+          <span className="text-zinc-500 text-sm">Inspect lines for bug</span>
         </div>
 
         {/* Code Content with Line Numbers */}
         <div className="p-4 overflow-x-auto leading-relaxed">
-          <pre className="text-[12px]">
+          <pre className="text-sm">
             {scenario.buggyCode.split('\n').map((line, idx) => (
               <div key={idx} className="flex gap-4 hover:bg-zinc-900/60 py-0.5 px-1 rounded">
-                <span className="text-zinc-600 select-none w-6 text-right font-mono text-[11px]">
+                <span className="text-zinc-600 select-none w-6 text-right font-mono text-sm">
                   {idx + 1}
                 </span>
                 <code
@@ -222,14 +227,14 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
                 <button
                   type="button"
                   onClick={() => setShowDiff(!showDiff)}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
                 >
                   <Eye className="w-3.5 h-3.5" />
                   <span>{showDiff ? 'Hide Fix' : 'Reveal Production Fix'}</span>
                 </button>
               )}
             </div>
-            <p className="text-muted-foreground text-[11px] leading-relaxed mt-1">
+            <p className="text-muted-foreground text-sm leading-relaxed mt-1">
               {explanation}
             </p>
           </div>
@@ -237,20 +242,20 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
           {/* Reveal Fix Code Box */}
           {showDiff && fixedCode && (
             <div className="rounded-xl bg-zinc-950 border border-emerald-900/40 text-zinc-100 font-mono text-sm overflow-hidden shadow-xl animate-in fade-in">
-              <div className="px-4 py-2 bg-emerald-950/40 border-b border-emerald-900/40 flex items-center justify-between text-[11px] text-emerald-300">
+              <div className="px-4 py-2 bg-emerald-950/40 border-b border-emerald-900/40 flex items-center justify-between text-sm text-emerald-300">
                 <span className="font-semibold flex items-center gap-1.5">
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Production Corrected Code</span>
                 </span>
-                <span className="text-[10px] text-zinc-400">Fixed</span>
+                <span className="text-sm text-zinc-400">Fixed</span>
               </div>
-              <div className="p-4 overflow-x-auto text-[12px] leading-relaxed">
+              <div className="p-4 overflow-x-auto text-sm leading-relaxed">
                 <pre>{fixedCode}</pre>
               </div>
             </div>
           )}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

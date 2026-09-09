@@ -3,7 +3,6 @@
 import React from 'react';
 import { CandidateTalent } from '@/lib/recruiter-data';
 import {
-  X,
   Award,
   Trophy,
   Mic,
@@ -17,6 +16,17 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 interface CandidateDossierModalProps {
   candidate: CandidateTalent;
@@ -33,18 +43,13 @@ export function CandidateDossierModal({
   const res = candidate.resume;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div
-        className="relative w-full max-w-4xl max-h-[90vh] bg-card border border-border rounded-3xl shadow-2xl shadow-black/40 overflow-hidden flex flex-col"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dossier-title"
-      >
+    <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden flex flex-col rounded-3xl">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-muted/30">
+        <DialogHeader className="px-6 py-5 border-b border-border bg-muted/30 text-left">
           <div className="flex items-center gap-3">
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg shadow-sm ${candidate.avatarBg}`}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg shadow-xs ${candidate.avatarBg}`}
             >
               {candidate.fullName
                 .split(' ')
@@ -53,30 +58,21 @@ export function CandidateDossierModal({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 id="dossier-title" className="text-xl font-bold text-foreground font-sans">
+                <DialogTitle className="text-xl font-bold text-foreground font-sans">
                   {candidate.fullName}
-                </h2>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider">
-                  <CheckCircle2 className="w-3 h-3" />
-                  Verified Talent
-                </span>
+                </DialogTitle>
+                <Badge variant="outline" className="gap-1 border-primary/30 text-primary bg-primary/10">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Verified Talent</span>
+                </Badge>
               </div>
-              <p className="text-sm font-mono text-muted-foreground mt-0.5">
-                {candidate.collegeOrCompany} • {candidate.region} • Rank #{candidate.weeklyRank} in{' '}
+              <DialogDescription className="text-sm font-mono text-muted-foreground mt-0.5">
+                {candidate.collegeOrCompany} - {candidate.region} - Rank #{candidate.weeklyRank} in{' '}
                 <span className="capitalize font-semibold text-foreground">{candidate.leagueTier} League</span>
-              </p>
+              </DialogDescription>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close modal"
-            className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        </DialogHeader>
 
         {/* Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6">
@@ -95,7 +91,7 @@ export function CandidateDossierModal({
               >
                 <Code className="w-3.5 h-3.5" />
                 <span>GitHub</span>
-                <ExternalLink className="w-2.5 h-2.5" />
+                <ExternalLink className="w-3 h-3" />
               </a>
               <a
                 href={candidate.linkedinUrl}
@@ -105,11 +101,11 @@ export function CandidateDossierModal({
               >
                 <Globe className="w-3.5 h-3.5" />
                 <span>LinkedIn</span>
-                <ExternalLink className="w-2.5 h-2.5" />
+                <ExternalLink className="w-3 h-3" />
               </a>
             </div>
 
-            <div className="flex items-center gap-2 font-mono text-[11px]">
+            <div className="flex items-center gap-2 font-mono text-sm">
               <span className="px-2.5 py-1 rounded-xl bg-card border border-border text-foreground font-bold">
                 🔥 {candidate.streakDays}-Day Streak
               </span>
@@ -136,7 +132,7 @@ export function CandidateDossierModal({
 
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <span className="text-[10px] uppercase font-mono text-muted-foreground block">
+                  <span className="text-sm uppercase font-mono text-muted-foreground block">
                     Composite Score
                   </span>
                   <span className="text-2xl font-black font-mono text-primary">
@@ -156,19 +152,14 @@ export function CandidateDossierModal({
                 { name: 'Industry Readiness', score: rep.industryLevelScore, desc: 'Hiring bar alignment' },
               ].map((axis) => (
                 <div key={axis.name} className="p-3 rounded-xl bg-card border border-border space-y-1.5">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide block truncate">
+                  <span className="text-sm font-bold text-muted-foreground uppercase tracking-wide block truncate">
                     {axis.name}
                   </span>
                   <div className="text-xl font-black font-mono text-foreground">
                     {axis.score.toFixed(1)}
                   </div>
-                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full transition-all"
-                      style={{ width: `${(axis.score / 10) * 100}%` }}
-                    />
-                  </div>
-                  <span className="text-[9px] font-mono text-muted-foreground block truncate">
+                  <Progress value={(axis.score / 10) * 100} className="h-1.5" />
+                  <span className="text-sm font-mono text-muted-foreground block truncate">
                     {axis.desc}
                   </span>
                 </div>
@@ -182,7 +173,7 @@ export function CandidateDossierModal({
                 <span>Pacing: {rep.speechMetrics.wordsPerMinute} Words / Min ({rep.speechMetrics.paceRating})</span>
               </span>
               <span className="px-3 py-1.5 rounded-xl bg-card border border-border text-foreground flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-yellow-500" />
+                <Zap className="w-3.5 h-3.5 text-amber-500" />
                 <span>Speech Fillers: Only {rep.speechMetrics.fillerCount} detected</span>
               </span>
               <span className="px-3 py-1.5 rounded-xl bg-card border border-border text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
@@ -193,7 +184,7 @@ export function CandidateDossierModal({
 
             {/* Recent Spoken Answer Excerpt */}
             <div className="p-4 rounded-xl bg-card border border-border/80 space-y-1.5">
-              <span className="text-[11px] font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span className="text-sm font-bold text-foreground font-mono flex items-center gap-1.5">
                 <span>🎙️ Verbatim Spoken Defense Excerpt:</span>
               </span>
               <p className="text-sm text-foreground/90 font-serif italic leading-relaxed">
@@ -250,7 +241,7 @@ export function CandidateDossierModal({
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-foreground">{badgeName}</h4>
-                    <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 block mt-0.5">
+                    <span className="text-sm font-mono text-emerald-600 dark:text-emerald-400 block mt-0.5">
                       ✓ Algorithmic Verification Passed
                     </span>
                   </div>
@@ -266,9 +257,9 @@ export function CandidateDossierModal({
                 <FileText className="w-4 h-4 text-primary" />
                 <span>ATS Resume Summary & Projects</span>
               </h3>
-              <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-sm font-bold">
+              <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono text-sm font-bold">
                 ATS Score: {res.overallAtsScore} / 100
-              </span>
+              </Badge>
             </div>
 
             <p className="text-sm text-foreground/80 leading-relaxed p-4 rounded-2xl bg-muted/40 border border-border">
@@ -278,33 +269,27 @@ export function CandidateDossierModal({
             {/* Skills Grid */}
             <div className="grid sm:grid-cols-2 gap-3 text-sm">
               <div className="p-3.5 rounded-xl bg-card border border-border space-y-1.5">
-                <span className="text-[10px] uppercase font-mono font-bold text-muted-foreground block">
+                <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
                   Frameworks & Engines
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {res.skills.frameworks.map((s) => (
-                    <span
-                      key={s}
-                      className="px-2 py-0.5 rounded-md bg-muted text-[11px] font-mono text-foreground"
-                    >
+                    <Badge key={s} variant="secondary" className="text-sm font-mono">
                       {s}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-card border border-border space-y-1.5">
-                <span className="text-[10px] uppercase font-mono font-bold text-muted-foreground block">
+                <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
                   Infrastructure & Deployment
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {res.skills.infrastructure.map((s) => (
-                    <span
-                      key={s}
-                      className="px-2 py-0.5 rounded-md bg-muted text-[11px] font-mono text-foreground"
-                    >
+                    <Badge key={s} variant="secondary" className="text-sm font-mono">
                       {s}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               </div>
@@ -323,9 +308,9 @@ export function CandidateDossierModal({
                   >
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-bold text-foreground font-mono">{proj.title}</h4>
-                      <span className="text-[10px] font-mono font-semibold text-primary px-2 py-0.5 rounded bg-primary/10">
+                      <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 font-mono">
                         {proj.impact}
-                      </span>
+                      </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {proj.description}
@@ -338,27 +323,22 @@ export function CandidateDossierModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 border-t border-border flex items-center justify-end gap-3 bg-muted/20">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2.5 rounded-xl border border-border text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-          >
+        <DialogFooter className="px-6 py-4 border-t border-border flex items-center justify-end gap-3 bg-muted/20">
+          <Button variant="outline" onClick={onClose} className="rounded-xl text-sm font-semibold">
             Close Dossier
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             onClick={() => {
               onClose();
               onInvite(candidate);
             }}
-            className="px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-sm font-bold shadow-lg shadow-primary/25 active:scale-98 transition-all flex items-center gap-2 cursor-pointer"
+            className="rounded-xl text-sm font-bold shadow-md shadow-primary/20 gap-2"
           >
             <Send className="w-4 h-4" />
             <span>Fast-Track Direct Interview Invitation</span>
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

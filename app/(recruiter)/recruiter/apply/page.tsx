@@ -6,6 +6,10 @@ import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { submitRecruiterApplication } from '@/app/actions/auth';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import {
   ShieldCheck,
   Building2,
@@ -89,13 +93,13 @@ export default function RecruiterApplyPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[350px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
 
         <div className="w-full max-w-xl relative z-10">
-          <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl shadow-black/20 space-y-6">
+          <Card className="p-6 sm:p-8 shadow-xl shadow-black/20 space-y-6">
             {/* Header */}
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-sm font-bold text-primary mb-1">
+              <Badge variant="outline" className="gap-1.5 px-3 py-1 bg-accent border-primary/20 text-sm font-bold text-primary mb-1">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>Verified Recruiter Access Only</span>
-              </div>
+              </Badge>
               <h1 className="text-2xl font-bold tracking-tight text-foreground font-sans">
                 Apply for Recruiter Portal
               </h1>
@@ -110,7 +114,7 @@ export default function RecruiterApplyPage() {
                 <Lock className="w-3.5 h-3.5 text-primary" />
                 <span>Anti-Impersonation Protocol</span>
               </div>
-              <p className="text-[11px] leading-relaxed">
+              <p className="text-sm leading-relaxed">
                 Free webmail addresses (@gmail, @yahoo, @outlook) are automatically rejected.
                 Submitted accounts enter quarantine and are manually reviewed before student resumes can be accessed.
               </p>
@@ -131,13 +135,13 @@ export default function RecruiterApplyPage() {
                     <User className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Your Full Name</span>
                   </label>
-                  <input
+                  <Input
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Satya Nadella"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-muted/60 border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all"
+                    className="text-sm"
                   />
                 </div>
 
@@ -146,13 +150,13 @@ export default function RecruiterApplyPage() {
                     <Briefcase className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Your Job Title</span>
                   </label>
-                  <input
+                  <Input
                     type="text"
                     required
                     value={recruiterDesignation}
                     onChange={(e) => setRecruiterDesignation(e.target.value)}
                     placeholder="e.g. Lead Technical Recruiter"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-muted/60 border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all"
+                    className="text-sm"
                   />
                 </div>
               </div>
@@ -164,13 +168,13 @@ export default function RecruiterApplyPage() {
                     <Building2 className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Company Name</span>
                   </label>
-                  <input
+                  <Input
                     type="text"
                     required
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     placeholder="e.g. NVIDIA Corporation"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-muted/60 border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all"
+                    className="text-sm"
                   />
                 </div>
 
@@ -179,13 +183,13 @@ export default function RecruiterApplyPage() {
                     <Globe className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Company Website</span>
                   </label>
-                  <input
+                  <Input
                     type="text"
                     required
                     value={companyWebsite}
                     onChange={(e) => setCompanyWebsite(e.target.value)}
                     placeholder="nvidia.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-muted/60 border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all font-mono"
+                    className="text-sm font-mono"
                   />
                 </div>
               </div>
@@ -197,15 +201,15 @@ export default function RecruiterApplyPage() {
                     <Mail className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Corporate Work Email</span>
                   </span>
-                  <span className="text-[10px] text-primary font-semibold">Strictly Corporate Domain</span>
+                  <Badge variant="outline" className="text-sm text-primary font-semibold border-primary/20 bg-primary/5">Strictly Corporate Domain</Badge>
                 </label>
-                <input
+                <Input
                   type="email"
                   required
                   value={workEmail}
                   onChange={(e) => setWorkEmail(e.target.value)}
                   placeholder="recruiter@nvidia.com"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-muted/60 border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all font-mono"
+                  className="text-sm font-mono"
                 />
               </div>
 
@@ -215,23 +219,20 @@ export default function RecruiterApplyPage() {
                   <Link2 className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>Company / Recruiter LinkedIn URL (Optional Verification Proof)</span>
                 </label>
-                <input
+                <Input
                   type="url"
                   value={linkedinUrl}
                   onChange={(e) => setLinkedinUrl(e.target.value)}
                   placeholder="https://linkedin.com/in/recruiter-profile"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-muted/60 border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all font-mono"
+                  className="text-sm font-mono"
                 />
               </div>
 
-              <button
+              <Button
                 type="submit"
+                size="lg"
                 disabled={loading || !fullName.trim() || !companyName.trim() || !workEmail.trim()}
-                className={`w-full py-3.5 px-4 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 mt-4 ${
-                  fullName.trim() && companyName.trim() && workEmail.trim() && !loading
-                    ? 'bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/25 active:scale-98 cursor-pointer'
-                    : 'bg-muted text-muted-foreground/60 border border-border cursor-not-allowed'
-                }`}
+                className="w-full font-bold text-sm shadow-lg shadow-primary/25 gap-2 mt-4"
               >
                 {loading ? (
                   <>
@@ -245,7 +246,7 @@ export default function RecruiterApplyPage() {
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
-              </button>
+              </Button>
             </form>
 
             {/* Link to Recruiter Login */}
@@ -258,7 +259,7 @@ export default function RecruiterApplyPage() {
                 Sign In to Recruiter Dashboard &rarr;
               </Link>
             </div>
-          </div>
+          </Card>
         </div>
       </main>
 

@@ -13,12 +13,22 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
-  X,
   Share2,
   Check,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { CoachEvaluationReport } from '@/lib/coach-data';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 interface ReportCardModalProps {
   report: CoachEvaluationReport;
@@ -52,10 +62,10 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
   }, [report.scores.compositeScore]);
 
   const getTierLabel = (score: number) => {
-    if (score >= 8.5) return { label: 'Principal / Staff Level', color: 'text-primary bg-primary/10 border-primary/30' };
-    if (score >= 7.0) return { label: 'Senior AI Engineer Level', color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30' };
-    if (score >= 5.5) return { label: 'Mid-Level AI Engineer', color: 'text-amber-500 bg-amber-500/10 border-amber-500/30' };
-    return { label: 'Associate / Junior Candidate', color: 'text-muted-foreground bg-muted border-border' };
+    if (score >= 8.5) return { label: 'Principal / Staff Level', variant: 'default' as const };
+    if (score >= 7.0) return { label: 'Senior AI Engineer Level', variant: 'success' as const };
+    if (score >= 5.5) return { label: 'Mid-Level AI Engineer', variant: 'warning' as const };
+    return { label: 'Associate / Junior Candidate', variant: 'secondary' as const };
   };
 
   const tier = getTierLabel(report.scores.compositeScore);
@@ -70,53 +80,40 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
   };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="report-card-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200"
-    >
-      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card border border-border p-6 shadow-2xl space-y-6 relative">
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close report card"
-          className="absolute top-5 right-5 p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
+    <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-7 space-y-6">
         {/* Header with Composite Score & Tier */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-accent p-[1px] flex items-center justify-center shadow-lg shadow-primary/20">
-              <div className="w-full h-full bg-background rounded-[15px] flex items-center justify-center">
-                <Trophy className="w-6 h-6 text-primary" />
+        <DialogHeader className="border-b border-border/60 pb-5 text-left">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-accent p-[1px] flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
+                <div className="w-full h-full bg-background rounded-[15px] flex items-center justify-center">
+                  <Trophy className="w-6 h-6 text-primary" />
+                </div>
+              </div>
+              <div>
+                <DialogDescription className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground">
+                  AIgnite Speech Assessment
+                </DialogDescription>
+                <DialogTitle className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
+                  AI Interview Report Card
+                </DialogTitle>
               </div>
             </div>
-            <div>
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
-                AIgnite Speech Assessment
-              </span>
-              <h2 id="report-card-title" className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
-                AI Interview Report Card
-              </h2>
-            </div>
-          </div>
 
-          <div className="flex items-center gap-2">
-            <div className="text-right">
-              <div className="text-2xl sm:text-3xl font-black text-primary font-mono leading-none">
-                {report.scores.compositeScore}
-                <span className="text-sm text-muted-foreground font-sans font-normal"> / 10.0</span>
+            <div className="flex items-center gap-2">
+              <div className="text-right">
+                <div className="text-2xl sm:text-3xl font-black text-primary font-mono leading-none">
+                  {report.scores.compositeScore}
+                  <span className="text-sm text-muted-foreground font-sans font-normal"> / 10.0</span>
+                </div>
+                <Badge variant={tier.variant} className="mt-1 text-sm">
+                  {tier.label}
+                </Badge>
               </div>
-              <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded border ${tier.color}`}>
-                {tier.label}
-              </span>
             </div>
           </div>
-        </div>
+        </DialogHeader>
 
         {/* 5-Axis Score Breakdown Grid */}
         <div className="space-y-2.5">
@@ -137,15 +134,10 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
                   <span className="font-semibold text-foreground">{axis.label}</span>
                   <div className="flex items-center gap-1 font-mono">
                     <span className="font-bold text-foreground">{axis.score}</span>
-                    <span className="text-[10px] text-muted-foreground">/10</span>
+                    <span className="text-sm text-muted-foreground">/10</span>
                   </div>
                 </div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full transition-all duration-700"
-                    style={{ width: `${axis.score * 10}%` }}
-                  />
-                </div>
+                <Progress value={axis.score * 10} className="h-1.5" />
               </div>
             ))}
           </div>
@@ -154,36 +146,36 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
         {/* Speech Telemetry Bar */}
         <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-muted/50 border border-border font-mono text-sm">
           <div className="flex flex-col">
-            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <Gauge className="w-3 h-3 text-primary" />
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Gauge className="w-3.5 h-3.5 text-primary" />
               <span>Speaking Pace</span>
             </span>
             <span className="font-bold text-foreground mt-0.5">
               {report.speechMetrics.wordsPerMinute} WPM
             </span>
-            <span className="text-[10px] text-muted-foreground">({report.speechMetrics.paceRating})</span>
+            <span className="text-sm text-muted-foreground">({report.speechMetrics.paceRating})</span>
           </div>
 
           <div className="flex flex-col">
-            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <Clock className="w-3 h-3 text-secondary-foreground" />
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-secondary-foreground" />
               <span>Duration</span>
             </span>
             <span className="font-bold text-foreground mt-0.5">
               {report.durationSeconds}s
             </span>
-            <span className="text-[10px] text-muted-foreground">(target 45–90s)</span>
+            <span className="text-sm text-muted-foreground">(target 45-90s)</span>
           </div>
 
           <div className="flex flex-col">
-            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <MessageSquare className="w-3 h-3 text-chart-4" />
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <MessageSquare className="w-3.5 h-3.5 text-chart-4" />
               <span>Filler Words</span>
             </span>
             <span className="font-bold text-foreground mt-0.5">
               {report.speechMetrics.fillerCount} detected
             </span>
-            <span className="text-[10px] text-muted-foreground truncate">
+            <span className="text-sm text-muted-foreground truncate">
               {report.speechMetrics.fillerWordsDetected.length > 0
                 ? report.speechMetrics.fillerWordsDetected.join(', ')
                 : 'None! Great flow'}
@@ -199,10 +191,10 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
               <CheckCircle2 className="w-4 h-4" />
               <span>Demonstrated Strengths</span>
             </div>
-            <ul className="space-y-1 text-[11px] text-muted-foreground leading-relaxed">
+            <ul className="space-y-1 text-sm text-muted-foreground leading-relaxed">
               {report.keyStrengths.map((str, idx) => (
                 <li key={idx} className="flex items-start gap-1.5">
-                  <span className="text-emerald-500 mt-0.5 font-bold">•</span>
+                  <span className="text-emerald-500 mt-0.5 font-bold">-</span>
                   <span>{str}</span>
                 </li>
               ))}
@@ -215,10 +207,10 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
               <AlertTriangle className="w-4 h-4" />
               <span>Areas for Revision</span>
             </div>
-            <ul className="space-y-1 text-[11px] text-muted-foreground leading-relaxed">
+            <ul className="space-y-1 text-sm text-muted-foreground leading-relaxed">
               {report.areasForImprovement.map((imp, idx) => (
                 <li key={idx} className="flex items-start gap-1.5">
-                  <span className="text-amber-500 mt-0.5 font-bold">•</span>
+                  <span className="text-amber-500 mt-0.5 font-bold">-</span>
                   <span>{imp}</span>
                 </li>
               ))}
@@ -231,7 +223,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
           <button
             type="button"
             onClick={() => setShowModelAnswer(!showModelAnswer)}
-            className="w-full p-3.5 flex items-center justify-between text-sm font-bold text-foreground hover:bg-muted/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="w-full p-3.5 flex items-center justify-between text-sm font-bold text-foreground hover:bg-muted/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
           >
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-primary" />
@@ -257,7 +249,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
               <span className="text-sm font-bold text-foreground block">
                 Daily Habit Maintained! +25 League XP Claimed
               </span>
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 Your daily interview streak is active. Keep returning daily at 8:00 AM.
               </span>
             </div>
@@ -268,26 +260,27 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-2 border-t border-border/60">
-          <button
+        {/* Action Buttons Footer */}
+        <DialogFooter className="flex items-center justify-between pt-2 border-t border-border/60 sm:justify-between">
+          <Button
             type="button"
+            variant="outline"
             onClick={handleShare}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground border border-border hover:bg-muted transition-colors"
+            className="rounded-xl gap-1.5 text-sm"
           >
             {copiedShare ? <Check className="w-3.5 h-3.5 text-primary" /> : <Share2 className="w-3.5 h-3.5" />}
             <span>{copiedShare ? 'Report Copied!' : 'Share Score'}</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
             onClick={onContinue}
-            className="px-6 py-2.5 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95"
+            className="rounded-xl text-sm font-bold shadow-md shadow-primary/20 px-6"
           >
             Done Practicing
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -16,6 +16,9 @@ import {
   Trophy,
   ChevronRight,
 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface PackModuleClientProps {
   pack: CompanyPack;
@@ -44,23 +47,27 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
     <div className="space-y-6">
       {/* Back to Packs Bar */}
       <div className="flex items-center justify-between">
-        <Link
-          href="/packs"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors p-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground p-0 h-auto"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Company Packs</span>
-        </Link>
+          <Link href="/packs">
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Company Packs</span>
+          </Link>
+        </Button>
 
         {/* Live League Points Badge */}
-        <div className="flex items-center gap-1.5 text-sm font-mono font-bold text-primary px-3 py-1 rounded-lg bg-primary/10 border border-primary/20">
+        <Badge variant="outline" className="gap-1.5 text-sm font-mono font-bold text-primary px-3 py-1 bg-primary/10 border-primary/20">
           <Zap className="w-3.5 h-3.5" />
           <span>+{earnedPoints} XP Claimed in Pack</span>
-        </div>
+        </Badge>
       </div>
 
       {/* Hero Pack Overview Card */}
-      <div className={`rounded-2xl bg-card border ${pack.borderColor} p-6 shadow-xl relative overflow-hidden`}>
+      <Card className={`rounded-2xl ${pack.borderColor} p-6 shadow-xl relative overflow-hidden`}>
         <div className={`absolute inset-0 bg-gradient-to-br ${pack.accentColor} pointer-events-none opacity-40`} />
 
         <div className="relative z-10 space-y-3">
@@ -86,86 +93,71 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
           <div className="pt-2 flex flex-wrap items-center gap-3 text-sm">
             <span className="text-muted-foreground">Activities Progress:</span>
             <div className="flex items-center gap-2">
-              <span
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-mono text-[11px] border ${
-                  completedActivities.includes('bubble')
-                    ? 'bg-primary/20 text-primary border-primary/40 font-bold'
-                    : 'bg-muted text-muted-foreground border-border'
-                }`}
+              <Badge
+                variant={completedActivities.includes('bubble') ? 'default' : 'outline'}
+                className="gap-1 px-2.5 py-0.5 font-mono text-sm"
               >
-                {completedActivities.includes('bubble') && <CheckCircle2 className="w-3 h-3" />}
+                {completedActivities.includes('bubble') && <CheckCircle2 className="w-3.5 h-3.5" />}
                 <span>1. Bubble Game</span>
-              </span>
+              </Badge>
 
-              <span
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-mono text-[11px] border ${
-                  completedActivities.includes('debugger')
-                    ? 'bg-primary/20 text-primary border-primary/40 font-bold'
-                    : 'bg-muted text-muted-foreground border-border'
-                }`}
+              <Badge
+                variant={completedActivities.includes('debugger') ? 'default' : 'outline'}
+                className="gap-1 px-2.5 py-0.5 font-mono text-sm"
               >
-                {completedActivities.includes('debugger') && <CheckCircle2 className="w-3 h-3" />}
+                {completedActivities.includes('debugger') && <CheckCircle2 className="w-3.5 h-3.5" />}
                 <span>2. Error Hunter</span>
-              </span>
+              </Badge>
 
-              <span
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-mono text-[11px] border ${
-                  completedActivities.includes('simulator')
-                    ? 'bg-primary/20 text-primary border-primary/40 font-bold'
-                    : 'bg-muted text-muted-foreground border-border'
-                }`}
+              <Badge
+                variant={completedActivities.includes('simulator') ? 'default' : 'outline'}
+                className="gap-1 px-2.5 py-0.5 font-mono text-sm"
               >
-                {completedActivities.includes('simulator') && <CheckCircle2 className="w-3 h-3" />}
+                {completedActivities.includes('simulator') && <CheckCircle2 className="w-3.5 h-3.5" />}
                 <span>3. Decision Simulator</span>
-              </span>
+              </Badge>
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Activity Navigation Tabs */}
       <div className="flex items-center gap-2 border-b border-border/80 pb-2 overflow-x-auto no-scrollbar">
-        <button
+        <Button
           type="button"
+          variant={activeTab === 'bubble' ? 'default' : 'outline'}
+          size="sm"
           onClick={() => setActiveTab('bubble')}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all border ${
-            activeTab === 'bubble'
-              ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-              : 'bg-card text-muted-foreground hover:text-foreground border-border'
-          }`}
+          className="gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap"
         >
           <Cpu className="w-4 h-4" />
           <span>1. Pipeline Bubble Game</span>
           {completedActivities.includes('bubble') && <CheckCircle2 className="w-3.5 h-3.5" />}
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant={activeTab === 'debugger' ? 'default' : 'outline'}
+          size="sm"
           onClick={() => setActiveTab('debugger')}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all border ${
-            activeTab === 'debugger'
-              ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-              : 'bg-card text-muted-foreground hover:text-foreground border-border'
-          }`}
+          className="gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap"
         >
           <Bug className="w-4 h-4" />
           <span>2. Error Hunter (Debugger)</span>
           {completedActivities.includes('debugger') && <CheckCircle2 className="w-3.5 h-3.5" />}
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant={activeTab === 'simulator' ? 'default' : 'outline'}
+          size="sm"
           onClick={() => setActiveTab('simulator')}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all border ${
-            activeTab === 'simulator'
-              ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-              : 'bg-card text-muted-foreground hover:text-foreground border-border'
-          }`}
+          className="gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap"
         >
           <Brain className="w-4 h-4" />
           <span>3. AI Decision Simulator</span>
           {completedActivities.includes('simulator') && <CheckCircle2 className="w-3.5 h-3.5" />}
-        </button>
+        </Button>
       </div>
 
       {/* Tab Panel Content */}
@@ -196,7 +188,7 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
       </div>
 
       {/* Capstone Teaser Card (Next Step: Voice Mock Interview) */}
-      <div className="p-5 rounded-2xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <Card className="p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-chart-1/10 border border-chart-1/20 flex items-center justify-center text-chart-1 shrink-0">
             <Trophy className="w-5 h-5" />
@@ -205,20 +197,23 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
             <h4 className="text-sm font-bold text-foreground">
               Ready for the {pack.companyName} Capstone Interview?
             </h4>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
+            <p className="text-sm text-muted-foreground mt-0.5">
               Complete all 3 activities to unlock the 3-question AI Voice Mock Interview for your report card.
             </p>
           </div>
         </div>
 
-        <Link
-          href="/feed"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline shrink-0"
+        <Button
+          asChild
+          variant="link"
+          className="gap-1.5 text-sm font-semibold text-primary p-0 h-auto shrink-0"
         >
-          <span>Daily Sparks Practice</span>
-          <ChevronRight className="w-4 h-4" />
-        </Link>
-      </div>
+          <Link href="/feed">
+            <span>Daily Sparks Practice</span>
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </Button>
+      </Card>
     </div>
   );
 }

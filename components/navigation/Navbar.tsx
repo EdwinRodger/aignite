@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -14,41 +14,22 @@ import {
   ShieldCheck,
   KeyRound,
   LayoutDashboard,
+  ChevronDown,
 } from 'lucide-react';
 import { getAuthUserAction } from '@/app/actions/auth';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function Navbar() {
   const [userRole, setUserRole] = useState<'student' | 'recruiter' | null>(null);
-  const [featuresOpen, setFeaturesOpen] = useState(false);
-  const [recruiterOpen, setRecruiterOpen] = useState(false);
-
-  const featuresRef = useRef<HTMLDivElement>(null);
-  const recruiterRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (featuresRef.current && !featuresRef.current.contains(event.target as Node)) {
-        setFeaturesOpen(false);
-      }
-      if (recruiterRef.current && !recruiterRef.current.contains(event.target as Node)) {
-        setRecruiterOpen(false);
-      }
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setFeaturesOpen(false);
-        setRecruiterOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
 
   useEffect(() => {
     async function checkAuth() {
@@ -77,6 +58,7 @@ export function Navbar() {
     }
     checkAuth();
   }, []);
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-md">
       {/* Accessible Skip Link */}
@@ -100,274 +82,192 @@ export function Navbar() {
             </div>
           </div>
           <span className="text-xl font-black tracking-tight text-foreground font-mono">
-            <span className="text-primary font-extrabold underline decoration-primary/50 decoration-2 underline-offset-4">A</span>Ignite
+            <span className="text-primary font-extrabold underline decoration-primary/50 decoration-2 underline-offset-4">
+              A
+            </span>
+            Ignite
           </span>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-1 text-sm font-medium text-muted-foreground">
+        <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
           {/* Explore Features Dropdown */}
-          <div ref={featuresRef} className="relative group">
-            <button
-              type="button"
-              id="features-menu-button"
-              aria-haspopup="true"
-              aria-expanded={featuresOpen}
-              aria-controls="features-menu"
-              onClick={() => {
-                setFeaturesOpen((prev) => !prev);
-                setRecruiterOpen(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') setFeaturesOpen(false);
-              }}
-              className="min-h-[44px] px-3.5 py-2 rounded-xl hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-medium text-sm cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span>Explore Features</span>
-              <svg
-                aria-hidden="true"
-                className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${
-                  featuresOpen ? 'rotate-180' : 'group-hover:rotate-180'
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="rounded-xl px-3.5 py-2 font-medium text-sm gap-1.5 text-muted-foreground hover:text-foreground">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span>Explore Features</span>
+                <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-80 p-2 rounded-2xl">
+              <DropdownMenuLabel className="font-mono font-bold uppercase tracking-wider text-muted-foreground px-3 py-1.5 text-sm">
+                Public Learning & AI Tools
+              </DropdownMenuLabel>
 
-            {/* Dropdown Menu Popover */}
-            <div
-              id="features-menu"
-              role="region"
-              aria-labelledby="features-menu-button"
-              className={`absolute top-full left-0 mt-1.5 w-72 rounded-2xl bg-card border border-border p-2 shadow-xl shadow-black/25 transition-all duration-150 z-50 group-hover:opacity-100 group-hover:visible focus-within:opacity-100 focus-within:visible ${
-                featuresOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-              }`}
-            >
-              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-3 py-1.5">
-                Public Learning &amp; AI Tools
-              </div>
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/resume-analyzer" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-foreground">AI Resume ATS Analyzer</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Score resume & identify missing AI skills
+                    </div>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
 
-              <Link
-                href="/resume-analyzer"
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-              >
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
-                    AI Resume ATS Analyzer
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/coach" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-chart-1/10 border border-chart-1/20 text-chart-1 flex items-center justify-center shrink-0 mt-0.5">
+                    <Mic className="w-4 h-4" />
                   </div>
-                  <div className="text-[11px] text-muted-foreground leading-snug">
-                    Score resume &amp; identify missing AI skills
+                  <div>
+                    <div className="text-sm font-bold text-foreground">Voice Mock Interview (POTD)</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Daily oral defense & speech metrics
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
 
-              <Link
-                href="/coach"
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-              >
-                <div className="w-8 h-8 rounded-lg bg-chart-1/10 border border-chart-1/20 text-chart-1 flex items-center justify-center shrink-0 mt-0.5">
-                  <Mic className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
-                    Voice Mock Interview (POTD)
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/packs" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-secondary/20 border border-border text-foreground flex items-center justify-center shrink-0 mt-0.5">
+                    <Layers className="w-4 h-4" />
                   </div>
-                  <div className="text-[11px] text-muted-foreground leading-snug">
-                    Daily oral defense &amp; speech metrics
+                  <div>
+                    <div className="text-sm font-bold text-foreground">Course Packs & Materials</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      NVIDIA, Google, OpenAI, Meta tracks
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
 
-              <Link
-                href="/packs"
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-              >
-                <div className="w-8 h-8 rounded-lg bg-secondary/20 border border-border text-foreground flex items-center justify-center shrink-0 mt-0.5">
-                  <Layers className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
-                    Course Packs &amp; Materials
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/roadmap" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-chart-4/10 border border-chart-4/20 text-chart-4 flex items-center justify-center shrink-0 mt-0.5">
+                    <Map className="w-4 h-4" />
                   </div>
-                  <div className="text-[11px] text-muted-foreground leading-snug">
-                    NVIDIA, Google, OpenAI, Meta tracks
+                  <div>
+                    <div className="text-sm font-bold text-foreground">AI Systems Roadmap</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      6-stage career pathway & curriculum
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
 
-              <Link
-                href="/roadmap"
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-              >
-                <div className="w-8 h-8 rounded-lg bg-chart-4/10 border border-chart-4/20 text-chart-4 flex items-center justify-center shrink-0 mt-0.5">
-                  <Map className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
-                    AI Systems Roadmap
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/feed" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                    <Flame className="w-4 h-4" />
                   </div>
-                  <div className="text-[11px] text-muted-foreground leading-snug">
-                    6-stage career pathway &amp; curriculum
+                  <div>
+                    <div className="text-sm font-bold text-foreground">AIgnite Pulse (Sparks)</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Interactive architectural micro-quizzes
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
 
-              <Link
-                href="/feed"
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-              >
-                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                  <Flame className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
-                    AIgnite Pulse (Sparks)
-                  </div>
-                  <div className="text-[11px] text-muted-foreground leading-snug">
-                    Instagram-style micro-quizzes
-                  </div>
-                </div>
-              </Link>
-              {/* Leaderboards moved into Explore Features at the bottom */}
-              <div className="pt-1 mt-1 border-t border-border/70">
-                <Link
-                  href="/league"
-                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-                >
+              <DropdownMenuSeparator className="my-1" />
+
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/league" className="flex items-start gap-3 w-full">
                   <div className="w-8 h-8 rounded-lg bg-chart-5/10 border border-chart-5/20 text-chart-5 flex items-center justify-center shrink-0 mt-0.5">
                     <Trophy className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors flex items-center gap-1.5">
+                    <div className="text-sm font-bold text-foreground flex items-center gap-1.5">
                       <span>Competitive Leaderboards</span>
-                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-chart-5/15 text-chart-5 font-mono font-semibold">Live</span>
+                      <Badge variant="outline" className="text-chart-5 border-chart-5/30 bg-chart-5/10 font-mono">
+                        Live
+                      </Badge>
                     </div>
-                    <div className="text-[11px] text-muted-foreground leading-snug">
-                      Regional, National &amp; International ranks
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Regional, National & International ranks
                     </div>
                   </div>
                 </Link>
-              </div>
-            </div>
-          </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          {/* Consolidated Recruiter Dropdown (Apply & Login under 1 button) */}
-          <div ref={recruiterRef} className="relative group">
-            <button
-              type="button"
-              id="recruiter-menu-button"
-              aria-haspopup="true"
-              aria-expanded={recruiterOpen}
-              aria-controls="recruiter-menu"
-              onClick={() => {
-                setRecruiterOpen((prev) => !prev);
-                setFeaturesOpen(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') setRecruiterOpen(false);
-              }}
-              className="min-h-[44px] px-3.5 py-2 rounded-xl hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-medium text-sm cursor-pointer"
-            >
-              <Briefcase className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-              <span>Recruiters</span>
-              <svg
-                aria-hidden="true"
-                className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${
-                  recruiterOpen ? 'rotate-180' : 'group-hover:rotate-180'
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {/* Recruiter Popover */}
-            <div
-              id="recruiter-menu"
-              role="region"
-              aria-labelledby="recruiter-menu-button"
-              className={`absolute top-full left-0 mt-1.5 w-64 rounded-2xl bg-card border border-border p-2 shadow-xl shadow-black/25 transition-all duration-150 z-50 group-hover:opacity-100 group-hover:visible focus-within:opacity-100 focus-within:visible ${
-                recruiterOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-              }`}
-            >
-              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-3 py-1.5">
+          {/* Consolidated Recruiter Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="rounded-xl px-3.5 py-2 font-medium text-sm gap-1.5 text-muted-foreground hover:text-foreground">
+                <Briefcase className="w-4 h-4 text-muted-foreground" />
+                <span>Recruiters</span>
+                <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-72 p-2 rounded-2xl">
+              <DropdownMenuLabel className="font-mono font-bold uppercase tracking-wider text-muted-foreground px-3 py-1.5 text-sm">
                 Verified Recruiter Access
-              </div>
+              </DropdownMenuLabel>
 
-              <Link
-                href="/recruiter/apply"
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-              >
-                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
-                    Apply for Access
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/recruiter/apply" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                    <ShieldCheck className="w-4 h-4" />
                   </div>
-                  <div className="text-[11px] text-muted-foreground leading-snug">
-                    Corporate domain verification
+                  <div>
+                    <div className="text-sm font-bold text-foreground">Apply for Access</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Corporate domain verification
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
 
-              <Link
-                href="/recruiter/login"
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted/60 transition-colors group/item"
-              >
-                <div className="w-8 h-8 rounded-lg bg-secondary/20 border border-border text-foreground flex items-center justify-center shrink-0 mt-0.5">
-                  <KeyRound className="w-4 h-4 text-chart-2" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
-                    Recruiter Sign In
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/recruiter/login" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-secondary/20 border border-border text-foreground flex items-center justify-center shrink-0 mt-0.5">
+                    <KeyRound className="w-4 h-4 text-chart-2" />
                   </div>
-                  <div className="text-[11px] text-muted-foreground leading-snug">
-                    Search verified student talent
+                  <div>
+                    <div className="text-sm font-bold text-foreground">Recruiter Sign In</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Search verified student talent
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </div>
-          </div>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         {/* Auth / Dashboard CTA */}
         <div className="flex items-center gap-3">
           {userRole === 'student' ? (
-            <Link
-              href="/dashboard"
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <LayoutDashboard className="w-3.5 h-3.5" />
-              <span>Dashboard</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <Button asChild size="default" className="rounded-xl font-semibold text-sm shadow-md shadow-primary/20">
+              <Link href="/dashboard" className="flex items-center gap-1.5">
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span>Dashboard</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </Button>
           ) : userRole === 'recruiter' ? (
-            <Link
-              href="/recruiter/dashboard"
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <Briefcase className="w-3.5 h-3.5" />
-              <span>Recruiter Dashboard</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <Button asChild size="default" className="rounded-xl font-semibold text-sm shadow-md shadow-primary/20">
+              <Link href="/recruiter/dashboard" className="flex items-center gap-1.5">
+                <Briefcase className="w-3.5 h-3.5" />
+                <span>Recruiter Dashboard</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </Button>
           ) : (
-            <Link
-              href="/login"
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span>Sign In</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <Button asChild size="default" className="rounded-xl font-semibold text-sm shadow-md shadow-primary/20">
+              <Link href="/login" className="flex items-center gap-1.5">
+                <span>Sign In</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </Button>
           )}
         </div>
       </div>

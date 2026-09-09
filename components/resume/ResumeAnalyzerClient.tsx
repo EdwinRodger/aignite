@@ -17,6 +17,11 @@ import {
   RotateCcw,
   BookOpen,
 } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import { Progress } from '@/components/ui/progress';
 
 const SAMPLE_AI_RESUME = `AARAV SHARMA
 B.Tech Computer Science | Mumbai, India | aarav.sharma@gmail.com | github.com/aarav-ai | linkedin.com/in/aarav-sharma
@@ -109,108 +114,108 @@ export function ResumeAnalyzerClient() {
       {/* Input Section */}
       {!result ? (
         <div className="space-y-6">
-          <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl shadow-black/10 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <Card className="rounded-3xl p-6 sm:p-8 shadow-xl shadow-black/10 space-y-6">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-0">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-foreground font-sans tracking-tight">
+                <CardTitle className="text-xl sm:text-2xl font-bold text-foreground font-sans tracking-tight">
                   Upload or Paste Your AI Resume
-                </h2>
+                </CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
                   Evaluated against 2026 AI systems hiring bars at Google, NVIDIA, and top AI labs.
                 </p>
               </div>
 
               {/* Sample Loader Shortcut */}
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={handleLoadSample}
-                className="px-3.5 py-2 rounded-xl bg-muted hover:bg-muted/80 border border-border text-foreground text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                className="gap-1.5 shrink-0 text-sm font-semibold rounded-xl"
               >
-                <Zap className="w-3.5 h-3.5 text-primary" />
+                <Zap className="w-4 h-4 text-primary" />
                 <span>Load Sample AI Resume</span>
-              </button>
-            </div>
+              </Button>
+            </CardHeader>
 
-            {error && (
-              <div className="p-3.5 rounded-2xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
-            {/* File Dropzone */}
-            <div className="relative border-2 border-dashed border-border hover:border-primary/50 rounded-2xl p-6 sm:p-8 text-center transition-colors bg-muted/20">
-              <input
-                type="file"
-                accept=".txt,.md,.pdf,.doc,.docx"
-                onChange={handleFileUpload}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              <div className="flex flex-col items-center justify-center space-y-2 pointer-events-none">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                  <UploadCloud className="w-6 h-6" />
+            <CardContent className="p-0 space-y-6">
+              {error && (
+                <div className="p-3.5 rounded-2xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{error}</span>
                 </div>
-                <div className="text-sm font-semibold text-foreground">
-                  {fileName ? (
-                    <span className="text-primary font-mono">{fileName}</span>
-                  ) : (
-                    <span>Drag & drop resume file, or click to browse</span>
-                  )}
-                </div>
-                <p className="text-[11px] text-muted-foreground">
-                  Supports TXT, Markdown, and PDF plain text extracts (up to 5MB)
-                </p>
-              </div>
-            </div>
-
-            {/* Paste Textarea */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground flex items-center justify-between">
-                <span>Or Paste Resume Plain Text / Markdown:</span>
-                <span className="text-[11px] font-mono text-muted-foreground">
-                  {resumeText.length} characters
-                </span>
-              </label>
-              <textarea
-                rows={10}
-                value={resumeText}
-                onChange={(e) => setResumeText(e.target.value)}
-                placeholder="Paste your education, skills, projects, and work experience here..."
-                className="w-full p-4 rounded-2xl bg-muted/40 border border-border text-foreground font-mono text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary resize-y"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="button"
-              onClick={handleAnalyze}
-              disabled={loading || !resumeText.trim()}
-              className={`w-full py-4 px-6 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${
-                resumeText.trim() && !loading
-                  ? 'bg-primary hover:opacity-90 text-primary-foreground shadow-xl shadow-primary/25 active:scale-98 cursor-pointer'
-                  : 'bg-muted text-muted-foreground/60 border border-border cursor-not-allowed'
-              }`}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Evaluating with Gemini 2.0 Flash AI ATS...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  <span>Analyze AI Resume & Detect Skill Gaps</span>
-                  <ArrowRight className="w-5 h-5" />
-                </>
               )}
-            </button>
-          </div>
+
+              {/* File Dropzone */}
+              <div className="relative border-2 border-dashed border-border hover:border-primary/50 rounded-2xl p-6 sm:p-8 text-center transition-colors bg-muted/20">
+                <input
+                  type="file"
+                  accept=".txt,.md,.pdf,.doc,.docx"
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="flex flex-col items-center justify-center space-y-2 pointer-events-none">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <UploadCloud className="w-6 h-6" />
+                  </div>
+                  <div className="text-sm font-semibold text-foreground">
+                    {fileName ? (
+                      <span className="text-primary font-mono">{fileName}</span>
+                    ) : (
+                      <span>Drag & drop resume file, or click to browse</span>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Supports TXT, Markdown, and PDF plain text extracts (up to 5MB)
+                  </p>
+                </div>
+              </div>
+
+              {/* Paste Textarea */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-foreground flex items-center justify-between">
+                  <span>Or Paste Resume Plain Text / Markdown:</span>
+                  <span className="text-sm font-mono text-muted-foreground">
+                    {resumeText.length} characters
+                  </span>
+                </label>
+                <Textarea
+                  rows={10}
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
+                  placeholder="Paste your education, skills, projects, and work experience here..."
+                  className="w-full p-4 rounded-2xl font-mono text-sm leading-relaxed"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="button"
+                onClick={handleAnalyze}
+                disabled={loading || !resumeText.trim()}
+                className="w-full py-6 rounded-2xl font-bold text-sm gap-2"
+                size="lg"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Evaluating with Gemini AI ATS...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5" />
+                    <span>Analyze AI Resume & Detect Skill Gaps</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       ) : (
         /* Results Section */
         <div className="space-y-8 animate-in fade-in duration-300">
           {/* Top Score Banner */}
-          <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl shadow-black/10 space-y-6 relative overflow-hidden">
+          <Card className="rounded-3xl p-6 sm:p-8 shadow-xl shadow-black/10 space-y-6 relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
@@ -221,7 +226,7 @@ export function ResumeAnalyzerClient() {
                     <span className="text-3xl font-black font-mono text-primary leading-none block">
                       {result.overallAtsScore}
                     </span>
-                    <span className="text-[10px] font-mono text-muted-foreground uppercase">
+                    <span className="text-sm font-mono text-muted-foreground uppercase">
                       / 100 ATS
                     </span>
                   </div>
@@ -232,9 +237,9 @@ export function ResumeAnalyzerClient() {
                     <h2 className="text-xl sm:text-2xl font-bold text-foreground font-sans">
                       Resume ATS Evaluation Score
                     </h2>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold font-mono">
+                    <Badge variant="success" className="text-sm font-bold font-mono">
                       Top {100 - result.percentileRank}% (Percentile {result.percentileRank})
-                    </span>
+                    </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
                     {result.headlineAssessment}
@@ -242,19 +247,20 @@ export function ResumeAnalyzerClient() {
                 </div>
               </div>
 
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => setResult(null)}
-                className="px-4 py-2.5 rounded-xl border border-border bg-card hover:bg-muted text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 cursor-pointer self-start md:self-center shrink-0"
+                className="gap-1.5 self-start md:self-center shrink-0 rounded-xl text-sm"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
+                <RotateCcw className="w-4 h-4" />
                 <span>Analyze Another Resume</span>
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
 
           {/* Domain Fit & Readiness Breakdown */}
-          <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-5 shadow-sm">
+          <Card className="rounded-3xl p-6 sm:p-8 space-y-5 shadow-sm">
             <div className="flex items-center gap-2">
               <Trophy className="w-5 h-5 text-chart-5" />
               <h3 className="text-lg font-bold text-foreground font-sans">
@@ -270,38 +276,34 @@ export function ResumeAnalyzerClient() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <h4 className="text-sm font-bold text-foreground font-mono">{domain.roleName}</h4>
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono border ${
+                    <Badge
+                      variant={
                         domain.readinessLevel === 'High Fit'
-                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                          ? 'success'
                           : domain.readinessLevel === 'Moderate Fit'
-                          ? 'bg-amber-500/10 border-amber-500/20 text-amber-500'
-                          : 'bg-destructive/10 border-destructive/20 text-destructive'
-                      }`}
+                          ? 'warning'
+                          : 'destructive'
+                      }
+                      className="text-sm font-mono font-bold"
                     >
                       {domain.readinessLevel}
-                    </span>
+                    </Badge>
                   </div>
 
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between text-[11px] font-mono">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-sm font-mono">
                       <span className="text-muted-foreground">ATS Match Fit</span>
                       <span className="text-primary font-bold">{domain.fitScore}%</span>
                     </div>
-                    <div className="h-2 rounded-full bg-muted overflow-hidden">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all"
-                        style={{ width: `${domain.fitScore}%` }}
-                      />
-                    </div>
+                    <Progress value={domain.fitScore} className="h-2" />
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
 
           {/* Action Over Consumption: AIgnite Gap Bridge */}
-          <div className="rounded-3xl bg-gradient-to-tr from-primary/10 via-card to-card border border-primary/25 p-6 sm:p-8 space-y-6 shadow-lg">
+          <Card className="rounded-3xl bg-gradient-to-tr from-primary/10 via-card to-card border-primary/25 p-6 sm:p-8 space-y-6 shadow-lg">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -319,7 +321,7 @@ export function ResumeAnalyzerClient() {
             {/* Critical Gaps Radar */}
             <div className="space-y-3">
               <span className="text-sm font-bold text-destructive font-mono uppercase tracking-wider block">
-                🚨 High-Priority Missing AI Skills Identified:
+                High-Priority Missing AI Skills Identified:
               </span>
               <div className="grid sm:grid-cols-2 gap-3">
                 {result.criticalSkillGaps.map((gap, idx) => (
@@ -329,9 +331,9 @@ export function ResumeAnalyzerClient() {
                   >
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-bold text-foreground">{gap.gap}</h4>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-destructive/10 text-destructive font-semibold">
+                      <Badge variant="destructive" className="text-sm font-mono">
                         {gap.severity}
-                      </span>
+                      </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {gap.explanation}
@@ -344,46 +346,45 @@ export function ResumeAnalyzerClient() {
             {/* Bridge Action Cards */}
             <div className="space-y-3 pt-2">
               <span className="text-sm font-bold text-primary font-mono uppercase tracking-wider block">
-                ⚡ Recommended Interactive Bridge Modules:
+                Recommended Interactive Bridge Modules:
               </span>
               <div className="grid sm:grid-cols-3 gap-4">
                 {result.recommendedModules.map((mod, idx) => (
-                  <div
+                  <Card
                     key={idx}
-                    className="p-4 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all flex flex-col justify-between space-y-3 shadow-2xs group"
+                    className="p-4 rounded-2xl border-border hover:border-primary/50 transition-all flex flex-col justify-between space-y-3 shadow-2xs group"
                   >
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-1.5 text-[10px] font-mono text-primary font-bold uppercase">
-                        {mod.type === 'Company Pack' && <Layers className="w-3.5 h-3.5" />}
-                        {mod.type === 'Pipeline Game' && <Zap className="w-3.5 h-3.5" />}
-                        {mod.type === 'Voice Coach' && <Mic className="w-3.5 h-3.5" />}
+                      <div className="flex items-center gap-1.5 text-sm font-mono text-primary font-bold uppercase">
+                        {mod.type === 'Company Pack' && <Layers className="w-4 h-4" />}
+                        {mod.type === 'Pipeline Game' && <Zap className="w-4 h-4" />}
+                        {mod.type === 'Voice Coach' && <Mic className="w-4 h-4" />}
                         <span>{mod.type}</span>
                       </div>
                       <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                         {mod.title}
                       </h4>
-                      <p className="text-[11px] text-muted-foreground leading-snug">
+                      <p className="text-sm text-muted-foreground leading-snug">
                         {mod.reason}
                       </p>
                     </div>
 
-                    <Link
-                      href={mod.url}
-                      className="py-2 px-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center gap-1 shadow-sm hover:opacity-90 transition-all"
-                    >
-                      <span>Launch Module</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+                    <Button asChild size="sm" className="w-full gap-1 font-bold text-sm">
+                      <Link href={mod.url}>
+                        <span>Launch Module</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </Button>
+                  </Card>
                 ))}
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Detected Skills & Formatting Advice Grid */}
           <div className="grid md:grid-cols-2 gap-6">
             {/* Detected Skills */}
-            <div className="p-6 rounded-3xl bg-card border border-border space-y-4">
+            <Card className="p-6 rounded-3xl border-border space-y-4">
               <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-primary" />
                 <span>Extracted Technical Competencies</span>
@@ -392,26 +393,27 @@ export function ResumeAnalyzerClient() {
               <div className="space-y-3">
                 {result.detectedSkills.map((cat) => (
                   <div key={cat.category} className="space-y-1.5">
-                    <span className="text-[10px] uppercase font-mono font-bold text-muted-foreground block">
+                    <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
                       {cat.category}
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {cat.skills.map((s, idx) => (
-                        <span
+                        <Badge
                           key={idx}
-                          className="px-2 py-0.5 rounded-lg bg-muted text-[11px] font-mono text-foreground border border-border/60"
+                          variant="secondary"
+                          className="text-sm font-mono text-foreground"
                         >
                           {s}
-                        </span>
+                        </Badge>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
 
             {/* ATS Strengths & Formatting Advice */}
-            <div className="p-6 rounded-3xl bg-card border border-border space-y-4">
+            <Card className="p-6 rounded-3xl border-border space-y-4">
               <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 <span>ATS Optimization Insights</span>
@@ -419,7 +421,7 @@ export function ResumeAnalyzerClient() {
 
               <div className="space-y-3 text-sm">
                 <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase font-mono font-bold text-emerald-600 dark:text-emerald-400 block">
+                  <span className="text-sm uppercase font-mono font-bold text-emerald-600 dark:text-emerald-400 block">
                     Key ATS Strengths:
                   </span>
                   <ul className="space-y-1 list-disc list-inside text-muted-foreground leading-relaxed">
@@ -430,7 +432,7 @@ export function ResumeAnalyzerClient() {
                 </div>
 
                 <div className="space-y-1.5 pt-2 border-t border-border/60">
-                  <span className="text-[10px] uppercase font-mono font-bold text-amber-500 block">
+                  <span className="text-sm uppercase font-mono font-bold text-amber-500 block">
                     Actionable Formatting Advice:
                   </span>
                   <ul className="space-y-1 list-disc list-inside text-muted-foreground leading-relaxed">
@@ -440,7 +442,7 @@ export function ResumeAnalyzerClient() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       )}

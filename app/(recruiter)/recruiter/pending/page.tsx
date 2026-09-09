@@ -93,7 +93,7 @@ export default function RecruiterPendingPage() {
                 <span>Check Status via Login</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
-              <span className="text-muted-foreground">•</span>
+              <span className="text-muted-foreground">-</span>
               <Link href="/" className="text-muted-foreground hover:text-foreground">
                 Back to Home
               </Link>

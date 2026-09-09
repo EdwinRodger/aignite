@@ -17,6 +17,9 @@ import {
   Trophy,
   Lock,
 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 export function RoadmapNodeTree() {
   const [expandedStages, setExpandedStages] = useState<string[]>([
@@ -58,15 +61,15 @@ export function RoadmapNodeTree() {
               {isCompleted ? (
                 <CheckCircle2 className="w-4 h-4" />
               ) : isInProgress ? (
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-4 h-4" />
               ) : (
-                <Lock className="w-3.5 h-3.5" />
+                <Lock className="w-4 h-4" />
               )}
             </div>
 
             {/* Stage Card */}
-            <div
-              className={`rounded-3xl bg-card border transition-all overflow-hidden shadow-lg shadow-black/5 ${
+            <Card
+              className={`rounded-3xl border transition-all overflow-hidden shadow-lg shadow-black/5 ${
                 isInProgress
                   ? 'border-primary/50 shadow-xl shadow-primary/5 ring-1 ring-primary/20'
                   : isCompleted
@@ -84,19 +87,20 @@ export function RoadmapNodeTree() {
                     <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground">
                       Stage 0{stage.stageNumber}
                     </span>
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono border ${
+                    <Badge
+                      variant={
                         isCompleted
-                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                          ? 'success'
                           : isInProgress
-                          ? 'bg-primary/15 border-primary/30 text-primary font-bold animate-pulse'
-                          : 'bg-muted border-border text-muted-foreground'
-                      }`}
+                          ? 'default'
+                          : 'outline'
+                      }
+                      className="text-sm font-mono font-bold"
                     >
                       {isCompleted ? '✓ Completed & Verified' : isInProgress ? '● Active Focus Track' : 'Locked Track'}
-                    </span>
+                    </Badge>
                     <span className="text-sm text-muted-foreground font-mono flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-primary" />
+                      <Clock className="w-3.5 h-3.5 text-primary" />
                       <span>{stage.estimatedHours}</span>
                     </span>
                   </div>
@@ -115,43 +119,46 @@ export function RoadmapNodeTree() {
 
                 <div className="flex items-center gap-3 self-end sm:self-center shrink-0">
                   {/* Badge Pill */}
-                  <div className="px-3 py-1.5 rounded-xl bg-muted border border-border flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                  <Badge variant="outline" className="px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-sm font-semibold text-foreground">
                     <Award className="w-3.5 h-3.5 text-primary" />
                     <span>{stage.badgeAwarded.name}</span>
-                  </div>
+                  </Badge>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
-                    className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    className="p-2 rounded-xl text-muted-foreground hover:text-foreground"
                   >
                     {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
               {/* Expanded Topic Details */}
               {isExpanded && (
-                <div className="px-6 sm:px-8 pb-7 pt-2 border-t border-border/80 bg-muted/20 space-y-6">
+                <CardContent className="px-6 sm:px-8 pb-7 pt-2 border-t border-border/80 bg-muted/20 space-y-6">
                   {/* Prerequisites Bar */}
                   <div className="flex flex-wrap items-center gap-2 text-sm font-mono">
                     <span className="text-muted-foreground">Prerequisites:</span>
                     {stage.prerequisites.map((req, idx) => (
-                      <span
+                      <Badge
                         key={idx}
-                        className="px-2 py-0.5 rounded-md bg-card border border-border text-foreground text-[11px]"
+                        variant="outline"
+                        className="text-sm font-normal"
                       >
                         {req}
-                      </span>
+                      </Badge>
                     ))}
                   </div>
 
                   {/* Topics Grid */}
                   <div className="space-y-3.5">
                     {stage.topics.map((topic) => (
-                      <div
+                      <Card
                         key={topic.id}
-                        className="p-4 sm:p-5 rounded-2xl bg-card border border-border/80 hover:border-primary/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs group/topic"
+                        className="p-4 sm:p-5 rounded-2xl border-border/80 hover:border-primary/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs group/topic"
                       >
                         <div className="space-y-1.5 flex-1">
                           <h4 className="text-sm font-bold text-foreground font-sans group-hover/topic:text-primary transition-colors">
@@ -162,35 +169,40 @@ export function RoadmapNodeTree() {
                           </p>
                           <div className="flex flex-wrap gap-1.5 pt-1">
                             {topic.keyKeywords.map((k) => (
-                              <span
+                              <Badge
                                 key={k}
-                                className="px-2 py-0.5 rounded-md bg-muted text-[10px] font-mono text-muted-foreground"
+                                variant="secondary"
+                                className="text-sm font-mono text-muted-foreground font-normal"
                               >
                                 {k}
-                              </span>
+                              </Badge>
                             ))}
                           </div>
                         </div>
 
                         {topic.interactiveModuleUrl && (
-                          <Link
-                            href={topic.interactiveModuleUrl}
-                            className="px-3.5 py-2 rounded-xl bg-muted hover:bg-primary hover:text-primary-foreground border border-border text-sm font-semibold text-foreground transition-all flex items-center justify-center gap-1.5 shrink-0"
+                          <Button
+                            asChild
+                            variant="outline"
+                            size="sm"
+                            className="gap-1.5 shrink-0 text-sm font-semibold rounded-xl hover:bg-primary hover:text-primary-foreground transition-all"
                           >
-                            {topic.interactiveType === 'Company Pack' && <Layers className="w-3.5 h-3.5" />}
-                            {topic.interactiveType === 'Pipeline Game' && <Zap className="w-3.5 h-3.5" />}
-                            {topic.interactiveType === 'Voice Coach' && <Mic className="w-3.5 h-3.5" />}
-                            {topic.interactiveType === 'League Challenge' && <Trophy className="w-3.5 h-3.5" />}
-                            <span>Practice on AIgnite</span>
-                            <ArrowRight className="w-3 h-3" />
-                          </Link>
+                            <Link href={topic.interactiveModuleUrl}>
+                              {topic.interactiveType === 'Company Pack' && <Layers className="w-4 h-4" />}
+                              {topic.interactiveType === 'Pipeline Game' && <Zap className="w-4 h-4" />}
+                              {topic.interactiveType === 'Voice Coach' && <Mic className="w-4 h-4" />}
+                              {topic.interactiveType === 'League Challenge' && <Trophy className="w-4 h-4" />}
+                              <span>Practice on AIgnite</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </Link>
+                          </Button>
                         )}
-                      </div>
+                      </Card>
                     ))}
                   </div>
-                </div>
+                </CardContent>
               )}
-            </div>
+            </Card>
           </div>
         );
       })}

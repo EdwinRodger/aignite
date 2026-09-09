@@ -255,7 +255,7 @@ export default function AdminOverviewPage() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-base font-bold text-foreground">{item.fullName}</span>
-                        <span className="text-sm text-muted-foreground">•</span>
+                        <span className="text-sm text-muted-foreground">-</span>
                         <span className="text-sm font-semibold text-primary">{item.companyName}</span>
                         {isPending && (
                           <span className="inline-flex items-center gap-1 text-sm font-bold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
@@ -279,11 +279,11 @@ export default function AdminOverviewPage() {
 
                       <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
                         <span>{item.recruiterDesignation}</span>
-                        <span>•</span>
+                        <span>-</span>
                         <span className="font-mono">{item.workEmail}</span>
                         {item.companyWebsite && (
                           <>
-                            <span>•</span>
+                            <span>-</span>
                             <a
                               href={item.companyWebsite.startsWith('http') ? item.companyWebsite : `https://${item.companyWebsite}`}
                               target="_blank"

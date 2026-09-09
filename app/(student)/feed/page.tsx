@@ -7,6 +7,9 @@ import { FeedCard } from '@/components/feed/FeedCard';
 import { FeedFilterBar } from '@/components/feed/FeedFilterBar';
 import { FeedSidebar } from '@/components/feed/FeedSidebar';
 import { CURATED_FEED_POSTS, FeedPost } from '@/lib/feed-data';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Sparkles, Flame } from 'lucide-react';
 
 export default function FeedPage() {
@@ -69,10 +72,10 @@ export default function FeedPage() {
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
+              <Badge variant="outline" className="gap-1.5 px-2.5 py-0.5 text-sm font-bold bg-primary/10 text-primary border-primary/20">
                 <Flame className="w-3.5 h-3.5" />
                 <span>AIgnite Pulse</span>
-              </span>
+              </Badge>
               <span className="text-sm text-muted-foreground font-mono">5-Minute Downtime Learning</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
@@ -84,7 +87,7 @@ export default function FeedPage() {
           </div>
 
           {/* Quick Mobile Status Banner */}
-          <div className="sm:hidden flex items-center justify-between p-3 rounded-xl bg-card border border-border">
+          <Card className="sm:hidden flex items-center justify-between p-3">
             <div className="flex items-center gap-2">
               <Flame className="w-4 h-4 text-primary" />
               <span className="text-sm font-bold font-mono">{streakCount} Day Streak</span>
@@ -92,7 +95,7 @@ export default function FeedPage() {
             <div className="text-sm font-mono font-bold text-primary">
               +{totalPoints} League XP
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Category Filter Pills */}
@@ -109,20 +112,20 @@ export default function FeedPage() {
             className="lg:col-span-7 xl:col-span-8 space-y-6"
           >
             {filteredPosts.length === 0 ? (
-              <div className="p-12 text-center rounded-2xl bg-card border border-border">
+              <Card className="p-12 text-center">
                 <Sparkles className="w-8 h-8 text-primary mx-auto mb-3" />
                 <h3 className="text-base font-bold text-foreground">No Sparks Found</h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   Try switching category or synthesize a new card in the sidebar.
                 </p>
-                <button
+                <Button
                   type="button"
                   onClick={() => setActiveCategory('All')}
-                  className="mt-4 px-4 py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground"
+                  className="mt-4 font-semibold text-sm"
                 >
                   View All Sparks
-                </button>
-              </div>
+                </Button>
+              </Card>
             ) : (
               filteredPosts.map((post) => (
                 <FeedCard

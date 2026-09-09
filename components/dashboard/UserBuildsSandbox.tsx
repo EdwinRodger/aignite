@@ -13,6 +13,9 @@ import {
   CheckCircle2,
   AlertTriangle,
 } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface SystemConfig {
   mission: string;
@@ -149,25 +152,27 @@ export function UserBuildsSandbox() {
   };
 
   return (
-    <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 space-y-6 shadow-sm">
+    <Card className="rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-5">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-5 p-0">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
               <Cpu className="w-4 h-4" />
             </div>
-            <h3 className="text-lg font-bold text-foreground font-sans">
+            <CardTitle className="text-lg font-bold text-foreground font-sans">
               User Builds System - The AI Systems Lab
-            </h3>
+            </CardTitle>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <CardDescription className="text-sm text-muted-foreground">
             Architect end-to-end production AI infrastructure. Tune parameters and observe live hardware telemetry and cost SLAs.
-          </p>
+          </CardDescription>
         </div>
 
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           onClick={() => {
             setConfig({
               mission: 'Legal SEC-10K Financial Regulatory Assistant',
@@ -181,15 +186,15 @@ export function UserBuildsSandbox() {
             });
             setTimeout(runSimulation, 50);
           }}
-          className="px-3 py-1.5 rounded-xl border border-border bg-muted/50 hover:bg-muted text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 cursor-pointer self-start sm:self-center"
+          className="gap-1.5 self-start sm:self-center text-sm font-semibold rounded-xl"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Defaults</span>
-        </button>
-      </div>
+        </Button>
+      </CardHeader>
 
       {/* Grid: 2 Columns (Controls vs Telemetry HUD) */}
-      <div className="grid lg:grid-cols-12 gap-6">
+      <CardContent className="p-0 grid lg:grid-cols-12 gap-6">
         {/* Controls (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
           {/* Mission Target */}
@@ -241,7 +246,7 @@ export function UserBuildsSandbox() {
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-foreground flex items-center justify-between">
                 <span>Chunk Size &amp; Overlap</span>
-                <span className="text-[10px] font-mono text-primary">{config.chunkSize} / {config.chunkOverlap} tokens</span>
+                <span className="text-sm font-mono text-primary">{config.chunkSize} / {config.chunkOverlap} tokens</span>
               </label>
               <select
                 value={`${config.chunkSize}-${config.chunkOverlap}`}
@@ -308,7 +313,7 @@ export function UserBuildsSandbox() {
             <div className="p-3 rounded-2xl bg-muted/60 border border-border flex items-center justify-between">
               <div>
                 <span className="text-sm font-bold text-foreground block">2nd-Stage Reranker</span>
-                <span className="text-[10px] text-muted-foreground">Cohere Cross-Encoder</span>
+                <span className="text-sm text-muted-foreground">Cohere Cross-Encoder</span>
               </div>
               <button
                 type="button"
@@ -343,15 +348,16 @@ export function UserBuildsSandbox() {
           </div>
 
           {/* Compile Button */}
-          <button
+          <Button
             type="button"
             onClick={runSimulation}
             disabled={isRunning}
-            className="w-full py-3.5 px-4 rounded-2xl bg-primary hover:opacity-90 text-primary-foreground font-bold text-sm shadow-lg shadow-primary/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+            className="w-full py-6 rounded-2xl font-bold text-sm gap-2 mt-2"
+            size="lg"
           >
-            <Play className="w-3.5 h-3.5 fill-primary-foreground" />
+            <Play className="w-4 h-4 fill-current" />
             <span>{isRunning ? 'Compiling Architecture & Benchmarking...' : 'Simulate Architecture & Measure Telemetry'}</span>
-          </button>
+          </Button>
         </div>
 
         {/* Telemetry HUD (5 cols) */}
@@ -363,44 +369,45 @@ export function UserBuildsSandbox() {
                 <span>Live Hardware &amp; SLA HUD</span>
               </span>
               {telemetry && (
-                <span
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono border ${
+                <Badge
+                  variant={
                     telemetry.status === 'optimal'
-                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                      ? 'success'
                       : telemetry.status === 'warning'
-                      ? 'bg-amber-500/10 border-amber-500/20 text-amber-500'
-                      : 'bg-destructive/10 border-destructive/20 text-destructive'
-                  }`}
+                      ? 'warning'
+                      : 'destructive'
+                  }
+                  className="text-sm font-bold font-mono"
                 >
                   {telemetry.status.toUpperCase()} STATUS
-                </span>
+                </Badge>
               )}
             </div>
 
             {telemetry && (
               <div className="grid grid-cols-2 gap-2.5 text-sm font-mono">
                 <div className="p-3 rounded-xl bg-card border border-border space-y-1">
-                  <span className="text-[10px] text-muted-foreground uppercase block">P95 Latency</span>
+                  <span className="text-sm text-muted-foreground uppercase block">P95 Latency</span>
                   <div className="text-lg font-black text-foreground">{telemetry.p95LatencyMs} ms</div>
-                  <span className="text-[9px] text-emerald-600 dark:text-emerald-400 block">SLA: &lt; 60 ms</span>
+                  <span className="text-sm text-emerald-600 dark:text-emerald-400 block">SLA: &lt; 60 ms</span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-card border border-border space-y-1">
-                  <span className="text-[10px] text-muted-foreground uppercase block">VRAM Footprint</span>
+                  <span className="text-sm text-muted-foreground uppercase block">VRAM Footprint</span>
                   <div className="text-lg font-black text-foreground">{telemetry.vramGb} GB</div>
-                  <span className="text-[9px] text-primary block">GPU: Single L40S</span>
+                  <span className="text-sm text-primary block">GPU: Single L40S</span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-card border border-border space-y-1">
-                  <span className="text-[10px] text-muted-foreground uppercase block">Cost / 1M Tokens</span>
+                  <span className="text-sm text-muted-foreground uppercase block">Cost / 1M Tokens</span>
                   <div className="text-lg font-black text-foreground">${telemetry.costPerMillion}</div>
-                  <span className="text-[9px] text-muted-foreground block">Enterprise Budget</span>
+                  <span className="text-sm text-muted-foreground block">Enterprise Budget</span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-card border border-border space-y-1">
-                  <span className="text-[10px] text-muted-foreground uppercase block">Recall Precision</span>
+                  <span className="text-sm text-muted-foreground uppercase block">Recall Precision</span>
                   <div className="text-lg font-black text-foreground">{telemetry.retrievalAccuracy}%</div>
-                  <span className="text-[9px] text-emerald-600 dark:text-emerald-400 block">RAGAS Benchmark</span>
+                  <span className="text-sm text-emerald-600 dark:text-emerald-400 block">RAGAS Benchmark</span>
                 </div>
               </div>
             )}
@@ -416,27 +423,27 @@ export function UserBuildsSandbox() {
                     : 'bg-destructive/5 border-destructive/20 text-foreground'
                 }`}
               >
-                <div className="flex items-center gap-1.5 font-bold mb-1 text-[11px]">
+                <div className="flex items-center gap-1.5 font-bold mb-1 text-sm">
                   {telemetry.status === 'optimal' ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                   ) : (
-                    <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
                   )}
                   <span>AI Architecture Feedback:</span>
                 </div>
-                <p className="text-[11px] text-muted-foreground leading-snug">
+                <p className="text-sm text-muted-foreground leading-snug">
                   {telemetry.diagnosis}
                 </p>
               </div>
             )}
           </div>
 
-          <div className="text-[10px] font-mono text-muted-foreground pt-2 border-t border-border/60 flex items-center justify-between">
+          <div className="text-sm font-mono text-muted-foreground pt-2 border-t border-border/60 flex items-center justify-between">
             <span>Verified System Build #804</span>
             <span className="text-primary font-bold">+50 XP Awarded</span>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
