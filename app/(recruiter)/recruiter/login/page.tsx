@@ -69,27 +69,27 @@ export default function RecruiterLoginPage() {
               <h1 className="text-2xl font-bold tracking-tight text-foreground font-sans">
                 Recruiter Portal Sign In
               </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Enter your verified corporate work email to access candidate search.
               </p>
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs flex items-center gap-2">
+              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
             {statusResult?.status === 'approved' && (
-              <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs flex items-center gap-2">
+              <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-sm flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>Verified! Redirecting to Recruiter Dashboard for {statusResult.company || 'Enterprise'}...</span>
               </div>
             )}
 
             {statusResult?.status === 'pending' && (
-              <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs flex items-center gap-2">
+              <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 text-sm flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>Account is currently in quarantine under review. Redirecting...</span>
               </div>
@@ -97,7 +97,7 @@ export default function RecruiterLoginPage() {
 
             <form onSubmit={handleLoginCheck} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-foreground flex items-center justify-between">
+                <label className="text-sm font-semibold text-foreground flex items-center justify-between">
                   <span>Corporate Work Email</span>
                   <span className="text-[10px] text-primary font-bold">Verified Domain</span>
                 </label>
@@ -162,7 +162,7 @@ export default function RecruiterLoginPage() {
             </div>
 
             {/* Link to Apply */}
-            <div className="pt-4 border-t border-border/80 text-center text-xs text-muted-foreground">
+            <div className="pt-4 border-t border-border/80 text-center text-sm text-muted-foreground">
               <span>Not verified yet? </span>
               <Link
                 href="/recruiter/apply"

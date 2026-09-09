@@ -31,7 +31,7 @@ export function FeedFilterBar({ activeCategory, onSelectCategory }: FeedFilterBa
             key={cat.id}
             type="button"
             onClick={() => onSelectCategory(cat.id)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all border shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               isActive
                 ? 'bg-primary text-primary-foreground border-primary shadow-sm shadow-primary/30 font-semibold scale-[1.02]'
                 : 'bg-card text-muted-foreground hover:text-foreground hover:bg-muted/70 border-border'

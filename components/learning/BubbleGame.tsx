@@ -115,21 +115,21 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
               <Cpu className="w-3.5 h-3.5" />
               <span>Tactile Pipeline Builder</span>
             </span>
-            <span className="text-xs text-muted-foreground font-mono">
+            <span className="text-sm text-muted-foreground font-mono">
               Slots: {placedNodes.length}/{mission.targetSlotsCount}
             </span>
           </div>
           <h3 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
             {mission.title}
           </h3>
-          <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
             {mission.scenario}
           </p>
         </div>
 
         {/* Action Points Badge */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
+          <div className="flex items-center gap-1 text-sm font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
             <Zap className="w-3.5 h-3.5" />
             <span>+{mission.pointsAwarded} XP</span>
           </div>
@@ -146,7 +146,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
       </div>
 
       {/* Real-time Telemetry HUD Bar */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 rounded-xl bg-muted/40 border border-border font-mono text-xs">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 rounded-xl bg-muted/40 border border-border font-mono text-sm">
         <div className="flex flex-col">
           <span className="text-[10px] uppercase text-muted-foreground flex items-center gap-1">
             <Clock className="w-3 h-3 text-primary" />
@@ -188,7 +188,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
 
       {/* Pipeline Assembly Runway (Slots) */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs font-semibold text-foreground">
+        <div className="flex items-center justify-between text-sm font-semibold text-foreground">
           <span>Active Sequential Pipeline:</span>
           <span className="text-muted-foreground text-[11px]">Tap slot to remove</span>
         </div>
@@ -222,7 +222,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
                       </button>
                     </div>
 
-                    <div className="text-xs font-bold text-foreground leading-tight mt-1">
+                    <div className="text-sm font-bold text-foreground leading-tight mt-1">
                       {placed.name}
                     </div>
 
@@ -233,7 +233,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
                   </>
                 ) : (
                   <div className="text-center">
-                    <span className="text-xs font-mono font-bold text-muted-foreground block">
+                    <span className="text-sm font-mono font-bold text-muted-foreground block">
                       Slot {slotIdx + 1}
                     </span>
                     <span className="text-[10px] text-muted-foreground/80 mt-1 block">
@@ -249,7 +249,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
 
       {/* Available Node Palette (Click/Tap to Add) */}
       <div className="space-y-2 pt-2 border-t border-border/60">
-        <div className="flex items-center justify-between text-xs font-semibold text-foreground">
+        <div className="flex items-center justify-between text-sm font-semibold text-foreground">
           <span className="flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-primary" />
             <span>Available Architectural Components (Tap to Chain):</span>
@@ -261,7 +261,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           {availableNodes.length === 0 ? (
-            <div className="col-span-full p-4 text-center text-xs text-muted-foreground rounded-xl bg-muted/20 border border-dashed border-border">
+            <div className="col-span-full p-4 text-center text-sm text-muted-foreground rounded-xl bg-muted/20 border border-dashed border-border">
               All available nodes placed! Ready to verify.
             </div>
           ) : (
@@ -282,7 +282,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
                       +{node.latencyMs}ms
                     </span>
                   </div>
-                  <div className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                     {node.name}
                   </div>
                 </div>
@@ -297,7 +297,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
 
       {/* Verification Feedback Banner */}
       {status === 'error' && errorMessage && (
-        <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive text-xs animate-in fade-in slide-in-from-top-2 flex items-start gap-2.5">
+        <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive text-sm animate-in fade-in slide-in-from-top-2 flex items-start gap-2.5">
           <AlertTriangle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
           <div>
             <span className="font-bold text-destructive block mb-0.5">
@@ -309,7 +309,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
       )}
 
       {status === 'success' && (
-        <div className="p-3.5 rounded-xl bg-primary/10 border border-primary text-xs animate-in fade-in slide-in-from-top-2 flex items-start gap-2.5">
+        <div className="p-3.5 rounded-xl bg-primary/10 border border-primary text-sm animate-in fade-in slide-in-from-top-2 flex items-start gap-2.5">
           <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
           <div>
             <span className="font-bold text-primary block mb-0.5">
@@ -329,7 +329,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
           type="button"
           onClick={handleVerify}
           disabled={placedNodes.length !== mission.targetSlotsCount || status === 'verifying'}
-          className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-sm font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {status === 'verifying' ? (
             <span>Simulating Architecture...</span>

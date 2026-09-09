@@ -87,7 +87,7 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
+          <div className="flex items-center gap-1 text-sm font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
             <Zap className="w-3.5 h-3.5" />
             <span>+{scenario.pointsAwarded} XP</span>
           </div>
@@ -110,7 +110,7 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
         <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
           Hard Production Constraints & SLAs:
         </span>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm font-mono">
           <div className="p-2.5 rounded-lg bg-card border border-border">
             <span className="text-[10px] text-muted-foreground block">Latency SLA</span>
             <span className="font-bold text-primary mt-0.5 block">{scenario.hardConstraints.slaLatency}</span>
@@ -132,7 +132,7 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
 
       {/* Architectural Tradeoff Options */}
       <div className="space-y-3">
-        <span className="text-xs font-bold text-foreground block">
+        <span className="text-sm font-bold text-foreground block">
           Select Your Production Architecture Proposal:
         </span>
 
@@ -152,7 +152,7 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
                 } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <h4 className="text-xs sm:text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                  <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                     {option.title}
                   </h4>
                   {isSelected && result && (
@@ -169,7 +169,7 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed font-sans">
+                <p className="text-sm text-muted-foreground leading-relaxed font-sans">
                   {option.architecture}
                 </p>
               </button>
@@ -239,7 +239,7 @@ export function DecisionSimulator({ scenario, packSlug, onCompleted }: DecisionS
 
           {/* Verdict Banner */}
           <div
-            className={`p-3 rounded-xl border text-xs flex items-start gap-2.5 ${
+            className={`p-3 rounded-xl border text-sm flex items-start gap-2.5 ${
               result.verdict === 'optimal'
                 ? 'bg-emerald-500/10 border-emerald-500/30 text-foreground'
                 : result.verdict === 'acceptable'

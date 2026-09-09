@@ -98,7 +98,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
               <h2 id="job-create-title" className="text-base font-bold text-foreground font-sans">
                 Post AI Engineering Opening
               </h2>
-              <p className="text-xs text-muted-foreground font-mono">
+              <p className="text-sm text-muted-foreground font-mono">
                 Company: {currentCompany}
               </p>
             </div>
@@ -114,9 +114,9 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4 text-sm">
           {error && (
-            <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs">
+            <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm">
               {error}
             </div>
           )}
@@ -130,7 +130,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Senior AI Inference Systems Engineer"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-xs"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
             />
           </div>
 
@@ -150,7 +150,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                       | 'Agent Architect'
                   )
                 }
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-xs"
+                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               >
                 <option value="AI Systems & Inference">AI Systems & Inference</option>
                 <option value="GenAI & LLM">GenAI & LLM</option>
@@ -170,7 +170,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="e.g. Bengaluru (Hybrid)"
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-xs"
+                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               >
               </input>
             </div>
@@ -188,7 +188,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                 value={salaryRange}
                 onChange={(e) => setSalaryRange(e.target.value)}
                 placeholder="₹28L - ₹45L CTC"
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-xs"
+                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               />
             </div>
 
@@ -203,7 +203,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
               <select
                 value={minReportScore}
                 onChange={(e) => setMinReportScore(Number(e.target.value))}
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-xs"
+                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"
               >
                 <option value={7.0}>7.0+ (Intermediate)</option>
                 <option value={7.5}>7.5+ (Proficient)</option>
@@ -261,7 +261,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                     key={badge}
                     type="button"
                     onClick={() => toggleBadge(badge)}
-                    className={`px-3 py-1.5 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-xl border text-sm font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                       checked
                         ? 'bg-primary text-primary-foreground border-primary shadow-xs'
                         : 'bg-muted border-border text-muted-foreground hover:text-foreground'
@@ -282,7 +282,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-3 rounded-xl bg-muted border border-border text-foreground leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary resize-none text-xs"
+              className="w-full p-3 rounded-xl bg-muted border border-border text-foreground leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary resize-none text-sm"
             />
           </div>
 

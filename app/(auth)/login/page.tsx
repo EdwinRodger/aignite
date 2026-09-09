@@ -57,14 +57,14 @@ export default function LoginPage() {
               <h1 className="text-2xl font-bold tracking-tight text-foreground font-sans">
                 Sign in to <span className="text-primary font-extrabold font-mono">AIgnite</span>
               </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Passwordless login. We will send a 6-digit verification code to your email.
               </p>
             </div>
 
             {/* Error Message */}
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs flex items-center gap-2 animate-in fade-in duration-200">
+              <div className="mb-4 p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2 animate-in fade-in duration-200">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -73,7 +73,7 @@ export default function LoginPage() {
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label htmlFor="email" className="text-xs font-semibold text-foreground flex items-center justify-between">
+                <label htmlFor="email" className="text-sm font-semibold text-foreground flex items-center justify-between">
                   <span>Student / Learner Email</span>
                   <span className="text-[10px] text-muted-foreground">Personal or University</span>
                 </label>
@@ -142,7 +142,7 @@ export default function LoginPage() {
 
             {/* Recruiter Discriminator Banner */}
             <div className="mt-6 pt-5 border-t border-border/80 text-center">
-              <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground mb-1">
+              <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground mb-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                 <span className="font-semibold text-foreground">Hiring AI Engineers?</span>
               </div>

@@ -61,7 +61,7 @@ export function CandidateDossierModal({
                   Verified Talent
                 </span>
               </div>
-              <p className="text-xs font-mono text-muted-foreground mt-0.5">
+              <p className="text-sm font-mono text-muted-foreground mt-0.5">
                 {candidate.collegeOrCompany} • {candidate.region} • Rank #{candidate.weeklyRank} in{' '}
                 <span className="capitalize font-semibold text-foreground">{candidate.leagueTier} League</span>
               </p>
@@ -81,7 +81,7 @@ export function CandidateDossierModal({
         {/* Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6">
           {/* Social Links & Contact Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-muted/60 border border-border text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-muted/60 border border-border text-sm">
             <div className="flex items-center gap-4 text-muted-foreground font-mono">
               <span className="flex items-center gap-1.5 text-foreground">
                 <Mail className="w-3.5 h-3.5 text-primary" />
@@ -129,7 +129,7 @@ export function CandidateDossierModal({
                     AI Interview Report Card & Speech Telemetry
                   </h3>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Aggregated across {rep.speechMetrics.totalInterviews} simulated technical interviews and oral defenses.
                 </p>
               </div>
@@ -176,7 +176,7 @@ export function CandidateDossierModal({
             </div>
 
             {/* Speech Telemetry Tags */}
-            <div className="flex flex-wrap gap-2 text-xs font-mono">
+            <div className="flex flex-wrap gap-2 text-sm font-mono">
               <span className="px-3 py-1.5 rounded-xl bg-card border border-border text-foreground flex items-center gap-1.5">
                 <Mic className="w-3.5 h-3.5 text-chart-1" />
                 <span>Pacing: {rep.speechMetrics.wordsPerMinute} Words / Min ({rep.speechMetrics.paceRating})</span>
@@ -196,13 +196,13 @@ export function CandidateDossierModal({
               <span className="text-[11px] font-bold text-foreground font-mono flex items-center gap-1.5">
                 <span>🎙️ Verbatim Spoken Defense Excerpt:</span>
               </span>
-              <p className="text-xs text-foreground/90 font-serif italic leading-relaxed">
+              <p className="text-sm text-foreground/90 font-serif italic leading-relaxed">
                 {rep.recentModelAnswerExcerpt}
               </p>
             </div>
 
             {/* Strengths & Improvements */}
-            <div className="grid sm:grid-cols-2 gap-4 text-xs">
+            <div className="grid sm:grid-cols-2 gap-4 text-sm">
               <div className="p-4 rounded-xl bg-card border border-border space-y-2">
                 <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
@@ -249,7 +249,7 @@ export function CandidateDossierModal({
                     🎖️
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-foreground">{badgeName}</h4>
+                    <h4 className="text-sm font-bold text-foreground">{badgeName}</h4>
                     <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 block mt-0.5">
                       ✓ Algorithmic Verification Passed
                     </span>
@@ -266,17 +266,17 @@ export function CandidateDossierModal({
                 <FileText className="w-4 h-4 text-primary" />
                 <span>ATS Resume Summary & Projects</span>
               </h3>
-              <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold">
+              <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-sm font-bold">
                 ATS Score: {res.overallAtsScore} / 100
               </span>
             </div>
 
-            <p className="text-xs text-foreground/80 leading-relaxed p-4 rounded-2xl bg-muted/40 border border-border">
+            <p className="text-sm text-foreground/80 leading-relaxed p-4 rounded-2xl bg-muted/40 border border-border">
               {res.summary}
             </p>
 
             {/* Skills Grid */}
-            <div className="grid sm:grid-cols-2 gap-3 text-xs">
+            <div className="grid sm:grid-cols-2 gap-3 text-sm">
               <div className="p-3.5 rounded-xl bg-card border border-border space-y-1.5">
                 <span className="text-[10px] uppercase font-mono font-bold text-muted-foreground block">
                   Frameworks & Engines
@@ -312,7 +312,7 @@ export function CandidateDossierModal({
 
             {/* Highlighted Projects */}
             <div className="space-y-3">
-              <span className="text-xs font-bold text-foreground font-mono block">
+              <span className="text-sm font-bold text-foreground font-mono block">
                 Highlighted Production Systems Projects:
               </span>
               <div className="space-y-3">
@@ -322,12 +322,12 @@ export function CandidateDossierModal({
                     className="p-4 rounded-2xl bg-card border border-border/80 space-y-1.5 shadow-2xs"
                   >
                     <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-foreground font-mono">{proj.title}</h4>
+                      <h4 className="text-sm font-bold text-foreground font-mono">{proj.title}</h4>
                       <span className="text-[10px] font-mono font-semibold text-primary px-2 py-0.5 rounded bg-primary/10">
                         {proj.impact}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {proj.description}
                     </p>
                   </div>
@@ -342,7 +342,7 @@ export function CandidateDossierModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl border border-border text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+            className="px-4 py-2.5 rounded-xl border border-border text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
             Close Dossier
           </button>
@@ -352,7 +352,7 @@ export function CandidateDossierModal({
               onClose();
               onInvite(candidate);
             }}
-            className="px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold shadow-lg shadow-primary/25 active:scale-98 transition-all flex items-center gap-2 cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-sm font-bold shadow-lg shadow-primary/25 active:scale-98 transition-all flex items-center gap-2 cursor-pointer"
           >
             <Send className="w-4 h-4" />
             <span>Fast-Track Direct Interview Invitation</span>

@@ -190,7 +190,7 @@ export const CURATED_FEED_POSTS: FeedPost[] = [
     id: 'qlora-4bit-tuning',
     title: 'QLoRA: 4-bit NormalFloat (NF4) & Double Quantization',
     summary:
-      'QLoRA democratized fine-tuning by allowing 65B+ parameter LLMs to be tuned on a single 48GB GPU. It introduces NormalFloat 4 (NF4)—an information-theoretically optimal quant type for normally distributed weights—plus Double Quantization to save memory on quant constants.',
+      'QLoRA democratized fine-tuning by allowing 65B+ parameter LLMs to be tuned on a single 48GB GPU. It introduces NormalFloat 4 (NF4)-an information-theoretically optimal quant type for normally distributed weights-plus Double Quantization to save memory on quant constants.',
     keyTakeaway:
       'Rule of thumb: When fine-tuning massive models on constrained hardware, QLoRA reduces memory by ~75% without compromising 16-bit baseline benchmark scores.',
     sourceName: 'Tim Dettmers / UW NLP',

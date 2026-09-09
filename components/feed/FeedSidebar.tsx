@@ -89,14 +89,14 @@ export function FeedSidebar({
               <Flame className="w-4 h-4 text-primary animate-pulse" />
             </div>
             <div>
-              <div className="text-xs font-bold text-foreground">Daily Streak</div>
+              <div className="text-sm font-bold text-foreground">Daily Streak</div>
               <div className="text-[11px] text-muted-foreground font-mono">
                 {streakCount > 0 ? `${streakCount} Day Streak 🔥` : 'Start your streak today!'}
               </div>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs font-mono font-bold text-primary">+{totalPoints} XP</div>
+            <div className="text-sm font-mono font-bold text-primary">+{totalPoints} XP</div>
             <div className="text-[10px] text-muted-foreground">League Points</div>
           </div>
         </div>
@@ -120,7 +120,7 @@ export function FeedSidebar({
         </div>
 
         {/* League Tier Badge */}
-        <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-xs">
+        <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-sm">
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Trophy className="w-3.5 h-3.5 text-amber-500" />
             <span>Current Tier:</span>
@@ -134,7 +134,7 @@ export function FeedSidebar({
       {/* Mobile Launch Screen Preference Settings */}
       <div className="rounded-2xl bg-card border border-border p-4 shadow-sm">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+          <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
             <Smartphone className="w-4 h-4 text-primary" />
             <span>Mobile Launch Screen</span>
           </div>
@@ -163,14 +163,14 @@ export function FeedSidebar({
                 key={item.id}
                 type="button"
                 onClick={() => handleLandingChange(item.id as 'feed' | 'coach' | 'league' | 'roadmap')}
-                className={`w-full text-left p-2.5 rounded-xl border text-xs transition-all flex items-center justify-between ${
+                className={`w-full text-left p-2.5 rounded-xl border text-sm transition-all flex items-center justify-between ${
                   isSelected
                     ? 'bg-primary/10 border-primary text-foreground font-semibold ring-1 ring-primary/30'
                     : 'bg-muted/40 border-border text-muted-foreground hover:text-foreground hover:bg-muted'
                 } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
               >
                 <div>
-                  <div className="text-xs text-foreground font-medium">{item.label}</div>
+                  <div className="text-sm text-foreground font-medium">{item.label}</div>
                   <div className="text-[10px] text-muted-foreground">{item.desc}</div>
                 </div>
                 {isSelected && <Zap className="w-3.5 h-3.5 text-primary shrink-0" />}
@@ -182,7 +182,7 @@ export function FeedSidebar({
 
       {/* Dynamic Gemini Spark Synthesizer (Free Tier) */}
       <div className="rounded-2xl bg-card border border-border p-4 shadow-sm">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-foreground mb-1">
+        <div className="flex items-center gap-1.5 text-sm font-bold text-foreground mb-1">
           <Sparkles className="w-4 h-4 text-primary" />
           <span>Synthesize AI Spark</span>
         </div>
@@ -196,13 +196,13 @@ export function FeedSidebar({
             value={genTopic}
             onChange={(e) => setGenTopic(e.target.value)}
             placeholder="e.g. FlashAttention-3, KV Cache..."
-            className="w-full px-3 py-2 text-xs rounded-xl bg-muted/60 border border-border text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="w-full px-3 py-2 text-sm rounded-xl bg-muted/60 border border-border text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
 
           <button
             type="submit"
             disabled={isGenerating || !genTopic.trim()}
-            className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 disabled:opacity-50 text-primary-foreground transition-all flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="w-full py-2 px-3 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 disabled:opacity-50 text-primary-foreground transition-all flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {isGenerating ? (
               <>
@@ -227,7 +227,7 @@ export function FeedSidebar({
 
       {/* Trending AI Architecture Tags */}
       <div className="rounded-2xl bg-card border border-border p-4 shadow-sm">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-foreground mb-2">
+        <div className="flex items-center gap-1.5 text-sm font-bold text-foreground mb-2">
           <TrendingUp className="w-4 h-4 text-primary" />
           <span>Trending Architecture Topics</span>
         </div>

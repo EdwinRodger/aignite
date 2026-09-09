@@ -463,7 +463,7 @@ export const INITIAL_RECRUITER_JOBS: RecruiterJob[] = [
     id: 'job-2',
     companyName: 'Google DeepMind',
     companyLogo: '🔵',
-    title: 'Research Engineer — Post-Training & Reasoning',
+    title: 'Research Engineer - Post-Training & Reasoning',
     roleCategory: 'GenAI & LLM',
     location: 'Bengaluru / Hyderabad (Hybrid)',
     salaryRange: '₹38,00,000 - ₹55,00,000 CTC',
@@ -518,7 +518,7 @@ export const INITIAL_INVITATIONS: InterviewInvitation[] = [
     candidateId: 'cand-1',
     candidateName: 'Aarav Sharma',
     companyName: 'Google DeepMind',
-    roleTitle: 'Research Engineer — Post-Training & Reasoning',
+    roleTitle: 'Research Engineer - Post-Training & Reasoning',
     roundType: 'Systems Architecture',
     customNote:
       'Hi Aarav, our DeepMind team was blown away by your 9.5 AIgnite Report Card and your TMA warp-specialized CUDA kernel benchmarks. We would love to fast-track you directly to our Principal Systems round.',

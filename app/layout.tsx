@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "AIgnite — Master Applied AI in 5-Minute Daily Sparks",
+  title: "AIgnite - Master Applied AI in 5-Minute Daily Sparks",
   description: "AIgnite (pronounced ignite, silent A) is the premier AI-specialized learning & career platform for SIH 2026. Interactive AI feeds, architecture games, weekly interview leagues, and verified recruiter discovery.",
 };
 

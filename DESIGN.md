@@ -9,7 +9,7 @@
 
 ## 1. Design Philosophy & Aesthetic Intent
 
-AIgnite's design language is built around **"Warm Flame"**—an engineering-focused, high-contrast aesthetic that conveys both the energy of rapid learning ("ignite") and the analytical discipline of applied AI systems.
+AIgnite's design language is built around **"Warm Flame"**-an engineering-focused, high-contrast aesthetic that conveys both the energy of rapid learning ("ignite") and the analytical discipline of applied AI systems.
 
 ### Core Tenets
 1. **Ruthless Visual Hierarchy**: Dense information (neural architecture graphs, latency metrics, code snippets) is structured with strict contrast boundaries and typographic differentiation to prevent cognitive fatigue.
@@ -87,11 +87,11 @@ The color system is organized into semantic tokens mapped via CSS custom variabl
 
 For multi-axis radar charts (Knowledge, Confidence, Communication, Systems Architecture, Industry Readiness) and telemetry meters:
 
-- `--chart-1`: `oklch(0.6404 0.2153 35.9003)` — Primary Warm Flame (Architecture / Core AI)
-- `--chart-2`: `oklch(0.8231 0.0995 35.9401)` — Warm Amber (Latency & Inference Speed)
-- `--chart-3`: `oklch(0.4431 0.1587 35.8458)` — Deep Rust Flame (Memory & Quantization)
-- `--chart-4`: `oklch(0.3396 0.1264 35.7951)` — Dark Umber (Retrieval Accuracy & RAG)
-- `--chart-5`: `oklch(0.9168 0.0469 35.9996)` — Soft Peach Highlight (Overall Readiness)
+- `--chart-1`: `oklch(0.6404 0.2153 35.9003)` - Primary Warm Flame (Architecture / Core AI)
+- `--chart-2`: `oklch(0.8231 0.0995 35.9401)` - Warm Amber (Latency & Inference Speed)
+- `--chart-3`: `oklch(0.4431 0.1587 35.8458)` - Deep Rust Flame (Memory & Quantization)
+- `--chart-4`: `oklch(0.3396 0.1264 35.7951)` - Dark Umber (Retrieval Accuracy & RAG)
+- `--chart-5`: `oklch(0.9168 0.0469 35.9996)` - Soft Peach Highlight (Overall Readiness)
 
 ---
 
@@ -132,8 +132,8 @@ const monoFont = IBM_Plex_Mono({
 | **Subheadings H3 / H4**| `font-sans` | `text-lg` to `text-xl` | 600 (SemiBold) | Card titles, step headers, quiz questions |
 | **Editorial Narrative** | `font-serif` | `text-base` to `text-lg` (`leading-relaxed`) | 400 (Regular) / 600 | Scenario context, AI Coach debriefs, problem briefs |
 | **Body (Default)** | `font-sans` | `text-sm` to `text-base` (`leading-normal`) | 400 / 500 | Explanations, button labels, form inputs |
-| **Telemetry / Code** | `font-mono` | `text-xs` to `text-sm` | 500 / 600 | Latency (ms), token counts, PyTorch code, ATS score |
-| **Micro / Caption** | `font-sans` | `text-xs` | 500 (Medium) | Timestamps, tier level badges, streak counters |
+| **Telemetry / Code** | `font-mono` | `text-sm` to `text-sm` | 500 / 600 | Latency (ms), token counts, PyTorch code, ATS score |
+| **Micro / Caption** | `font-sans` | `text-sm` | 500 (Medium) | Timestamps, tier level badges, streak counters |
 
 ---
 
@@ -181,7 +181,7 @@ Layered shadows using subtle HSL alpha blending ensure depth in both light and d
 ### 5.3. Pipeline Bubble Canvas & Game Elements
 - Bubble Nodes: Circular containers with `border border-border bg-card shadow-md`.
 - Active Connection Lines: SVG strokes rendered in `var(--primary)` with pulsating glow.
-- Cost/Latency Telemetry: Floating badges styled with `font-mono text-xs text-muted-foreground`.
+- Cost/Latency Telemetry: Floating badges styled with `font-mono text-sm text-muted-foreground`.
 
 ---
 

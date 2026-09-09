@@ -1,4 +1,4 @@
-# Database Schema & Data Models — AIgnite
+# Database Schema & Data Models - AIgnite
 > **Project**: AIgnite (*pronounced ignite, 'A' is silent*)  
 > **Database Engine**: PostgreSQL 16 (Hosted on Supabase)  
 > **Extensions**: `uuid-ossp`, `pgcrypto`, `vector` (pgvector)  

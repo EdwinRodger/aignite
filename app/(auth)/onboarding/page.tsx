@@ -85,20 +85,20 @@ export default function OnboardingPage() {
           <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl shadow-black/20">
             {/* Header */}
             <div className="text-center space-y-2 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-xs font-bold text-primary mb-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-sm font-bold text-primary mb-1">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>30-Second Setup</span>
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground font-sans">
                 Welcome to <span className="text-primary font-mono">AIgnite</span>
               </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Set up your public learner profile and customize your daily habit.
               </p>
             </div>
 
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs flex items-center gap-2">
+              <div className="mb-4 p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -107,7 +107,7 @@ export default function OnboardingPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Full Name */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                   <User className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>Full Name</span>
                 </label>
@@ -123,7 +123,7 @@ export default function OnboardingPage() {
 
               {/* Username Handle */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                   <AtSign className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>Unique Handle</span>
                 </label>
@@ -144,7 +144,7 @@ export default function OnboardingPage() {
 
               {/* College / University */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                   <GraduationCap className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>College / University / Affiliation</span>
                 </label>
@@ -159,7 +159,7 @@ export default function OnboardingPage() {
 
               {/* Primary Focus Track */}
               <div className="space-y-2 pt-1">
-                <label className="text-xs font-semibold text-foreground block">
+                <label className="text-sm font-semibold text-foreground block">
                   Primary AI Focus Area
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -170,7 +170,7 @@ export default function OnboardingPage() {
                         key={track.id}
                         type="button"
                         onClick={() => setHeadline(`Aspiring ${track.label} Engineer`)}
-                        className={`p-2 rounded-xl border text-xs font-medium text-left flex items-center gap-1.5 transition-all cursor-pointer ${
+                        className={`p-2 rounded-xl border text-sm font-medium text-left flex items-center gap-1.5 transition-all cursor-pointer ${
                           isSelected
                             ? 'bg-accent border-primary text-foreground ring-1 ring-primary'
                             : 'bg-muted/40 border-border text-muted-foreground hover:text-foreground hover:bg-muted'
@@ -187,7 +187,7 @@ export default function OnboardingPage() {
               {/* Mobile Default Landing Preference */}
               <div className="space-y-2 pt-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Compass className="w-3.5 h-3.5 text-primary" />
                     <span>Default Launch Screen on Mobile</span>
                   </label>
@@ -197,7 +197,7 @@ export default function OnboardingPage() {
                   <button
                     type="button"
                     onClick={() => setDefaultMobileLandingPage('feed')}
-                    className={`p-2.5 rounded-xl border text-xs font-medium text-center transition-all cursor-pointer ${
+                    className={`p-2.5 rounded-xl border text-sm font-medium text-center transition-all cursor-pointer ${
                       defaultMobileLandingPage === 'feed'
                         ? 'bg-accent border-primary text-foreground ring-1 ring-primary'
                         : 'bg-muted/40 border-border text-muted-foreground hover:text-foreground'
@@ -210,7 +210,7 @@ export default function OnboardingPage() {
                   <button
                     type="button"
                     onClick={() => setDefaultMobileLandingPage('coach')}
-                    className={`p-2.5 rounded-xl border text-xs font-medium text-center transition-all cursor-pointer ${
+                    className={`p-2.5 rounded-xl border text-sm font-medium text-center transition-all cursor-pointer ${
                       defaultMobileLandingPage === 'coach'
                         ? 'bg-accent border-primary text-foreground ring-1 ring-primary'
                         : 'bg-muted/40 border-border text-muted-foreground hover:text-foreground'
@@ -223,7 +223,7 @@ export default function OnboardingPage() {
                   <button
                     type="button"
                     onClick={() => setDefaultMobileLandingPage('dashboard')}
-                    className={`p-2.5 rounded-xl border text-xs font-medium text-center transition-all cursor-pointer ${
+                    className={`p-2.5 rounded-xl border text-sm font-medium text-center transition-all cursor-pointer ${
                       defaultMobileLandingPage === 'dashboard'
                         ? 'bg-accent border-primary text-foreground ring-1 ring-primary'
                         : 'bg-muted/40 border-border text-muted-foreground hover:text-foreground'

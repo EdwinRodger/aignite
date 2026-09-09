@@ -20,7 +20,7 @@ export default function RoadmapPage() {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
         {/* Header */}
         <section className="text-center space-y-3 relative">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold">
             <Map className="w-3.5 h-3.5" />
             <span>Interactive Competency Tree</span>
           </div>
@@ -33,7 +33,7 @@ export default function RoadmapPage() {
             The complete 6-stage pathway to becoming an AI Systems Architect. Master mathematical intuition, PyTorch internals, RAG vector retrieval, and distributed CUDA training with interactive proof-of-skill challenges.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-muted-foreground pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-mono text-muted-foreground pt-2">
             <span className="flex items-center gap-1">
               <Sparkles className="w-4 h-4 text-primary" />
               <span>6 Progressive Milestone Stages</span>
@@ -51,7 +51,7 @@ export default function RoadmapPage() {
           </div>
 
           {/* Callout Banner */}
-          <div className="p-4 rounded-2xl bg-card border border-border/80 max-w-xl mx-auto flex items-center justify-between gap-4 text-xs text-left shadow-sm">
+          <div className="p-4 rounded-2xl bg-card border border-border/80 max-w-xl mx-auto flex items-center justify-between gap-4 text-sm text-left shadow-sm">
             <div className="space-y-0.5">
               <span className="font-bold text-foreground">Want to verify your current level?</span>
               <p className="text-muted-foreground text-[11px]">
@@ -60,7 +60,7 @@ export default function RoadmapPage() {
             </div>
             <Link
               href="/resume-analyzer"
-              className="px-3.5 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs shrink-0 flex items-center gap-1 hover:opacity-90 transition-all"
+              className="px-3.5 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm shrink-0 flex items-center gap-1 hover:opacity-90 transition-all"
             >
               <span>Scan Resume</span>
               <ArrowRight className="w-3.5 h-3.5" />

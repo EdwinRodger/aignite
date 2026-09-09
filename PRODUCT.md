@@ -56,5 +56,5 @@ Unlike general coding or EdTech platforms that teach basic Python or passive the
 1. **Action Over Consumption:** No passive 2-hour videos; every concept is tested or constructed through tactile games, code debugging, or architectural trade-off decisions.
 2. **5-Second Feedback Loops:** Whether in the micro-feed quiz, pipeline assembler, or voice mock interview, evaluation is immediate, diagnostic, and actionable.
 3. **Desktop-First Power, Mobile-First Agility:** Rich simulators and dashboards thrive on desktop screens, while the feed and daily streaks are instantaneous and seamless on mobile.
-4. **Ruthless Architectural Truth:** Problems reflect genuine production bottlenecks—quantization limits, token context limits, CUDA OOM, RAG retrieval drift, and latency tradeoffs.
+4. **Ruthless Architectural Truth:** Problems reflect genuine production bottlenecks-quantization limits, token context limits, CUDA OOM, RAG retrieval drift, and latency tradeoffs.
 5. **Zero-Cost Accessibility:** Engineered to operate completely on free-tier infrastructure so learners and hackathon evaluators face zero friction or paywalls.

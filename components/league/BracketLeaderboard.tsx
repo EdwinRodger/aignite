@@ -30,7 +30,7 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
               <Trophy className="w-3.5 h-3.5" />
               <span>Weekly Bracket Standings</span>
             </span>
-            <span className="text-xs text-muted-foreground font-mono">30-Candidate Cohort</span>
+            <span className="text-sm text-muted-foreground font-mono">30-Candidate Cohort</span>
           </div>
           <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
             Live Competitive Leaderboard
@@ -38,7 +38,7 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
         </div>
 
         {/* View Switcher Pills */}
-        <div className="flex items-center rounded-xl bg-muted/60 p-1 border border-border text-xs">
+        <div className="flex items-center rounded-xl bg-muted/60 p-1 border border-border text-sm">
           <button
             type="button"
             onClick={() => setActiveTab('bracket')}
@@ -81,7 +81,7 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
       </div>
 
       {/* Zone Demarcation Legend */}
-      <div className="flex flex-wrap items-center gap-4 text-xs font-mono py-1 px-2 rounded-xl bg-muted/30 border border-border/60">
+      <div className="flex flex-wrap items-center gap-4 text-sm font-mono py-1 px-2 rounded-xl bg-muted/30 border border-border/60">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
           <span className="text-emerald-500 font-semibold">Promotion Zone (Ranks 1–6): Advances to Gold</span>
@@ -110,7 +110,7 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
               <th className="py-3 px-3 text-right hidden sm:table-cell">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/60 text-xs font-sans">
+          <tbody className="divide-y divide-border/60 text-sm font-sans">
             {members.map((member) => {
               const isPromo = member.rank <= 6;
               const isDemote = member.rank >= 25;
@@ -138,7 +138,7 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
                         <span className="text-base select-none">🥉</span>
                       ) : (
                         <span
-                          className={`font-mono font-bold text-xs ${
+                          className={`font-mono font-bold text-sm ${
                             isCurrent ? 'text-primary' : isPromo ? 'text-emerald-500' : 'text-muted-foreground'
                           }`}
                         >
@@ -152,7 +152,7 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
                   <td className="py-3.5 px-3">
                     <div className="flex items-center gap-2.5">
                       <div
-                        className={`w-8 h-8 rounded-full font-bold font-mono text-xs flex items-center justify-center shrink-0 ${member.avatarBg}`}
+                        className={`w-8 h-8 rounded-full font-bold font-mono text-sm flex items-center justify-center shrink-0 ${member.avatarBg}`}
                       >
                         {member.name.slice(0, 2).toUpperCase()}
                       </div>
@@ -191,7 +191,7 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
                           </span>
                         ))
                       ) : (
-                        <span className="text-[10px] text-muted-foreground italic">—</span>
+                        <span className="text-[10px] text-muted-foreground italic">-</span>
                       )}
                     </div>
                   </td>
@@ -199,17 +199,17 @@ export function BracketLeaderboard({ members }: BracketLeaderboardProps) {
                   {/* Streak */}
                   <td className="py-3.5 px-3 text-center">
                     {member.streakDays > 0 ? (
-                      <span className="inline-flex items-center gap-1 font-mono font-semibold text-xs text-foreground">
+                      <span className="inline-flex items-center gap-1 font-mono font-semibold text-sm text-foreground">
                         <Flame className="w-3.5 h-3.5 text-primary" />
                         <span>{member.streakDays}d</span>
                       </span>
                     ) : (
-                      <span className="text-muted-foreground text-xs font-mono">—</span>
+                      <span className="text-muted-foreground text-sm font-mono">-</span>
                     )}
                   </td>
 
                   {/* Weekly Points */}
-                  <td className="py-3.5 px-3 text-right font-mono font-bold text-xs text-foreground">
+                  <td className="py-3.5 px-3 text-right font-mono font-bold text-sm text-foreground">
                     {member.weeklyPoints} XP
                   </td>
 

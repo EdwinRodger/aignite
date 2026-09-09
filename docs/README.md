@@ -1,4 +1,4 @@
-# AIgnite (pronounced *ignite*) — System Documentation
+# AIgnite (pronounced *ignite*) - System Documentation
 > **SIH 2026 Project | Next-Generation AI-Only Learning & Career Platform**
 
 ---
@@ -74,9 +74,9 @@ graph TD
 ---
 
 ## 🎯 Target Milestones for SIH 2026
-1. **Phase 1: Core Foundation & Auth** — Supabase setup, Next.js App Router layout, role-based navigation (Student vs. Recruiter).
-2. **Phase 2: Interactive Learning Engine** — Text modules, Pipeline Bubble Game, Decision Simulator, Error Hunter MCQ.
-3. **Phase 3: AI Interview Coach & Report Card** — Daily Voice Coach, Audio-based Mock Interview, automated multi-axis scoring.
-4. **Phase 4: Gamification & Leagues** — Weekly AI Interview League progression, Streak tracker, Badges, Regional/Global Leaderboard.
-5. **Phase 5: Recruiter Portal & Resume Analyzer** — PDF parsing, candidate search, skill gap analysis, and one-stop hiring filter.
-6. **Phase 6: Mobile WebView Wrapper** — React Native shell with notifications, offline caching, and responsive UI.
+1. **Phase 1: Core Foundation & Auth** - Supabase setup, Next.js App Router layout, role-based navigation (Student vs. Recruiter).
+2. **Phase 2: Interactive Learning Engine** - Text modules, Pipeline Bubble Game, Decision Simulator, Error Hunter MCQ.
+3. **Phase 3: AI Interview Coach & Report Card** - Daily Voice Coach, Audio-based Mock Interview, automated multi-axis scoring.
+4. **Phase 4: Gamification & Leagues** - Weekly AI Interview League progression, Streak tracker, Badges, Regional/Global Leaderboard.
+5. **Phase 5: Recruiter Portal & Resume Analyzer** - PDF parsing, candidate search, skill gap analysis, and one-stop hiring filter.
+6. **Phase 6: Mobile WebView Wrapper** - React Native shell with notifications, offline caching, and responsive UI.

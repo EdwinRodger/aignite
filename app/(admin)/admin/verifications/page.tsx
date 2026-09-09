@@ -87,14 +87,14 @@ export default function AdminVerificationsPage() {
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-border">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-xs font-bold text-primary mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-sm font-bold text-primary mb-2">
               <Lock className="w-3.5 h-3.5" />
               <span>Platform Admin & Trust Console</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground font-sans">
               Recruiter Verification Queue
             </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Review company identities, validate corporate email domains, and authorize candidate resume access.
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function AdminVerificationsPage() {
 
         {/* Filter Controls */}
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-1.5 bg-muted/60 p-1 rounded-xl border border-border text-xs font-medium">
+          <div className="flex items-center gap-1.5 bg-muted/60 p-1 rounded-xl border border-border text-sm font-medium">
             <Filter className="w-3.5 h-3.5 ml-2 text-muted-foreground" />
             <button
               onClick={() => setFilter('all')}
@@ -144,7 +144,7 @@ export default function AdminVerificationsPage() {
 
           <Link
             href="/recruiter/apply"
-            className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+            className="text-sm font-semibold text-primary hover:underline flex items-center gap-1"
           >
             <span>+ Test New Application Form</span>
           </Link>
@@ -160,7 +160,7 @@ export default function AdminVerificationsPage() {
           <div className="text-center py-16 rounded-3xl bg-card border border-border p-8 space-y-2">
             <ShieldCheck className="w-10 h-10 text-emerald-500 mx-auto" />
             <h3 className="text-base font-bold text-foreground">No applications in this view</h3>
-            <p className="text-xs text-muted-foreground">All corporate recruiter submissions have been processed.</p>
+            <p className="text-sm text-muted-foreground">All corporate recruiter submissions have been processed.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4">
@@ -181,8 +181,8 @@ export default function AdminVerificationsPage() {
                         <span className="text-base font-bold text-foreground font-sans">
                           {item.fullName}
                         </span>
-                        <span className="text-xs text-muted-foreground">•</span>
-                        <span className="text-xs font-semibold text-primary">
+                        <span className="text-sm text-muted-foreground">•</span>
+                        <span className="text-sm font-semibold text-primary">
                           {item.recruiterDesignation}
                         </span>
                         {isPending && (
@@ -205,7 +205,7 @@ export default function AdminVerificationsPage() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
                         <div className="flex items-center gap-1 font-semibold text-foreground">
                           <Building2 className="w-3.5 h-3.5 text-muted-foreground" />
                           <span>{item.companyName}</span>
@@ -249,7 +249,7 @@ export default function AdminVerificationsPage() {
                           <button
                             onClick={() => handleToggle(item.id, 'approved')}
                             disabled={isBusy}
-                            className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                            className="px-4 py-2 rounded-xl text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                           >
                             {isBusy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
                             <span>Approve & Grant Access</span>
@@ -257,7 +257,7 @@ export default function AdminVerificationsPage() {
                           <button
                             onClick={() => handleToggle(item.id, 'rejected')}
                             disabled={isBusy}
-                            className="px-3 py-2 rounded-xl text-xs font-bold bg-muted hover:bg-destructive/10 text-muted-foreground hover:text-destructive border border-border transition-all flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                            className="px-3 py-2 rounded-xl text-sm font-bold bg-muted hover:bg-destructive/10 text-muted-foreground hover:text-destructive border border-border transition-all flex items-center gap-1 cursor-pointer disabled:opacity-50"
                           >
                             <XCircle className="w-3.5 h-3.5" />
                             <span>Reject</span>
@@ -269,7 +269,7 @@ export default function AdminVerificationsPage() {
                         <button
                           onClick={() => handleToggle(item.id, 'rejected')}
                           disabled={isBusy}
-                          className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-muted hover:bg-destructive/10 text-muted-foreground hover:text-destructive border border-border transition-all cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl text-sm font-semibold bg-muted hover:bg-destructive/10 text-muted-foreground hover:text-destructive border border-border transition-all cursor-pointer"
                         >
                           Revoke Access
                         </button>
@@ -279,7 +279,7 @@ export default function AdminVerificationsPage() {
                         <button
                           onClick={() => handleToggle(item.id, 'approved')}
                           disabled={isBusy}
-                          className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-muted hover:bg-emerald-500/10 text-muted-foreground hover:text-emerald-500 border border-border transition-all cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl text-sm font-semibold bg-muted hover:bg-emerald-500/10 text-muted-foreground hover:text-emerald-500 border border-border transition-all cursor-pointer"
                         >
                           Re-Approve
                         </button>

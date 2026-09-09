@@ -1,4 +1,4 @@
-# System Design & Architecture Document — AIgnite
+# System Design & Architecture Document - AIgnite
 > **Project**: AIgnite (*pronounced ignite, 'A' is silent*)  
 > **Event**: Smart India Hackathon (SIH) 2026  
 > **Architecture Style**: Modern Jamstack / Serverless BaaS with Next.js App Router & Supabase

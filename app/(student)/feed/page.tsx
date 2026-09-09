@@ -69,16 +69,16 @@ export default function FeedPage() {
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
                 <Flame className="w-3.5 h-3.5" />
                 <span>AIgnite Pulse</span>
               </span>
-              <span className="text-xs text-muted-foreground font-mono">5-Minute Downtime Learning</span>
+              <span className="text-sm text-muted-foreground font-mono">5-Minute Downtime Learning</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
               Interactive AI Sparks Feed
             </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
+            <p className="text-sm text-muted-foreground mt-1 max-w-xl">
               Replace passive social media doomscrolling. Solve 5-second architectural micro-quizzes, explore production AI breakthroughs, and earn weekly interview league XP.
             </p>
           </div>
@@ -87,9 +87,9 @@ export default function FeedPage() {
           <div className="sm:hidden flex items-center justify-between p-3 rounded-xl bg-card border border-border">
             <div className="flex items-center gap-2">
               <Flame className="w-4 h-4 text-primary" />
-              <span className="text-xs font-bold font-mono">{streakCount} Day Streak</span>
+              <span className="text-sm font-bold font-mono">{streakCount} Day Streak</span>
             </div>
-            <div className="text-xs font-mono font-bold text-primary">
+            <div className="text-sm font-mono font-bold text-primary">
               +{totalPoints} League XP
             </div>
           </div>
@@ -112,13 +112,13 @@ export default function FeedPage() {
               <div className="p-12 text-center rounded-2xl bg-card border border-border">
                 <Sparkles className="w-8 h-8 text-primary mx-auto mb-3" />
                 <h3 className="text-base font-bold text-foreground">No Sparks Found</h3>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Try switching category or synthesize a new card in the sidebar.
                 </p>
                 <button
                   type="button"
                   onClick={() => setActiveCategory('All')}
-                  className="mt-4 px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-primary-foreground"
+                  className="mt-4 px-4 py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground"
                 >
                   View All Sparks
                 </button>
@@ -135,7 +135,7 @@ export default function FeedPage() {
 
             {/* End of Feed Callout */}
             <div className="p-6 text-center rounded-2xl bg-muted/30 border border-border/60">
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 🎉 You are all caught up on today&apos;s AI breakthroughs!
               </p>
               <p className="text-[11px] text-muted-foreground mt-1">

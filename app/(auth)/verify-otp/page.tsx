@@ -152,7 +152,7 @@ function VerifyOtpContent() {
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-sans">
             Enter Verification Code
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             We sent a 6-digit code to{' '}
             <span className="font-semibold text-foreground">{email}</span>
           </p>
@@ -160,7 +160,7 @@ function VerifyOtpContent() {
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-4 p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs flex items-center gap-2 animate-in fade-in duration-200">
+          <div className="mb-4 p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2 animate-in fade-in duration-200">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -168,7 +168,7 @@ function VerifyOtpContent() {
 
         {/* Resend Success Alert */}
         {resendSuccess && (
-          <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs flex items-center gap-2 animate-in fade-in duration-200">
+          <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-sm flex items-center gap-2 animate-in fade-in duration-200">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>A fresh verification code has been dispatched to your inbox.</span>
           </div>
@@ -224,7 +224,7 @@ function VerifyOtpContent() {
         </div>
 
         {/* Resend Action Pill */}
-        <div className="mt-6 flex flex-col items-center gap-2 text-xs text-muted-foreground">
+        <div className="mt-6 flex flex-col items-center gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <span>Didn&apos;t receive the code?</span>
             {resendTimer > 0 ? (

@@ -61,7 +61,7 @@ export function TierBadgeHeader({
               <Clock className="w-3 h-3 text-primary" />
               <span>Cycle Ends</span>
             </span>
-            <span className="text-xs sm:text-sm font-bold text-foreground font-mono mt-0.5">
+            <span className="text-sm font-bold text-foreground font-mono mt-0.5">
               {timeRemaining.split('(')[0].trim()}
             </span>
           </div>
@@ -71,7 +71,7 @@ export function TierBadgeHeader({
               <Zap className="w-3 h-3" />
               <span>Your Weekly Score</span>
             </span>
-            <span className="text-xs sm:text-sm font-black text-primary font-mono mt-0.5">
+            <span className="text-sm font-black text-primary font-mono mt-0.5">
               {weeklyPoints} XP
             </span>
           </div>
@@ -101,7 +101,7 @@ export function TierBadgeHeader({
                   <span className="text-lg">{tier.badgeIcon}</span>
                   <span className="text-[10px] font-mono text-muted-foreground">Tier {idx + 1}</span>
                 </div>
-                <div className={`text-xs font-bold ${isCurrent ? 'text-primary' : 'text-foreground'}`}>
+                <div className={`text-sm font-bold ${isCurrent ? 'text-primary' : 'text-foreground'}`}>
                   {tier.name.split(' ')[0]}
                 </div>
                 <span className="text-[10px] text-muted-foreground mt-0.5 truncate">

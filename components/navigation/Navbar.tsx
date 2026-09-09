@@ -82,7 +82,7 @@ export function Navbar() {
       {/* Accessible Skip Link */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:font-semibold focus:text-xs focus:rounded-lg focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-ring"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:font-semibold focus:text-sm focus:rounded-lg focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-ring"
       >
         Skip to main content
       </a>
@@ -159,7 +159,7 @@ export function Navbar() {
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
                     AI Resume ATS Analyzer
                   </div>
                   <div className="text-[11px] text-muted-foreground leading-snug">
@@ -176,7 +176,7 @@ export function Navbar() {
                   <Mic className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
                     Voice Mock Interview (POTD)
                   </div>
                   <div className="text-[11px] text-muted-foreground leading-snug">
@@ -193,7 +193,7 @@ export function Navbar() {
                   <Layers className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
                     Course Packs &amp; Materials
                   </div>
                   <div className="text-[11px] text-muted-foreground leading-snug">
@@ -210,7 +210,7 @@ export function Navbar() {
                   <Map className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
                     AI Systems Roadmap
                   </div>
                   <div className="text-[11px] text-muted-foreground leading-snug">
@@ -227,7 +227,7 @@ export function Navbar() {
                   <Flame className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
                     AIgnite Pulse (Sparks)
                   </div>
                   <div className="text-[11px] text-muted-foreground leading-snug">
@@ -245,7 +245,7 @@ export function Navbar() {
                     <Trophy className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors flex items-center gap-1.5">
+                    <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors flex items-center gap-1.5">
                       <span>Competitive Leaderboards</span>
                       <span className="text-[9px] px-1.5 py-0.2 rounded bg-chart-5/15 text-chart-5 font-mono font-semibold">Live</span>
                     </div>
@@ -311,7 +311,7 @@ export function Navbar() {
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
                     Apply for Access
                   </div>
                   <div className="text-[11px] text-muted-foreground leading-snug">
@@ -328,7 +328,7 @@ export function Navbar() {
                   <KeyRound className="w-4 h-4 text-chart-2" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-foreground group-hover/item:text-primary transition-colors">
+                  <div className="text-sm font-bold text-foreground group-hover/item:text-primary transition-colors">
                     Recruiter Sign In
                   </div>
                   <div className="text-[11px] text-muted-foreground leading-snug">
@@ -345,7 +345,7 @@ export function Navbar() {
           {userRole === 'student' ? (
             <Link
               href="/dashboard"
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
               <span>Dashboard</span>
@@ -354,7 +354,7 @@ export function Navbar() {
           ) : userRole === 'recruiter' ? (
             <Link
               href="/recruiter/dashboard"
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Briefcase className="w-3.5 h-3.5" />
               <span>Recruiter Dashboard</span>
@@ -363,7 +363,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span>Sign In with OTP</span>
               <ArrowRight className="w-3.5 h-3.5" />

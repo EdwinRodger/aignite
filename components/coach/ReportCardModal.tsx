@@ -109,7 +109,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
             <div className="text-right">
               <div className="text-2xl sm:text-3xl font-black text-primary font-mono leading-none">
                 {report.scores.compositeScore}
-                <span className="text-xs text-muted-foreground font-sans font-normal"> / 10.0</span>
+                <span className="text-sm text-muted-foreground font-sans font-normal"> / 10.0</span>
               </div>
               <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded border ${tier.color}`}>
                 {tier.label}
@@ -120,11 +120,11 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
 
         {/* 5-Axis Score Breakdown Grid */}
         <div className="space-y-2.5">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground block">
+          <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground block">
             5-Axis Performance Breakdown:
           </span>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
             {[
               { label: 'Knowledge Depth', score: report.scores.knowledgeScore, weight: '35% weight' },
               { label: 'Industry Readiness', score: report.scores.industryReadinessScore, weight: '20% weight' },
@@ -133,7 +133,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
               { label: 'Production Examples', score: report.scores.examplesScore, weight: '15% weight' },
             ].map((axis, i) => (
               <div key={i} className="p-3 rounded-xl bg-muted/40 border border-border space-y-1.5">
-                <div className="flex justify-between items-center text-xs">
+                <div className="flex justify-between items-center text-sm">
                   <span className="font-semibold text-foreground">{axis.label}</span>
                   <div className="flex items-center gap-1 font-mono">
                     <span className="font-bold text-foreground">{axis.score}</span>
@@ -152,7 +152,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
         </div>
 
         {/* Speech Telemetry Bar */}
-        <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-muted/50 border border-border font-mono text-xs">
+        <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-muted/50 border border-border font-mono text-sm">
           <div className="flex flex-col">
             <span className="text-[10px] text-muted-foreground flex items-center gap-1">
               <Gauge className="w-3 h-3 text-primary" />
@@ -195,7 +195,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Strengths */}
           <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-500">
+            <div className="flex items-center gap-1.5 text-sm font-bold text-emerald-500">
               <CheckCircle2 className="w-4 h-4" />
               <span>Demonstrated Strengths</span>
             </div>
@@ -211,7 +211,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
 
           {/* Improvements */}
           <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-500">
+            <div className="flex items-center gap-1.5 text-sm font-bold text-amber-500">
               <AlertTriangle className="w-4 h-4" />
               <span>Areas for Revision</span>
             </div>
@@ -231,7 +231,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
           <button
             type="button"
             onClick={() => setShowModelAnswer(!showModelAnswer)}
-            className="w-full p-3.5 flex items-center justify-between text-xs font-bold text-foreground hover:bg-muted/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="w-full p-3.5 flex items-center justify-between text-sm font-bold text-foreground hover:bg-muted/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-primary" />
@@ -241,7 +241,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
           </button>
 
           {showModelAnswer && (
-            <div className="p-4 border-t border-border bg-card text-xs text-foreground/90 leading-relaxed font-sans animate-in fade-in">
+            <div className="p-4 border-t border-border bg-card text-sm text-foreground/90 leading-relaxed font-sans animate-in fade-in">
               <p>{report.principalModelAnswer}</p>
             </div>
           )}
@@ -254,7 +254,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
               <Flame className="w-5 h-5 animate-pulse" />
             </div>
             <div>
-              <span className="text-xs font-bold text-foreground block">
+              <span className="text-sm font-bold text-foreground block">
                 Daily Habit Maintained! +25 League XP Claimed
               </span>
               <span className="text-[11px] text-muted-foreground">
@@ -262,7 +262,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
               </span>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-1 font-mono font-bold text-primary text-xs">
+          <div className="hidden sm:flex items-center gap-1 font-mono font-bold text-primary text-sm">
             <Zap className="w-4 h-4" />
             <span>+25 XP</span>
           </div>
@@ -273,7 +273,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
           <button
             type="button"
             onClick={handleShare}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground border border-border hover:bg-muted transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground border border-border hover:bg-muted transition-colors"
           >
             {copiedShare ? <Check className="w-3.5 h-3.5 text-primary" /> : <Share2 className="w-3.5 h-3.5" />}
             <span>{copiedShare ? 'Report Copied!' : 'Share Score'}</span>
@@ -282,7 +282,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
           <button
             type="button"
             onClick={onContinue}
-            className="px-6 py-2.5 rounded-xl text-xs font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95"
+            className="px-6 py-2.5 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-all active:scale-95"
           >
             Done Practicing
           </button>

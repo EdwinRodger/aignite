@@ -88,7 +88,7 @@ export function WeeklyChallengesCard({
           </div>
         </div>
 
-        <span className="text-xs font-mono font-bold text-primary px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20">
+        <span className="text-sm font-mono font-bold text-primary px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20">
           {completedIds.length}/{challenges.length} Done
         </span>
       </div>
@@ -124,7 +124,7 @@ export function WeeklyChallengesCard({
                       +{challenge.pointsAwarded} XP
                     </span>
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-foreground leading-snug">
+                  <h4 className="text-sm font-bold text-foreground leading-snug">
                     {challenge.title}
                   </h4>
                 </div>
@@ -146,7 +146,7 @@ export function WeeklyChallengesCard({
               {/* Expandable Submission Form */}
               {isOpen && !isDone && (
                 <div className="p-4 border-t border-border/60 bg-card space-y-3 animate-in fade-in">
-                  <p className="text-xs text-foreground/90 leading-relaxed font-sans">
+                  <p className="text-sm text-foreground/90 leading-relaxed font-sans">
                     {challenge.prompt}
                   </p>
 
@@ -161,7 +161,7 @@ export function WeeklyChallengesCard({
                       onChange={(e) => setAnswerText(e.target.value)}
                       placeholder="Outline your architectural solution, trade-offs, and failure mode mitigations..."
                       rows={3}
-                      className="w-full p-3 rounded-xl bg-muted/50 border border-border text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="w-full p-3 rounded-xl bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     />
 
                     <div className="flex justify-end">
@@ -169,7 +169,7 @@ export function WeeklyChallengesCard({
                         type="button"
                         onClick={() => handleSubmit(challenge.id)}
                         disabled={!answerText.trim() || isSubmitting}
-                        className="px-4 py-2 rounded-xl text-xs font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-sm shadow-primary/20 transition-all flex items-center gap-1.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="px-4 py-2 rounded-xl text-sm font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-sm shadow-primary/20 transition-all flex items-center gap-1.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         {isSubmitting ? (
                           <>
@@ -190,7 +190,7 @@ export function WeeklyChallengesCard({
 
               {/* Completion Feedback */}
               {isDone && feedback && (
-                <div className="p-3 border-t border-emerald-500/20 text-xs text-emerald-500 flex items-center gap-2">
+                <div className="p-3 border-t border-emerald-500/20 text-sm text-emerald-500 flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>{feedback}</span>
                 </div>

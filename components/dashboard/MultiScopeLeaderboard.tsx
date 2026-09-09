@@ -67,7 +67,7 @@ export function MultiScopeLeaderboard() {
               Competitive AI Leaderboard
             </h3>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Ranked by daily spoken interview consistency and verified technical capstones.
           </p>
         </div>
@@ -81,7 +81,7 @@ export function MultiScopeLeaderboard() {
             aria-selected={metric === 'streak'}
             aria-controls="leaderboard-roster-panel"
             onClick={() => setMetric('streak')}
-            className={`min-h-[40px] px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+            className={`min-h-[40px] px-3.5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               metric === 'streak'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
@@ -97,7 +97,7 @@ export function MultiScopeLeaderboard() {
             aria-selected={metric === 'score'}
             aria-controls="leaderboard-roster-panel"
             onClick={() => setMetric('score')}
-            className={`min-h-[40px] px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+            className={`min-h-[40px] px-3.5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               metric === 'score'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
@@ -110,7 +110,7 @@ export function MultiScopeLeaderboard() {
       </div>
 
       {/* Scope Selector (Regional, National, International) */}
-      <div role="tablist" aria-label="Leaderboard geographic scope" className="flex flex-wrap items-center gap-2 text-xs">
+      <div role="tablist" aria-label="Leaderboard geographic scope" className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-[11px] font-mono uppercase text-muted-foreground mr-1">Scope:</span>
         <button
           type="button"
@@ -166,7 +166,7 @@ export function MultiScopeLeaderboard() {
 
       {/* Leaderboard Table */}
       <div id="leaderboard-roster-panel" role="tabpanel" aria-labelledby={metric === 'streak' ? 'tab-metric-streak' : 'tab-metric-score'} className="overflow-x-auto">
-        <table className="w-full text-left text-xs" aria-label="Competitive AI Leaderboard Roster">
+        <table className="w-full text-left text-sm" aria-label="Competitive AI Leaderboard Roster">
           <thead>
             <tr className="border-b border-border/80 text-[10px] font-mono text-muted-foreground uppercase">
               <th scope="col" className="py-2.5 px-3">Rank</th>
@@ -192,7 +192,7 @@ export function MultiScopeLeaderboard() {
                 <td className="py-3 px-3 font-mono">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs ${
+                      className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-sm ${
                         idx === 0
                           ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 font-black'
                           : idx === 1
@@ -217,7 +217,7 @@ export function MultiScopeLeaderboard() {
                 <td className="py-3 px-3">
                   <div className="flex items-center gap-2.5">
                     <div
-                      className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${entry.avatarBg}`}
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 ${entry.avatarBg}`}
                     >
                       {entry.name.slice(0, 2).toUpperCase()}
                     </div>

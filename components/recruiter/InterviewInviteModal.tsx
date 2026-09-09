@@ -79,7 +79,7 @@ export function InterviewInviteModal({
               <h2 id="invite-title" className="text-base font-bold text-foreground font-sans">
                 Dispatch Interview Invitation
               </h2>
-              <p className="text-xs text-muted-foreground font-mono">
+              <p className="text-sm text-muted-foreground font-mono">
                 To: {candidate.fullName} ({candidate.collegeOrCompany})
               </p>
             </div>
@@ -101,14 +101,14 @@ export function InterviewInviteModal({
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <h3 className="text-lg font-bold text-foreground">Interview Invitation Dispatched!</h3>
-            <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+            <p className="text-sm text-muted-foreground max-w-xs mx-auto">
               {candidate.fullName} has been sent an official notification with priority fast-track scheduling.
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSend} className="p-6 space-y-4 text-xs">
+          <form onSubmit={handleSend} className="p-6 space-y-4 text-sm">
             {error && (
-              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs">
+              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm">
                 {error}
               </div>
             )}

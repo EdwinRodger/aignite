@@ -173,7 +173,7 @@ export default function HomePage() {
               {/* Left Column: Vision & Pitch */}
               <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
                 {/* SIH Pill Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/90 border border-border text-xs font-semibold text-foreground shadow-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/90 border border-border text-sm font-semibold text-foreground shadow-sm">
                   <Flame className="w-4 h-4 text-primary" />
                   <span>Smart India Hackathon (SIH) 2026 Initiative</span>
                   <span className="w-1 h-1 rounded-full bg-primary" />
@@ -185,7 +185,7 @@ export default function HomePage() {
                   <span className="text-primary">
                     5-Minute Daily Sparks
                   </span>{' '}
-                  — Not 50-Hour Videos.
+                  - Not 50-Hour Videos.
                 </h1>
 
                 <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed">
@@ -248,7 +248,7 @@ export default function HomePage() {
                 <div className="mt-3 text-center">
                   <Link
                     href="/feed"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline group"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline group"
                   >
                     <span>Explore all 8+ AI Sparks & Full Feed</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -266,18 +266,18 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary mb-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-sm font-bold text-primary mb-2">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Public Features Hub • 100% Free &amp; Open Access</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   Everything You Need to Break into Applied AI Systems
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-2xl">
+                <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
                   Publicly accessible engineering tools designed to bridge academic theory with 2026 production standards.
                 </p>
               </div>
-              <span className="text-xs font-mono text-muted-foreground mt-4 md:mt-0">
+              <span className="text-sm font-mono text-muted-foreground mt-4 md:mt-0">
                 ⚡ No credit card required • Instant evaluation
               </span>
             </div>
@@ -303,12 +303,12 @@ export default function HomePage() {
                       <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                         {feat.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                         {feat.description}
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-border flex items-center justify-between text-xs">
+                    <div className="pt-3 border-t border-border flex items-center justify-between text-sm">
                       <Link
                         href={feat.href}
                         className="inline-flex items-center gap-1.5 font-bold text-primary hover:underline group/link"
@@ -331,20 +331,20 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-500">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-sm font-bold text-orange-500">
                   <Flame className="w-4 h-4" />
                   <span>Problem of the Day • Daily Streak Driver</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   Tackle Today&apos;s High-Yield Architecture Challenge
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Every morning at 06:00 IST, AIgnite drops one production interview scenario. Speak your answer into the voice coach or study key canonical trade-offs to keep your league streak burning.
                 </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                   <Link
                     href="/coach"
-                    className="px-5 py-3 rounded-xl text-xs font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center gap-2 transition-transform active:scale-95"
+                    className="px-5 py-3 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center gap-2 transition-transform active:scale-95"
                   >
                     <Mic className="w-4 h-4" />
                     <span>Solve in Voice Mock Interview</span>
@@ -352,7 +352,7 @@ export default function HomePage() {
                   </Link>
                   <Link
                     href="/feed"
-                    className="px-5 py-3 rounded-xl text-xs font-bold bg-card hover:bg-muted text-foreground border border-border flex items-center gap-2 transition-colors"
+                    className="px-5 py-3 rounded-xl text-sm font-bold bg-card hover:bg-muted text-foreground border border-border flex items-center gap-2 transition-colors"
                   >
                     <Sparkles className="w-4 h-4 text-primary" />
                     <span>Browse 5-Second Sparks</span>
@@ -366,11 +366,11 @@ export default function HomePage() {
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping motion-reduce:animate-none" />
-                      <span className="text-xs font-bold font-mono text-foreground uppercase tracking-wider">
+                      <span className="text-sm font-bold font-mono text-foreground uppercase tracking-wider">
                         Today&apos;s Active Challenge
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono">
+                    <div className="flex items-center gap-2 text-sm font-mono">
                       <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">
                         {todayQuestion.track}
                       </span>
@@ -384,7 +384,7 @@ export default function HomePage() {
                     <h3 className="text-base sm:text-lg font-black text-foreground mb-2">
                       {todayQuestion.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       &quot;{todayQuestion.questionText}&quot;
                     </p>
                   </div>
@@ -394,7 +394,7 @@ export default function HomePage() {
                       <Zap className="w-3.5 h-3.5" />
                       <span>Canonical Focus Points Expected by Interviewers</span>
                     </div>
-                    <ul className="space-y-1.5 text-xs text-muted-foreground">
+                    <ul className="space-y-1.5 text-sm text-muted-foreground">
                       {todayQuestion.canonicalKeyPoints.slice(0, 3).map((point, idx) => (
                         <li key={idx} className="flex items-start gap-2">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
@@ -404,7 +404,7 @@ export default function HomePage() {
                     </ul>
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between text-xs font-mono">
+                  <div className="pt-2 flex items-center justify-between text-sm font-mono">
                     <div className="flex items-center gap-1 text-muted-foreground">
                       <span>Target Time:</span>
                       <span className="text-foreground font-bold">{todayQuestion.estimatedSpeakingTime}</span>
@@ -426,7 +426,7 @@ export default function HomePage() {
         <section className="py-16 border-y border-border bg-muted/20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-widest text-primary mb-2 block">
                 The Productive Instagram Alternative
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
@@ -444,7 +444,7 @@ export default function HomePage() {
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-foreground mb-2">Curated AI Breakthroughs</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   No generic software tutorials. Zero noise. Strictly deep-dive breakthroughs in LLMs,
                   FlashAttention, RAG architectures, and model quantization.
                 </p>
@@ -455,7 +455,7 @@ export default function HomePage() {
                   <Brain className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-foreground mb-2">5-Second Embedded Quizzes</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Passive reading fails retention. Every card tests your comprehension with single-tap check questions
                   rewarding immediate points toward your league standing.
                 </p>
@@ -466,7 +466,7 @@ export default function HomePage() {
                   <Flame className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-foreground mb-2">Mobile Default Landing</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Open the app on your phone and dive straight into the swipeable feed.
                   Configurable in preferences if you prefer the dashboard or voice coach first.
                 </p>
@@ -493,20 +493,20 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
               <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-primary mb-1 block">
+                <span className="text-sm font-bold uppercase tracking-widest text-primary mb-1 block">
                   Company-Specific Skill Packs
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   Learn What Top AI Teams Actually Use
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
+                <p className="text-sm text-muted-foreground mt-1 max-w-xl">
                   Instead of selling a single bloated 100-hour course, master modular company packs
                   engineered to match actual technical interview bars.
                 </p>
               </div>
               <Link
                 href="/packs"
-                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
+                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
               >
                 <span>View All Packs</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -526,10 +526,10 @@ export default function HomePage() {
                     </span>
                   </div>
                   <h3 className="text-lg font-bold text-foreground mb-2">{pack.name}</h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                     {pack.description}
                   </p>
-                  <div className="flex items-center justify-between pt-3 border-t border-border text-xs">
+                  <div className="flex items-center justify-between pt-3 border-t border-border text-sm">
                     <span className="text-muted-foreground">{pack.modules} Interactive Modules</span>
                     <span className="text-primary font-semibold flex items-center gap-1">
                       <span>Includes Capstone Mock</span>
@@ -548,18 +548,18 @@ export default function HomePage() {
                     </span>
                   </div>
                   <h3 className="text-lg font-bold text-foreground mb-2">Bubble Game: RAG Master</h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     Build low-latency retrieval pipelines against the clock! Drag and connect Chunkers,
                     Embeddings, Vector Stores, and LLM nodes under tight latency and memory constraints.
                   </p>
                 </div>
                 <div className="pt-4 mt-4 border-t border-border flex items-center justify-between">
-                  <span className="text-xs text-primary font-semibold flex items-center gap-1">
+                  <span className="text-sm text-primary font-semibold flex items-center gap-1">
                     <span>Unlocks &quot;RAG Master&quot; Badge</span>
                   </span>
                   <Link
                     href="/packs/nvidia-ai-pack"
-                    className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-primary hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-primary hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span>Play Now</span>
                     <ArrowRight className="w-3 h-3" />
@@ -578,14 +578,14 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               {/* Left Column: The League System */}
               <div className="lg:col-span-6 space-y-5">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-sm font-bold text-primary">
                   <Trophy className="w-3.5 h-3.5" />
                   <span>The AI Interview League 🏆</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   Duolingo for Technical AI Interviews
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Instead of a boring, static leaderboard, compete in weekly ranked divisions.
                   Solve 5 high-yield AI interview questions every week. Top 20% get promoted; bottom tier gets demoted.
                 </p>
@@ -599,7 +599,7 @@ export default function HomePage() {
                     >
                       <span className="text-xl">{tier.icon}</span>
                       <div>
-                        <div className="text-xs font-bold text-foreground">{tier.name}</div>
+                        <div className="text-sm font-bold text-foreground">{tier.name}</div>
                         <div className="text-[10px] text-muted-foreground">Weekly Top 20% Promotion</div>
                       </div>
                     </div>
@@ -615,12 +615,12 @@ export default function HomePage() {
                       <h3 className="text-sm font-bold text-foreground">AI Interview Report Card</h3>
                       <p className="text-[11px] text-muted-foreground">Automated Speech & Concept Evaluation</p>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full bg-primary/15 text-primary border border-primary/30 text-xs font-bold font-mono">
+                    <span className="px-2.5 py-1 rounded-full bg-primary/15 text-primary border border-primary/30 text-sm font-bold font-mono">
                       Overall: 8.2 / 10
                     </span>
                   </div>
 
-                  <div className="space-y-3 font-mono text-xs">
+                  <div className="space-y-3 font-mono text-sm">
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
                         <span className="text-muted-foreground">Knowledge Depth</span>
@@ -672,7 +672,7 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-border flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-border flex items-center justify-between text-sm">
                     <span className="text-muted-foreground flex items-center gap-1">
                       <Mic className="w-3.5 h-3.5 text-primary" />
                       <span>Daily Morning Coach Habit</span>
@@ -692,7 +692,7 @@ export default function HomePage() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-12 gap-8 items-center">
               <div className="md:col-span-7 space-y-4 text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-sm font-bold text-emerald-600 dark:text-emerald-400">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Public Acquisition Engine • 100% Free</span>
                 </div>
@@ -701,14 +701,14 @@ export default function HomePage() {
                   Public AI Resume ATS Analyzer &amp; Skill Gap Radar
                 </h2>
 
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Is your resume ready for modern AI systems roles? Upload or paste your resume to get an instant 0–100 ATS score, benchmark against NVIDIA and Google engineering bars, identify missing technical gaps (quantization, kernels, agent loops), and get direct links to AIgnite modules that close those gaps.
                 </p>
 
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
                   <Link
                     href="/resume-analyzer"
-                    className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors"
+                    className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors"
                   >
                     <span>Analyze Your AI Resume Now</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -728,7 +728,7 @@ export default function HomePage() {
                         94%
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-foreground">ATS Systems Compatibility</div>
+                        <div className="text-sm font-bold text-foreground">ATS Systems Compatibility</div>
                         <div className="text-[10px] text-muted-foreground font-mono">Top 6% Percentile</div>
                       </div>
                     </div>
@@ -737,7 +737,7 @@ export default function HomePage() {
                     </span>
                   </div>
 
-                  <div className="space-y-1.5 text-xs">
+                  <div className="space-y-1.5 text-sm">
                     <div className="p-2.5 rounded-xl bg-muted/60 border border-border/80 flex items-center justify-between">
                       <span className="text-muted-foreground font-mono text-[11px]">GenAI &amp; RAG Systems</span>
                       <span className="text-primary font-bold">92%</span>
@@ -765,20 +765,20 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-4/10 border border-chart-4/20 text-xs font-bold text-chart-4 mb-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-4/10 border border-chart-4/20 text-sm font-bold text-chart-4 mb-2">
                   <Map className="w-3.5 h-3.5" />
                   <span>Public Competency Tree • 6-Stage Curriculum</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   The Applied AI Systems Roadmap
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
+                <p className="text-sm text-muted-foreground mt-1 max-w-xl">
                   Step-by-step career path from Mathematical Foundations to Distributed Training and Triton Kernels. Curated for 2026 AI systems hiring bars.
                 </p>
               </div>
               <Link
                 href="/roadmap"
-                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
+                className="mt-4 md:mt-0 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold text-primary hover:opacity-80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl border border-transparent hover:border-primary/20"
               >
                 <span>Explore Full Interactive Roadmap</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -802,7 +802,7 @@ export default function HomePage() {
                     <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                       {stage.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                    <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
                       {stage.headline}
                     </p>
                   </div>
@@ -818,7 +818,7 @@ export default function HomePage() {
             <div className="mt-8 text-center">
               <Link
                 href="/roadmap"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs bg-card hover:bg-muted text-foreground border border-border transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-card hover:bg-muted text-foreground border border-border transition-colors shadow-sm"
               >
                 <Map className="w-4 h-4 text-chart-4" />
                 <span>View All 6 Milestone Stages &amp; Recruiter Badges</span>
@@ -833,7 +833,7 @@ export default function HomePage() {
         {/* ========================================================================= */}
         <section className="py-16 border-t border-border bg-gradient-to-b from-background to-muted/30">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-sm font-bold text-primary">
               <Lock className="w-3.5 h-3.5" />
               <span>Gated Recruiter Mode & Anti-Impersonation</span>
             </div>
@@ -842,7 +842,7 @@ export default function HomePage() {
               Direct Recruiter Pipeline Without Resume Fluff
             </h2>
 
-            <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Recruiter accounts undergo manual verification and corporate domain validation to prevent student impersonation.
               Verified hiring managers search candidates based on proven skills: verified badges, league tiers, and real mock interview metrics.
             </p>
@@ -850,14 +850,14 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
               <Link
                 href="/recruiter/apply"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <span>Apply for Recruiter Access (Company Email)</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
               <Link
                 href="/recruiter/login"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-bold bg-card hover:bg-muted text-foreground border border-border flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold bg-card hover:bg-muted text-foreground border border-border flex items-center justify-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <span>Approved Recruiter Sign In</span>
               </Link>
@@ -872,20 +872,20 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-5/10 border border-chart-5/20 text-xs font-bold text-chart-5 mb-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-chart-5/10 border border-chart-5/20 text-sm font-bold text-chart-5 mb-2">
                   <Trophy className="w-3.5 h-3.5" />
                   <span>Multi-Scope Competitive Leaderboard • Weekly League</span>
                 </div>
                 <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                   Regional, National &amp; International Rankings
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+                <p className="text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
                   Compete with peers from your university, state, across India, and globally. Rank based on daily consistency (flame streak) or verified engineering score (XP).
                 </p>
               </div>
               <Link
                 href="/league"
-                className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 transition-all active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/20 transition-all active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span>View Full Division Leagues</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -899,11 +899,11 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
+      <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="font-bold text-foreground font-mono">AIgnite</span>
-            <span>— Smart India Hackathon (SIH) 2026</span>
+            <span>- Smart India Hackathon (SIH) 2026</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 text-muted-foreground">
             <Link href="/roadmap" className="min-h-[44px] inline-flex items-center px-2 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">AI Roadmap</Link>

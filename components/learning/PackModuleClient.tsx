@@ -46,14 +46,14 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
       <div className="flex items-center justify-between">
         <Link
           href="/packs"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors p-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors p-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Company Packs</span>
         </Link>
 
         {/* Live League Points Badge */}
-        <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-primary px-3 py-1 rounded-lg bg-primary/10 border border-primary/20">
+        <div className="flex items-center gap-1.5 text-sm font-mono font-bold text-primary px-3 py-1 rounded-lg bg-primary/10 border border-primary/20">
           <Zap className="w-3.5 h-3.5" />
           <span>+{earnedPoints} XP Claimed in Pack</span>
         </div>
@@ -69,7 +69,7 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
               {pack.badgeIcon}
             </span>
             <div>
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
+              <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground">
                 {pack.companyName} Curricula
               </span>
               <h1 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
@@ -78,12 +78,12 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
             </div>
           </div>
 
-          <p className="text-xs text-muted-foreground max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
             {pack.description}
           </p>
 
           {/* Module Progress Checkpoint */}
-          <div className="pt-2 flex flex-wrap items-center gap-3 text-xs">
+          <div className="pt-2 flex flex-wrap items-center gap-3 text-sm">
             <span className="text-muted-foreground">Activities Progress:</span>
             <div className="flex items-center gap-2">
               <span
@@ -128,7 +128,7 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
         <button
           type="button"
           onClick={() => setActiveTab('bubble')}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all border ${
             activeTab === 'bubble'
               ? 'bg-primary text-primary-foreground border-primary shadow-sm'
               : 'bg-card text-muted-foreground hover:text-foreground border-border'
@@ -142,7 +142,7 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
         <button
           type="button"
           onClick={() => setActiveTab('debugger')}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all border ${
             activeTab === 'debugger'
               ? 'bg-primary text-primary-foreground border-primary shadow-sm'
               : 'bg-card text-muted-foreground hover:text-foreground border-border'
@@ -156,7 +156,7 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
         <button
           type="button"
           onClick={() => setActiveTab('simulator')}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all border ${
             activeTab === 'simulator'
               ? 'bg-primary text-primary-foreground border-primary shadow-sm'
               : 'bg-card text-muted-foreground hover:text-foreground border-border'
@@ -202,7 +202,7 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
             <Trophy className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-xs sm:text-sm font-bold text-foreground">
+            <h4 className="text-sm font-bold text-foreground">
               Ready for the {pack.companyName} Capstone Interview?
             </h4>
             <p className="text-[11px] text-muted-foreground mt-0.5">
@@ -213,7 +213,7 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
 
         <Link
           href="/feed"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline shrink-0"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline shrink-0"
         >
           <span>Daily Sparks Practice</span>
           <ChevronRight className="w-4 h-4" />

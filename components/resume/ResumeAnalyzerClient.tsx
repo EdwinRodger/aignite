@@ -25,7 +25,7 @@ SUMMARY:
 Final-year CS student with strong foundations in PyTorch, Large Language Models, and RAG systems. Built low-latency generative AI applications with pgvector and vLLM. Seeking an AI/ML Systems Engineering role.
 
 EDUCATION:
-Indian Institute of Technology (IIT) Bombay — B.Tech in Computer Science & Engineering (2022 - 2026)
+Indian Institute of Technology (IIT) Bombay - B.Tech in Computer Science & Engineering (2022 - 2026)
 CGPA: 8.9 / 10.0
 
 TECHNICAL SKILLS:
@@ -115,7 +115,7 @@ export function ResumeAnalyzerClient() {
                 <h2 className="text-xl sm:text-2xl font-bold text-foreground font-sans tracking-tight">
                   Upload or Paste Your AI Resume
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Evaluated against 2026 AI systems hiring bars at Google, NVIDIA, and top AI labs.
                 </p>
               </div>
@@ -124,7 +124,7 @@ export function ResumeAnalyzerClient() {
               <button
                 type="button"
                 onClick={handleLoadSample}
-                className="px-3.5 py-2 rounded-xl bg-muted hover:bg-muted/80 border border-border text-foreground text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                className="px-3.5 py-2 rounded-xl bg-muted hover:bg-muted/80 border border-border text-foreground text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
               >
                 <Zap className="w-3.5 h-3.5 text-primary" />
                 <span>Load Sample AI Resume</span>
@@ -132,7 +132,7 @@ export function ResumeAnalyzerClient() {
             </div>
 
             {error && (
-              <div className="p-3.5 rounded-2xl bg-destructive/10 border border-destructive/30 text-destructive text-xs flex items-center gap-2">
+              <div className="p-3.5 rounded-2xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -150,7 +150,7 @@ export function ResumeAnalyzerClient() {
                 <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                   <UploadCloud className="w-6 h-6" />
                 </div>
-                <div className="text-xs sm:text-sm font-semibold text-foreground">
+                <div className="text-sm font-semibold text-foreground">
                   {fileName ? (
                     <span className="text-primary font-mono">{fileName}</span>
                   ) : (
@@ -165,7 +165,7 @@ export function ResumeAnalyzerClient() {
 
             {/* Paste Textarea */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-foreground flex items-center justify-between">
+              <label className="text-sm font-semibold text-foreground flex items-center justify-between">
                 <span>Or Paste Resume Plain Text / Markdown:</span>
                 <span className="text-[11px] font-mono text-muted-foreground">
                   {resumeText.length} characters
@@ -176,7 +176,7 @@ export function ResumeAnalyzerClient() {
                 value={resumeText}
                 onChange={(e) => setResumeText(e.target.value)}
                 placeholder="Paste your education, skills, projects, and work experience here..."
-                className="w-full p-4 rounded-2xl bg-muted/40 border border-border text-foreground font-mono text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary resize-y"
+                className="w-full p-4 rounded-2xl bg-muted/40 border border-border text-foreground font-mono text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary resize-y"
               />
             </div>
 
@@ -232,11 +232,11 @@ export function ResumeAnalyzerClient() {
                     <h2 className="text-xl sm:text-2xl font-bold text-foreground font-sans">
                       Resume ATS Evaluation Score
                     </h2>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold font-mono">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold font-mono">
                       Top {100 - result.percentileRank}% (Percentile {result.percentileRank})
                     </span>
                   </div>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-2xl">
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
                     {result.headlineAssessment}
                   </p>
                 </div>
@@ -245,7 +245,7 @@ export function ResumeAnalyzerClient() {
               <button
                 type="button"
                 onClick={() => setResult(null)}
-                className="px-4 py-2.5 rounded-xl border border-border bg-card hover:bg-muted text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 cursor-pointer self-start md:self-center shrink-0"
+                className="px-4 py-2.5 rounded-xl border border-border bg-card hover:bg-muted text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 cursor-pointer self-start md:self-center shrink-0"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Analyze Another Resume</span>
@@ -269,7 +269,7 @@ export function ResumeAnalyzerClient() {
                   className="p-4 rounded-2xl bg-muted/50 border border-border/80 space-y-2.5"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <h4 className="text-xs font-bold text-foreground font-mono">{domain.roleName}</h4>
+                    <h4 className="text-sm font-bold text-foreground font-mono">{domain.roleName}</h4>
                     <span
                       className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono border ${
                         domain.readinessLevel === 'High Fit'
@@ -310,7 +310,7 @@ export function ResumeAnalyzerClient() {
                     Action Over Consumption: Close Your Skill Gaps with AIgnite
                   </h3>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Do not watch passive 50-hour lectures. Bridge your missing production competencies directly with interactive modules:
                 </p>
               </div>
@@ -318,7 +318,7 @@ export function ResumeAnalyzerClient() {
 
             {/* Critical Gaps Radar */}
             <div className="space-y-3">
-              <span className="text-xs font-bold text-destructive font-mono uppercase tracking-wider block">
+              <span className="text-sm font-bold text-destructive font-mono uppercase tracking-wider block">
                 🚨 High-Priority Missing AI Skills Identified:
               </span>
               <div className="grid sm:grid-cols-2 gap-3">
@@ -328,12 +328,12 @@ export function ResumeAnalyzerClient() {
                     className="p-4 rounded-2xl bg-card border border-destructive/20 space-y-1.5"
                   >
                     <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-foreground">{gap.gap}</h4>
+                      <h4 className="text-sm font-bold text-foreground">{gap.gap}</h4>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-destructive/10 text-destructive font-semibold">
                         {gap.severity}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {gap.explanation}
                     </p>
                   </div>
@@ -343,7 +343,7 @@ export function ResumeAnalyzerClient() {
 
             {/* Bridge Action Cards */}
             <div className="space-y-3 pt-2">
-              <span className="text-xs font-bold text-primary font-mono uppercase tracking-wider block">
+              <span className="text-sm font-bold text-primary font-mono uppercase tracking-wider block">
                 ⚡ Recommended Interactive Bridge Modules:
               </span>
               <div className="grid sm:grid-cols-3 gap-4">
@@ -359,7 +359,7 @@ export function ResumeAnalyzerClient() {
                         {mod.type === 'Voice Coach' && <Mic className="w-3.5 h-3.5" />}
                         <span>{mod.type}</span>
                       </div>
-                      <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+                      <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                         {mod.title}
                       </h4>
                       <p className="text-[11px] text-muted-foreground leading-snug">
@@ -369,7 +369,7 @@ export function ResumeAnalyzerClient() {
 
                     <Link
                       href={mod.url}
-                      className="py-2 px-3 rounded-xl bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center gap-1 shadow-sm hover:opacity-90 transition-all"
+                      className="py-2 px-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center gap-1 shadow-sm hover:opacity-90 transition-all"
                     >
                       <span>Launch Module</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -417,7 +417,7 @@ export function ResumeAnalyzerClient() {
                 <span>ATS Optimization Insights</span>
               </h4>
 
-              <div className="space-y-3 text-xs">
+              <div className="space-y-3 text-sm">
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase font-mono font-bold text-emerald-600 dark:text-emerald-400 block">
                     Key ATS Strengths:

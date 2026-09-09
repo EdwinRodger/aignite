@@ -92,20 +92,20 @@ export default function RecruiterApplyPage() {
           <div className="rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-xl shadow-black/20 space-y-6">
             {/* Header */}
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-xs font-bold text-primary mb-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent border border-primary/20 text-sm font-bold text-primary mb-1">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>Verified Recruiter Access Only</span>
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground font-sans">
                 Apply for Recruiter Portal
               </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 To protect student candidate privacy and prevent impersonation, all hiring managers must verify their corporate identity.
               </p>
             </div>
 
             {/* Anti-Impersonation Warning Box */}
-            <div className="p-3.5 rounded-2xl bg-muted/60 border border-border text-xs text-muted-foreground space-y-1.5">
+            <div className="p-3.5 rounded-2xl bg-muted/60 border border-border text-sm text-muted-foreground space-y-1.5">
               <div className="font-bold text-foreground flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5 text-primary" />
                 <span>Anti-Impersonation Protocol</span>
@@ -117,7 +117,7 @@ export default function RecruiterApplyPage() {
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs flex items-center gap-2">
+              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -127,7 +127,7 @@ export default function RecruiterApplyPage() {
               {/* Full Name & Designation */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <User className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Your Full Name</span>
                   </label>
@@ -142,7 +142,7 @@ export default function RecruiterApplyPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Briefcase className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Your Job Title</span>
                   </label>
@@ -160,7 +160,7 @@ export default function RecruiterApplyPage() {
               {/* Company Name & Website */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Building2 className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Company Name</span>
                   </label>
@@ -175,7 +175,7 @@ export default function RecruiterApplyPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Globe className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Company Website</span>
                   </label>
@@ -192,7 +192,7 @@ export default function RecruiterApplyPage() {
 
               {/* Work Email */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-foreground flex items-center justify-between">
+                <label className="text-sm font-semibold text-foreground flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <Mail className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Corporate Work Email</span>
@@ -211,7 +211,7 @@ export default function RecruiterApplyPage() {
 
               {/* LinkedIn URL */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-foreground flex items-center gap-1">
+                <label className="text-sm font-semibold text-foreground flex items-center gap-1">
                   <Link2 className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>Company / Recruiter LinkedIn URL (Optional Verification Proof)</span>
                 </label>
@@ -249,7 +249,7 @@ export default function RecruiterApplyPage() {
             </form>
 
             {/* Link to Recruiter Login */}
-            <div className="pt-4 border-t border-border/80 text-center text-xs text-muted-foreground">
+            <div className="pt-4 border-t border-border/80 text-center text-sm text-muted-foreground">
               <span>Already verified by our team? </span>
               <Link
                 href="/recruiter/login"

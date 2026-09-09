@@ -1,4 +1,4 @@
-# API & Edge Functions Specification — AIgnite
+# API & Edge Functions Specification - AIgnite
 > **Project**: AIgnite (*pronounced ignite, 'A' is silent*)  
 > **Runtime**: Supabase Edge Functions (Deno / TypeScript) & Next.js App Router API
 

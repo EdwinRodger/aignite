@@ -22,21 +22,21 @@ export default function RecruiterPendingPage() {
             </div>
 
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-500">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-sm font-bold text-amber-500">
                 <Lock className="w-3.5 h-3.5" />
                 <span>Account Quarantined (Security Measure)</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-sans">
                 Verification Under Review
               </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+              <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
                 Your recruiter application has been placed in our Trust & Safety quarantine queue.
                 Candidate resumes and search tools will remain locked until your company domain is verified.
               </p>
             </div>
 
             {/* Checklist of Verification Steps */}
-            <div className="p-4 rounded-2xl bg-muted/60 border border-border text-left space-y-3 font-sans text-xs">
+            <div className="p-4 rounded-2xl bg-muted/60 border border-border text-left space-y-3 font-sans text-sm">
               <div className="flex items-start gap-2.5 text-foreground">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
@@ -65,19 +65,19 @@ export default function RecruiterPendingPage() {
             {/* SIH Hackathon Jury Fast-Track Demo Box */}
             <div className="p-4 rounded-2xl bg-accent/60 border border-primary/30 text-left space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-primary flex items-center gap-1.5">
+                <span className="text-sm font-bold text-primary flex items-center gap-1.5">
                   <span>⚡ SIH Evaluator Fast-Track</span>
                 </span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary text-primary-foreground font-bold">
                   Demo Mode
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Testing this project for the hackathon evaluation? Open the Admin Console to approve this application with 1 click:
               </p>
               <Link
                 href="/admin/verifications"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
               >
                 <span>Go to Admin Verification Console</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -85,7 +85,7 @@ export default function RecruiterPendingPage() {
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-2 flex items-center justify-center gap-4 text-xs">
+            <div className="pt-2 flex items-center justify-center gap-4 text-sm">
               <Link
                 href="/recruiter/login"
                 className="text-primary font-semibold hover:underline flex items-center gap-1"

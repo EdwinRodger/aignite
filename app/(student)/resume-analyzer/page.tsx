@@ -19,7 +19,7 @@ export default function ResumeAnalyzerPage() {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
         {/* Page Hero Header */}
         <section className="text-center space-y-3 relative">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Public AI Systems Acquisition Utility</span>
           </div>
@@ -32,7 +32,7 @@ export default function ResumeAnalyzerPage() {
             Stop getting screened out by legacy keyword parsers. Evaluate your resume against modern 2026 AI systems hiring bars (RAG, quantization, CUDA kernels, agent loops) and close missing gaps with interactive mini-modules.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-muted-foreground pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-mono text-muted-foreground pt-2">
             <span className="flex items-center gap-1">
               <ShieldCheck className="w-4 h-4 text-emerald-500" />
               <span>100% Free &amp; Private</span>

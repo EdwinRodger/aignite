@@ -123,12 +123,12 @@ export default function RecruiterDashboardPage() {
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground font-sans tracking-tight">
                     {recruiterCompany}
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     Verified Partner
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-muted-foreground font-mono">
+                <p className="text-sm text-muted-foreground font-mono">
                   {recruiterName} • {recruiterDesignation}
                 </p>
               </div>
@@ -139,7 +139,7 @@ export default function RecruiterDashboardPage() {
               <button
                 type="button"
                 onClick={() => setIsCreateJobOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold shadow-md shadow-primary/20 flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-sm font-bold shadow-md shadow-primary/20 flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Post AI Engineering Role</span>
@@ -148,7 +148,7 @@ export default function RecruiterDashboardPage() {
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="px-3 py-2.5 rounded-xl border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-2.5 rounded-xl border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sign Out</span>
@@ -209,7 +209,7 @@ export default function RecruiterDashboardPage() {
           <button
             type="button"
             onClick={() => setActiveTab('talent')}
-            className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === 'talent'
                 ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
@@ -222,7 +222,7 @@ export default function RecruiterDashboardPage() {
           <button
             type="button"
             onClick={() => setActiveTab('jobs')}
-            className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === 'jobs'
                 ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
@@ -235,7 +235,7 @@ export default function RecruiterDashboardPage() {
           <button
             type="button"
             onClick={() => setActiveTab('invitations')}
-            className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === 'invitations'
                 ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
@@ -261,14 +261,14 @@ export default function RecruiterDashboardPage() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
                     placeholder="Search candidates by name, college (e.g. IIT Bombay), skills (Triton, CUDA, vLLM)..."
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-muted border border-border text-foreground text-xs font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={applyFilters}
-                  className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:opacity-90 transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                 >
                   <Filter className="w-3.5 h-3.5" />
                   <span>Apply Filters</span>
@@ -276,7 +276,7 @@ export default function RecruiterDashboardPage() {
               </div>
 
               {/* Filter Chips */}
-              <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-border/60 text-xs">
+              <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-border/60 text-sm">
                 {/* League Tier Filter */}
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] font-mono text-muted-foreground uppercase flex items-center gap-1">
@@ -289,7 +289,7 @@ export default function RecruiterDashboardPage() {
                       setSelectedTier(e.target.value);
                       setTimeout(applyFilters, 50);
                     }}
-                    className="px-2.5 py-1.5 rounded-lg bg-muted border border-border text-foreground text-xs font-medium focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="px-2.5 py-1.5 rounded-lg bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     <option value="all">All Divisions</option>
                     <option value="architect">👑 AI Architect (Top 1%)</option>
@@ -312,7 +312,7 @@ export default function RecruiterDashboardPage() {
                       setSelectedBadge(e.target.value);
                       setTimeout(applyFilters, 50);
                     }}
-                    className="px-2.5 py-1.5 rounded-lg bg-muted border border-border text-foreground text-xs font-medium focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="px-2.5 py-1.5 rounded-lg bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     <option value="all">Any Badge</option>
                     <option value="RAG Master">RAG Master</option>
@@ -335,7 +335,7 @@ export default function RecruiterDashboardPage() {
                       setMinReportScore(Number(e.target.value));
                       setTimeout(applyFilters, 50);
                     }}
-                    className="px-2.5 py-1.5 rounded-lg bg-muted border border-border text-foreground text-xs font-medium focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="px-2.5 py-1.5 rounded-lg bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     <option value={0}>All Scores</option>
                     <option value={8.0}>8.0+ / 10</option>
@@ -359,7 +359,7 @@ export default function RecruiterDashboardPage() {
                         if (res.success) setCandidates(res.candidates);
                       });
                     }}
-                    className="text-primary hover:underline text-xs font-mono ml-auto cursor-pointer"
+                    className="text-primary hover:underline text-sm font-mono ml-auto cursor-pointer"
                   >
                     Reset Filters
                   </button>
@@ -383,7 +383,7 @@ export default function RecruiterDashboardPage() {
               <div className="p-12 text-center rounded-3xl bg-card border border-border space-y-3">
                 <Users className="w-10 h-10 text-muted-foreground mx-auto" />
                 <h3 className="text-base font-bold text-foreground">No Candidates Matched Criteria</h3>
-                <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
                   Try relaxing your minimum league tier or badge requirements to see more aspiring AI engineers.
                 </p>
                 <button
@@ -398,7 +398,7 @@ export default function RecruiterDashboardPage() {
                       if (res.success) setCandidates(res.candidates);
                     });
                   }}
-                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs mt-2 cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm mt-2 cursor-pointer"
                 >
                   Clear All Filters
                 </button>
@@ -413,7 +413,7 @@ export default function RecruiterDashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-foreground font-sans">Active AI Engineering Openings</h2>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Roles published with verified threshold gating. Candidates who do not meet your required league tier or badges cannot submit spam applications.
                 </p>
               </div>
@@ -421,7 +421,7 @@ export default function RecruiterDashboardPage() {
               <button
                 type="button"
                 onClick={() => setIsCreateJobOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs flex items-center gap-1.5 shadow-md shadow-primary/20 hover:opacity-90 transition-all cursor-pointer shrink-0"
+                className="px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm flex items-center gap-1.5 shadow-md shadow-primary/20 hover:opacity-90 transition-all cursor-pointer shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>Post New AI Role</span>
@@ -441,23 +441,23 @@ export default function RecruiterDashboardPage() {
                       </div>
                       <div>
                         <h3 className="text-base font-bold text-foreground font-sans">{job.title}</h3>
-                        <p className="text-xs text-muted-foreground font-mono mt-0.5">
+                        <p className="text-sm text-muted-foreground font-mono mt-0.5">
                           {job.companyName} • {job.roleCategory}
                         </p>
                       </div>
                     </div>
 
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold shrink-0">
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold shrink-0">
                       Active
                     </span>
                   </div>
 
-                  <p className="text-xs text-foreground/80 leading-relaxed line-clamp-2">
+                  <p className="text-sm text-foreground/80 leading-relaxed line-clamp-2">
                     {job.description}
                   </p>
 
                   {/* Metadata */}
-                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-primary" />
                       <span>{job.location}</span>
@@ -477,7 +477,7 @@ export default function RecruiterDashboardPage() {
                     <span className="text-[10px] uppercase font-mono font-bold text-muted-foreground block">
                       Automated Gate Requirements:
                     </span>
-                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                    <div className="flex flex-wrap items-center gap-2 text-sm">
                       <span className="px-2 py-1 rounded-lg bg-card border border-border text-foreground font-mono">
                         Tier: {job.minLeagueTier.toUpperCase()}
                       </span>
@@ -496,13 +496,13 @@ export default function RecruiterDashboardPage() {
                   </div>
 
                   <div className="pt-2 flex items-center justify-between border-t border-border/80">
-                    <span className="text-xs font-mono text-muted-foreground">
+                    <span className="text-sm font-mono text-muted-foreground">
                       <strong className="text-foreground">{job.applicantsCount}</strong> Qualified Candidates Applied
                     </span>
                     <button
                       type="button"
                       onClick={() => setActiveTab('talent')}
-                      className="text-xs font-bold text-primary hover:underline cursor-pointer"
+                      className="text-sm font-bold text-primary hover:underline cursor-pointer"
                     >
                       Find Matching Talent &rarr;
                     </button>
@@ -518,7 +518,7 @@ export default function RecruiterDashboardPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-bold text-foreground font-sans">Dispatched Interview Invitations</h2>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Track fast-track invitations sent directly to verified AIgnite engineers. Candidates receive priority calendar slots.
               </p>
             </div>
@@ -532,12 +532,12 @@ export default function RecruiterDashboardPage() {
                   <div className="space-y-1.5 flex-1">
                     <div className="flex items-center gap-2">
                       <h3 className="text-base font-bold text-foreground">{inv.candidateName}</h3>
-                      <span className="text-xs text-muted-foreground font-mono">• {inv.roleTitle}</span>
+                      <span className="text-sm text-muted-foreground font-mono">• {inv.roleTitle}</span>
                     </div>
-                    <p className="text-xs text-muted-foreground italic font-serif bg-muted/40 p-2.5 rounded-xl border border-border/50">
+                    <p className="text-sm text-muted-foreground italic font-serif bg-muted/40 p-2.5 rounded-xl border border-border/50">
                       &ldquo;{inv.customNote}&rdquo;
                     </p>
-                    <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-muted-foreground pt-1">
+                    <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-muted-foreground pt-1">
                       <span>Round: <strong>{inv.roundType}</strong></span>
                       <span>•</span>
                       <span>Company: <strong>{inv.companyName}</strong></span>
@@ -548,7 +548,7 @@ export default function RecruiterDashboardPage() {
 
                   <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
                     <span
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono border ${
+                      className={`px-3 py-1.5 rounded-xl text-sm font-bold font-mono border ${
                         inv.status === 'Scheduled'
                           ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
                           : inv.status === 'Accepted'

@@ -70,7 +70,7 @@ export function AudioReaderButton({ textToRead, title }: AudioReaderButtonProps)
       onClick={handleTogglePlay}
       aria-label={isPlaying ? 'Stop audio readout' : 'Listen to 30-second audio summary'}
       title={isPlaying ? 'Stop audio' : 'Listen hands-free'}
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium border transition-all ${
         isPlaying
           ? 'bg-primary text-primary-foreground border-primary shadow-sm shadow-primary/30 animate-pulse'
           : 'bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border'

@@ -24,7 +24,7 @@ export function BadgesGrid({ badges }: BadgesGridProps) {
           </div>
         </div>
 
-        <span className="text-xs font-mono font-bold text-primary px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20">
+        <span className="text-sm font-mono font-bold text-primary px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20">
           {badges.filter((b) => b.isUnlocked).length}/{badges.length} Claimed
         </span>
       </div>
@@ -66,7 +66,7 @@ export function BadgesGrid({ badges }: BadgesGridProps) {
                 </div>
               </div>
 
-              <h4 className="text-xs font-bold text-foreground leading-snug">
+              <h4 className="text-sm font-bold text-foreground leading-snug">
                 {badge.name}
               </h4>
               <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed">

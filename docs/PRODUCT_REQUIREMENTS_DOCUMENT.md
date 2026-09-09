@@ -1,4 +1,4 @@
-# Product Requirements Document (PRD) — AIgnite
+# Product Requirements Document (PRD) - AIgnite
 > **Project**: AIgnite (*pronounced ignite, 'A' is silent*)  
 > **Event**: Smart India Hackathon (SIH) 2026  
 > **Status**: Ready for Implementation  

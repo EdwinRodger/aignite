@@ -118,7 +118,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             )}
             <span>{post.tagBadge}</span>
           </span>
-          <span className="text-xs text-muted-foreground font-mono">{post.readTime}</span>
+          <span className="text-sm text-muted-foreground font-mono">{post.readTime}</span>
           <span className="text-[11px] text-muted-foreground hidden sm:inline-block">• {post.createdAt}</span>
         </div>
 
@@ -153,9 +153,9 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
         </p>
 
         {/* Highlighted Rule of Thumb Callout */}
-        <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs text-primary-foreground/90 font-serif italic flex items-start gap-2">
+        <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-sm text-primary-foreground/90 font-serif italic flex items-start gap-2">
           <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-          <span className="text-foreground/90 not-italic font-sans text-xs leading-relaxed">
+          <span className="text-foreground/90 not-italic font-sans text-sm leading-relaxed">
             {post.keyTakeaway}
           </span>
         </div>
@@ -171,7 +171,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                 <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground">
                   {m.label}
                 </span>
-                <span className="text-xs sm:text-sm font-bold text-foreground mt-0.5 font-mono">
+                <span className="text-sm font-bold text-foreground mt-0.5 font-mono">
                   {m.value}
                 </span>
               </div>
@@ -210,7 +210,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
         {/* 5-Second Interactive Micro-Quiz Card */}
         <div className="pt-2 border-t border-border/60">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-foreground flex items-center gap-1.5" id={`quiz-${post.quiz.id}`}>
+            <span className="text-sm font-bold text-foreground flex items-center gap-1.5" id={`quiz-${post.quiz.id}`}>
               <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>5-Second Check: {post.quiz.questionText}</span>
             </span>
@@ -219,7 +219,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                 type="button"
                 onClick={handleReset}
                 aria-label="Retry quiz"
-                className="px-2 py-1 text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1 rounded-md hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="px-2 py-1 text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1 rounded-md hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span className="text-[11px]">Retry</span>
@@ -254,7 +254,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
                   aria-checked={isSelected}
                   onClick={() => handleSelect(idx)}
                   disabled={hasAnswered}
-                  className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${buttonStyle}`}
+                  className={`w-full text-left p-3 rounded-xl border text-sm transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${buttonStyle}`}
                 >
                   <span className="pr-2">{option}</span>
                   {hasAnswered && isOptionCorrect && (
@@ -271,7 +271,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
           {/* Feedback & Technical Takeaway Drawer */}
           <div role="status" aria-live="polite">
             {hasAnswered && (
-              <div className="mt-3 p-3 rounded-xl bg-muted/70 border border-border text-xs animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="mt-3 p-3 rounded-xl bg-muted/70 border border-border text-sm animate-in fade-in slide-in-from-top-2 duration-300">
                 {isCorrect ? (
                   <div>
                     <div className="font-bold text-primary flex items-center gap-1.5 mb-1">
@@ -299,7 +299,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
       </div>
 
       {/* Engagement Footer Bar */}
-      <div className="p-4 border-t border-border/60 bg-muted/10 flex items-center justify-between text-xs text-muted-foreground">
+      <div className="p-4 border-t border-border/60 bg-muted/10 flex items-center justify-between text-sm text-muted-foreground">
         <div className="flex items-center gap-4">
           {/* Like Button */}
           <button

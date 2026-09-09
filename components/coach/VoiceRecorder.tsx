@@ -168,7 +168,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
       {/* Header & Mode Switcher */}
       <div className="flex items-center justify-between border-b border-border/60 pb-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+          <span className="text-sm font-bold text-foreground flex items-center gap-1.5">
             <Volume2 className="w-4 h-4 text-primary" />
             <span>Candidate Response Workspace</span>
           </span>
@@ -181,7 +181,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
         </div>
 
         {/* Input Mode Toggle */}
-        <div className="flex items-center rounded-lg bg-muted/60 p-1 border border-border text-xs">
+        <div className="flex items-center rounded-lg bg-muted/60 p-1 border border-border text-sm">
           <button
             type="button"
             onClick={() => setMode('voice')}
@@ -240,7 +240,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
                 type="button"
                 onClick={startRecording}
                 disabled={isEvaluating}
-                className="px-6 py-3.5 rounded-2xl font-bold text-xs sm:text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/25 transition-transform active:scale-95 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="px-6 py-3.5 rounded-2xl font-bold text-sm bg-primary hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/25 transition-transform active:scale-95 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Mic className="w-4 h-4" />
                 <span>Start Spoken Answer</span>
@@ -249,7 +249,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
               <button
                 type="button"
                 onClick={stopRecording}
-                className="px-6 py-3.5 rounded-2xl font-bold text-xs sm:text-sm bg-destructive hover:opacity-90 text-destructive-foreground shadow-lg shadow-destructive/25 transition-transform active:scale-95 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="px-6 py-3.5 rounded-2xl font-bold text-sm bg-destructive hover:opacity-90 text-destructive-foreground shadow-lg shadow-destructive/25 transition-transform active:scale-95 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <MicOff className="w-4 h-4" />
                 <span>Pause Spoken Answer</span>
@@ -286,7 +286,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
 
       {/* Transcript Editor / Fallback Text Input */}
       <div className="space-y-1.5">
-        <div className="flex items-center justify-between text-xs font-semibold text-foreground">
+        <div className="flex items-center justify-between text-sm font-semibold text-foreground">
           <span>{mode === 'voice' ? 'Spoken Transcript (Editable):' : 'Type Your Technical Answer:'}</span>
           <span className="text-[11px] font-mono text-muted-foreground">
             {transcript.trim().split(/\s+/).filter(Boolean).length} words
@@ -302,7 +302,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
               : 'Provide your technical response explaining the architecture, trade-offs, and failure cases...'
           }
           rows={4}
-          className="w-full p-3.5 rounded-xl bg-muted/40 border border-border text-xs text-foreground placeholder:text-muted-foreground leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y font-sans"
+          className="w-full p-3.5 rounded-xl bg-muted/40 border border-border text-sm text-foreground placeholder:text-muted-foreground leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y font-sans"
         />
       </div>
 
@@ -316,7 +316,7 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
           type="button"
           onClick={handleSubmit}
           disabled={!transcript.trim() || isEvaluating}
-          className="px-5 py-2.5 rounded-xl text-xs font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-md shadow-primary/20 transition-all flex items-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="px-5 py-2.5 rounded-xl text-sm font-bold bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground shadow-md shadow-primary/20 transition-all flex items-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {isEvaluating ? (
             <>

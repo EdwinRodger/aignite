@@ -35,17 +35,17 @@ export default function CompanyPacksPage() {
         {/* Header & Value Proposition */}
         <div className="mb-8 border-b border-border/60 pb-6">
           <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
               <Layers className="w-3.5 h-3.5" />
               <span>Company-Specific AI Packs</span>
             </span>
-            <span className="text-xs text-muted-foreground font-mono">No 50-Hour Videos</span>
+            <span className="text-sm text-muted-foreground font-mono">No 50-Hour Videos</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">
             Learn What Top AI Teams Actually Build
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-2 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted-foreground mt-2 max-w-2xl leading-relaxed">
             Replace passive tutorial hell with hands-on systems architecture. Each pack prepares you for specific technical interview rounds at NVIDIA, Google, OpenAI, Meta, and Microsoft.
           </p>
 
@@ -56,7 +56,7 @@ export default function CompanyPacksPage() {
                 key={t}
                 type="button"
                 onClick={() => setSelectedTrack(t)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all border ${
+                className={`px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
                   selectedTrack === t
                     ? 'bg-primary text-primary-foreground border-primary font-semibold shadow-sm'
                     : 'bg-card text-muted-foreground hover:text-foreground border-border'
@@ -88,7 +88,7 @@ export default function CompanyPacksPage() {
                       {pack.badgeIcon}
                     </span>
                     <div>
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
+                      <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground">
                         {pack.companyName}
                       </span>
                       <h2 className="text-lg font-bold text-foreground tracking-tight">
@@ -103,12 +103,12 @@ export default function CompanyPacksPage() {
                 </div>
 
                 {/* Tagline */}
-                <p className="text-xs text-primary font-medium">
+                <p className="text-sm text-primary font-medium">
                   {pack.tagline}
                 </p>
 
                 {/* Description */}
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {pack.description}
                 </p>
 
@@ -130,7 +130,7 @@ export default function CompanyPacksPage() {
                 </div>
 
                 {/* Unlockable Recruiter Badge Preview */}
-                <div className="p-3 rounded-xl bg-muted/40 border border-border/80 flex items-center justify-between text-xs">
+                <div className="p-3 rounded-xl bg-muted/40 border border-border/80 flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <Trophy className="w-4 h-4 text-amber-500" />
                     <div>
@@ -144,14 +144,14 @@ export default function CompanyPacksPage() {
 
               {/* Action Button */}
               <div className="relative z-10 pt-6 mt-4 border-t border-border/60 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Sparkles className="w-3.5 h-3.5 text-primary" />
                   <span>Interactive Games Included</span>
                 </div>
 
                 <Link
                   href={`/packs/${pack.slug}`}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-primary hover:opacity-90 text-primary-foreground shadow-md shadow-primary/20 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <span>Launch Pack</span>
                   <ArrowRight className="w-3.5 h-3.5" />

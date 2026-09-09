@@ -89,13 +89,13 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
           <h3 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
             {scenario.title}
           </h3>
-          <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
             {scenario.contextDescription}
           </p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
+          <div className="flex items-center gap-1 text-sm font-semibold px-2.5 py-1 rounded-lg border bg-primary/10 text-primary border-primary/20">
             <Zap className="w-3.5 h-3.5" />
             <span>+{scenario.pointsAwarded} XP</span>
           </div>
@@ -114,7 +114,7 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
       </div>
 
       {/* Code Inspection Editor Preview */}
-      <div className="rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-100 font-mono text-xs overflow-hidden shadow-2xl">
+      <div className="rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-100 font-mono text-sm overflow-hidden shadow-2xl">
         <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5">
@@ -152,7 +152,7 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
 
       {/* Bug Diagnostic Options */}
       <div className="space-y-2">
-        <span className="text-xs font-bold text-foreground block">
+        <span className="text-sm font-bold text-foreground block">
           Diagnose Root Cause: What is causing the production failure?
         </span>
 
@@ -180,7 +180,7 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
                 aria-checked={isSelected}
                 onClick={() => handleSubmit(opt.id)}
                 disabled={hasSubmitted}
-                className={`w-full text-left p-3.5 rounded-xl border text-xs transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${style}`}
+                className={`w-full text-left p-3.5 rounded-xl border text-sm transition-all flex items-center justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${style}`}
               >
                 <span className="pr-2 leading-relaxed">{opt.text}</span>
                 {hasSubmitted && opt.isCorrect && (
@@ -198,7 +198,7 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
       {/* Diagnostic Explanation & Fix Reveal */}
       {hasSubmitted && explanation && (
         <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
-          <div className="p-4 rounded-xl bg-muted/70 border border-border text-xs">
+          <div className="p-4 rounded-xl bg-muted/70 border border-border text-sm">
             <div className="flex items-center justify-between mb-1">
               <span
                 className={`font-bold flex items-center gap-1.5 ${
@@ -236,7 +236,7 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
 
           {/* Reveal Fix Code Box */}
           {showDiff && fixedCode && (
-            <div className="rounded-xl bg-zinc-950 border border-emerald-900/40 text-zinc-100 font-mono text-xs overflow-hidden shadow-xl animate-in fade-in">
+            <div className="rounded-xl bg-zinc-950 border border-emerald-900/40 text-zinc-100 font-mono text-sm overflow-hidden shadow-xl animate-in fade-in">
               <div className="px-4 py-2 bg-emerald-950/40 border-b border-emerald-900/40 flex items-center justify-between text-[11px] text-emerald-300">
                 <span className="font-semibold flex items-center gap-1.5">
                   <Check className="w-3.5 h-3.5 text-emerald-400" />

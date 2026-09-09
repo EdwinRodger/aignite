@@ -1,4 +1,4 @@
-# Mobile App Architecture (React Native WebView) — AIgnite
+# Mobile App Architecture (React Native WebView) - AIgnite
 > **Project**: AIgnite (*pronounced ignite, 'A' is silent*)  
 > **Mobile Technology**: React Native / Expo with `react-native-webview`  
 > **Target Stores**: Google Play Store (Android) & Apple App Store (iOS)  

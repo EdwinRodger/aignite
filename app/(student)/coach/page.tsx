@@ -58,16 +58,16 @@ export default function CoachPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-6">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
                 <Mic className="w-3.5 h-3.5" />
                 <span>Daily Voice Coach</span>
               </span>
-              <span className="text-xs text-muted-foreground font-mono">Morning Habit • 8:00 AM POTD</span>
+              <span className="text-sm text-muted-foreground font-mono">Morning Habit • 8:00 AM POTD</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">
               Audio-Based AI Mock Interview
             </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 max-w-2xl leading-relaxed">
+            <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl leading-relaxed">
               Maintain your daily speaking streak. Practice answering real staff-level AI systems interview questions out loud, and receive instant 5-axis automated scoring with feedback.
             </p>
           </div>
@@ -78,7 +78,7 @@ export default function CoachPage() {
               <Flame className="w-5 h-5 animate-pulse" />
             </div>
             <div>
-              <div className="text-xs font-bold text-foreground font-mono">
+              <div className="text-sm font-bold text-foreground font-mono">
                 {streakDays} Day Flame Streak
               </div>
               <div className="text-[11px] text-primary font-semibold flex items-center gap-1">
@@ -106,7 +106,7 @@ export default function CoachPage() {
                   <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-semibold">
                     {selectedQuestion.track}
                   </span>
-                  <span className="text-xs text-muted-foreground">• {selectedQuestion.difficulty}</span>
+                  <span className="text-sm text-muted-foreground">• {selectedQuestion.difficulty}</span>
                 </div>
 
                 <div className="flex items-center gap-1 text-[11px] font-mono text-muted-foreground">
@@ -121,7 +121,7 @@ export default function CoachPage() {
               </h2>
 
               {/* Context Hint Callout */}
-              <div className="p-3 rounded-xl bg-muted/40 border border-border/80 flex items-start gap-2.5 text-xs">
+              <div className="p-3 rounded-xl bg-muted/40 border border-border/80 flex items-start gap-2.5 text-sm">
                 <HelpCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold text-foreground block">Architectural Prompt Hint:</span>
@@ -150,7 +150,7 @@ export default function CoachPage() {
 
             {/* Error Feedback if any */}
             {errorMessage && (
-              <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive text-xs text-destructive">
+              <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive text-sm text-destructive">
                 {errorMessage}
               </div>
             )}
@@ -166,7 +166,7 @@ export default function CoachPage() {
           <aside aria-label="Question selector" className="lg:col-span-4 space-y-5">
             {/* Daily Questions Selector */}
             <div className="rounded-2xl bg-card border border-border p-5 shadow-sm space-y-3">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+              <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
                 <Calendar className="w-4 h-4 text-primary" />
                 <span>Today & Past Coach Questions</span>
               </div>
@@ -187,7 +187,7 @@ export default function CoachPage() {
                         setEvaluationReport(null);
                         setErrorMessage(null);
                       }}
-                      className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex flex-col justify-between ${
+                      className={`w-full text-left p-3 rounded-xl border text-sm transition-all flex flex-col justify-between ${
                         isSelected
                           ? 'bg-primary/10 border-primary text-foreground font-semibold ring-1 ring-primary/30'
                           : 'bg-muted/30 border-border text-muted-foreground hover:text-foreground hover:bg-muted/60'
@@ -201,7 +201,7 @@ export default function CoachPage() {
                           {q.difficulty}
                         </span>
                       </div>
-                      <div className="text-xs font-bold text-foreground leading-tight line-clamp-2">
+                      <div className="text-sm font-bold text-foreground leading-tight line-clamp-2">
                         {q.title}
                       </div>
                     </button>
@@ -212,7 +212,7 @@ export default function CoachPage() {
 
             {/* Multi-Axis Scoring Criteria Card */}
             <div className="rounded-2xl bg-card border border-border p-5 shadow-sm space-y-3">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+              <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
                 <Brain className="w-4 h-4 text-primary" />
                 <span>AI Scoring Dimensions</span>
               </div>

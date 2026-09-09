@@ -1,13 +1,3 @@
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
-
 # AIgnite Project-Wide Agent Rules
 
 All AI agents, coding assistants, and contributors working on this codebase must strictly follow these rules:
@@ -18,7 +8,7 @@ All AI agents, coding assistants, and contributors working on this codebase must
 - Example:
   - ❌ `AIgnite — Master Applied AI in 5-Minute Daily Sparks`
   - ✅ `AIgnite - Master Applied AI in 5-Minute Daily Sparks`
-- *Exception:* Third-party vendor-generated blocks (such as the Next.js agent block above) that are automatically managed by external CLI tools.
+- *Exception:* Third-party vendor-generated blocks that are automatically managed by external CLI tools.
 
 ## 2. Typography: Minimum Font Size (`text-sm` or Larger)
 - **STRICT REQUIREMENT:** Never use `text-xs` (12px / 0.75rem) anywhere in Tailwind CSS classes. 12px is too small for accessibility, legibility, and mobile usability.

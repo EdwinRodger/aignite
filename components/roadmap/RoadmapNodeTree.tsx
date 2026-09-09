@@ -47,7 +47,7 @@ export function RoadmapNodeTree() {
           <div key={stage.id} className="relative sm:pl-20 group">
             {/* Stage Milestone Indicator Icon on the line */}
             <div
-              className={`hidden sm:flex absolute left-4.5 -translate-x-1/2 top-7 w-7 h-7 rounded-full items-center justify-center font-bold text-xs shadow-md border-2 z-10 transition-transform group-hover:scale-110 ${
+              className={`hidden sm:flex absolute left-4.5 -translate-x-1/2 top-7 w-7 h-7 rounded-full items-center justify-center font-bold text-sm shadow-md border-2 z-10 transition-transform group-hover:scale-110 ${
                 isCompleted
                   ? 'bg-emerald-500 border-emerald-400 text-white'
                   : isInProgress
@@ -81,7 +81,7 @@ export function RoadmapNodeTree() {
               >
                 <div className="space-y-1.5 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground">
                       Stage 0{stage.stageNumber}
                     </span>
                     <span
@@ -95,7 +95,7 @@ export function RoadmapNodeTree() {
                     >
                       {isCompleted ? '✓ Completed & Verified' : isInProgress ? '● Active Focus Track' : 'Locked Track'}
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono flex items-center gap-1">
+                    <span className="text-sm text-muted-foreground font-mono flex items-center gap-1">
                       <Clock className="w-3 h-3 text-primary" />
                       <span>{stage.estimatedHours}</span>
                     </span>
@@ -108,14 +108,14 @@ export function RoadmapNodeTree() {
                     </h3>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {stage.headline}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3 self-end sm:self-center shrink-0">
                   {/* Badge Pill */}
-                  <div className="px-3 py-1.5 rounded-xl bg-muted border border-border flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                  <div className="px-3 py-1.5 rounded-xl bg-muted border border-border flex items-center gap-1.5 text-sm font-semibold text-foreground">
                     <Award className="w-3.5 h-3.5 text-primary" />
                     <span>{stage.badgeAwarded.name}</span>
                   </div>
@@ -134,7 +134,7 @@ export function RoadmapNodeTree() {
               {isExpanded && (
                 <div className="px-6 sm:px-8 pb-7 pt-2 border-t border-border/80 bg-muted/20 space-y-6">
                   {/* Prerequisites Bar */}
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+                  <div className="flex flex-wrap items-center gap-2 text-sm font-mono">
                     <span className="text-muted-foreground">Prerequisites:</span>
                     {stage.prerequisites.map((req, idx) => (
                       <span
@@ -157,7 +157,7 @@ export function RoadmapNodeTree() {
                           <h4 className="text-sm font-bold text-foreground font-sans group-hover/topic:text-primary transition-colors">
                             {topic.title}
                           </h4>
-                          <p className="text-xs text-muted-foreground leading-relaxed">
+                          <p className="text-sm text-muted-foreground leading-relaxed">
                             {topic.description}
                           </p>
                           <div className="flex flex-wrap gap-1.5 pt-1">
@@ -175,7 +175,7 @@ export function RoadmapNodeTree() {
                         {topic.interactiveModuleUrl && (
                           <Link
                             href={topic.interactiveModuleUrl}
-                            className="px-3.5 py-2 rounded-xl bg-muted hover:bg-primary hover:text-primary-foreground border border-border text-xs font-semibold text-foreground transition-all flex items-center justify-center gap-1.5 shrink-0"
+                            className="px-3.5 py-2 rounded-xl bg-muted hover:bg-primary hover:text-primary-foreground border border-border text-sm font-semibold text-foreground transition-all flex items-center justify-center gap-1.5 shrink-0"
                           >
                             {topic.interactiveType === 'Company Pack' && <Layers className="w-3.5 h-3.5" />}
                             {topic.interactiveType === 'Pipeline Game' && <Zap className="w-3.5 h-3.5" />}
