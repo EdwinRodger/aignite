@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Sparkles, Flame, Trophy, Map, Briefcase, Layers, ArrowRight } from 'lucide-react';
+import { Sparkles, Flame, Trophy, Map, Briefcase, Layers, ArrowRight, Mic } from 'lucide-react';
 
 export function Navbar() {
   return (
@@ -57,6 +57,13 @@ export function Navbar() {
           >
             <Layers className="w-4 h-4 text-secondary-foreground" />
             <span>Company Packs</span>
+          </Link>
+          <Link
+            href="/coach"
+            className="px-3 py-1.5 rounded-lg hover:text-foreground hover:bg-muted/60 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <Mic className="w-4 h-4 text-chart-1" />
+            <span>Voice Coach</span>
           </Link>
           <Link
             href="/roadmap"
