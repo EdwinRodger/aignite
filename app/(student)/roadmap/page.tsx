@@ -1,7 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { Navbar } from '@/components/navigation/Navbar';
-import { MobileTabBar } from '@/components/navigation/MobileTabBar';
+
 import { RoadmapNodeTree } from '@/components/roadmap/RoadmapNodeTree';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,10 +16,7 @@ export const metadata: Metadata = {
 
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-12">
-      <Navbar />
-
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
         {/* Header */}
         <section className="text-center space-y-3 relative">
           <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-primary text-sm font-semibold">
@@ -72,9 +68,6 @@ export default function RoadmapPage() {
 
         {/* Visual Roadmap Tree */}
         <RoadmapNodeTree />
-      </main>
-
-      <MobileTabBar />
     </div>
   );
 }

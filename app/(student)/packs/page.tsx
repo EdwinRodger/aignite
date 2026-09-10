@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Navbar } from '@/components/navigation/Navbar';
-import { MobileTabBar } from '@/components/navigation/MobileTabBar';
+
 import { COMPANY_PACKS } from '@/lib/learning-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,11 +30,8 @@ export default function CompanyPacksPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col pb-20 md:pb-12">
-      <Navbar />
-
-      <main id="main-content" className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header & Value Proposition */}
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Header & Value Proposition */}
         <div className="mb-8 border-b border-border/60 pb-6">
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="outline" className="gap-1.5 px-3 py-1 text-sm font-bold bg-primary/10 text-primary border-primary/20">
@@ -156,9 +152,6 @@ export default function CompanyPacksPage() {
             </Card>
           ))}
         </div>
-      </main>
-
-      <MobileTabBar />
     </div>
   );
 }

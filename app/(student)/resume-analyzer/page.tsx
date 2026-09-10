@@ -1,7 +1,5 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { Navbar } from '@/components/navigation/Navbar';
-import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { ResumeAnalyzerClient } from '@/components/resume/ResumeAnalyzerClient';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, ShieldCheck, Zap } from 'lucide-react';
@@ -14,10 +12,7 @@ export const metadata: Metadata = {
 
 export default function ResumeAnalyzerPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-12">
-      <Navbar />
-
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
         {/* Page Hero Header */}
         <section className="text-center space-y-3 relative">
           <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-primary text-sm font-semibold">
@@ -41,7 +36,7 @@ export default function ResumeAnalyzerPage() {
             <span>-</span>
             <span className="flex items-center gap-1">
               <Zap className="w-4 h-4 text-primary" />
-              <span>Gemini 2.0 Flash Powered</span>
+              <span>Gemini 2.5 Flash Powered</span>
             </span>
             <span>-</span>
             <span>No Account Required to Test</span>
@@ -50,9 +45,6 @@ export default function ResumeAnalyzerPage() {
 
         {/* Interactive Analyzer Engine */}
         <ResumeAnalyzerClient />
-      </main>
-
-      <MobileTabBar />
     </div>
   );
 }

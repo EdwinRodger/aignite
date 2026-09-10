@@ -2,11 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Navbar } from '@/components/navigation/Navbar';
-import { MobileTabBar } from '@/components/navigation/MobileTabBar';
-import { UserBuildsSandbox } from '@/components/dashboard/UserBuildsSandbox';
-import { MultiScopeLeaderboard } from '@/components/dashboard/MultiScopeLeaderboard';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -14,24 +10,29 @@ import {
   Trophy,
   Mic,
   ArrowRight,
-  Layers,
   CheckCircle2,
-  BookOpen,
-  HelpCircle,
-  Bug,
-  Scale,
+  Sparkles,
+  Cpu,
+  Boxes,
+  Route,
+  FileText,
+  Flame,
+  Zap,
+  TrendingUp,
+  CircleDot,
 } from 'lucide-react';
+import { getCurrentStudentProfileAction } from '@/app/actions/auth';
 
 export default function StudentDashboardPage() {
   const [user, setUser] = useState({
     name: 'AI Learner',
     username: 'learner',
     college: 'Student Campus',
-    streakDays: 0,
-    totalXp: 0,
-    leagueTier: 'Bronze AI Engineer',
-    leagueRank: 0,
-    atsScore: 0,
+    streakDays: 3,
+    totalXp: 415,
+    leagueTier: 'Silver AI Engineer',
+    leagueRank: 5,
+    atsScore: 84,
     earnedBadges: [] as string[],
   });
 
@@ -47,540 +48,471 @@ export default function StudentDashboardPage() {
   } | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (typeof window !== 'undefined') {
-        const storedPoints = localStorage.getItem('aignite_student_points');
-        const storedStreak = localStorage.getItem('aignite_student_streak');
-        const storedReport = localStorage.getItem('aignite_user_report_card');
-        const storedUser = localStorage.getItem('aignite_user_profile');
+    let isMounted = true;
 
-        if (storedUser) {
-          try {
-            const parsedUser = JSON.parse(storedUser);
-            setUser((prev) => ({ ...prev, ...parsedUser }));
-          } catch {
-            // fallback
-          }
+    // 1. Fetch real student profile from database / session
+    getCurrentStudentProfileAction()
+      .then((profile) => {
+        if (isMounted && profile) {
+          setUser((prev) => ({
+            ...prev,
+            name: profile.fullName || prev.name,
+            username: profile.username || prev.username,
+            college: profile.collegeOrCompany || prev.college,
+            totalXp: profile.totalPoints || prev.totalXp,
+            streakDays: profile.currentStreak || prev.streakDays,
+            leagueTier: profile.leagueTier || prev.leagueTier,
+            leagueRank: profile.leagueRank || prev.leagueRank,
+            atsScore: profile.atsScore || prev.atsScore,
+          }));
         }
-        if (storedPoints) {
-          const pts = parseInt(storedPoints, 10);
-          setUser((prev) => ({ ...prev, totalXp: pts }));
-        }
-        if (storedStreak) {
-          const str = parseInt(storedStreak, 10);
-          setUser((prev) => ({ ...prev, streakDays: str }));
-        }
-        if (storedReport) {
-          try {
-            const parsed = JSON.parse(storedReport);
-            setReportCard(parsed);
-          } catch {
-            // fallback
-          }
+      })
+      .catch((err) => {
+        console.warn('Could not load student profile from database:', err);
+      });
+
+    // 2. Merge local storage overrides if available
+    if (typeof window !== 'undefined') {
+      const storedPoints = localStorage.getItem('aignite_student_points');
+      const storedStreak = localStorage.getItem('aignite_student_streak');
+      const storedReport = localStorage.getItem('aignite_user_report_card');
+      const storedUser = localStorage.getItem('aignite_user_profile');
+
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser((prev) => ({ ...prev, ...parsedUser }));
+        } catch {
+          // fallback
         }
       }
-    }, 0);
+      if (storedPoints) {
+        const pts = parseInt(storedPoints, 10);
+        setUser((prev) => ({ ...prev, totalXp: pts }));
+      }
+      if (storedStreak) {
+        const str = parseInt(storedStreak, 10);
+        setUser((prev) => ({ ...prev, streakDays: str }));
+      }
+      if (storedReport) {
+        try {
+          const parsed = JSON.parse(storedReport);
+          setReportCard(parsed);
+        } catch {
+          // fallback
+        }
+      }
+    }
 
-    return () => clearTimeout(timer);
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // Learning Suite active tool tab
-  const [activeModuleTool, setActiveModuleTool] = useState<
-    'text' | 'bubble' | 'mcq' | 'error' | 'simulator' | 'builds'
-  >('builds');
-
-  // Interactive MCQ state
-  const [selectedMcqOption, setSelectedMcqOption] = useState<number | null>(null);
-  const [mcqSubmitted, setMcqSubmitted] = useState(false);
-
-  // Interactive Error Hunter state
-  const [errorFixed, setErrorFixed] = useState(false);
-
-  // Interactive Decision Simulator state
-  const [selectedDecision, setSelectedDecision] = useState<string | null>(null);
-
-  const userInitials = user.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase() || 'AL';
+  const userInitials =
+    user.name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase() || 'AL';
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-12">
-      <Navbar />
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* ========================================================================= */}
+      {/* 1. STUDENT PROFILE & STREAK HEADER */}
+      {/* ========================================================================= */}
+      <Card className="p-6 sm:p-8 shadow-xs bg-card border-border">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="flex items-start sm:items-center gap-4">
+            <div className="w-16 h-16 rounded-xl bg-primary text-primary-foreground font-bold text-2xl flex items-center justify-center shadow-xs shrink-0 font-mono">
+              {userInitials}
+            </div>
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground font-sans tracking-tight">
+                  Welcome back, {user.name}!
+                </h1>
+                <Badge
+                  variant="outline"
+                  className="gap-1 px-2.5 py-0.5 bg-primary/10 border-primary/20 text-primary text-sm font-bold font-mono"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Verified Student</span>
+                </Badge>
+              </div>
+              <p className="text-sm text-muted-foreground font-mono">
+                {user.college} - @{user.username} - Division: {user.leagueTier}
+              </p>
+            </div>
+          </div>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
-        {/* ========================================================================= */}
-        {/* 1. STUDENT PROFILE & STREAK HEADER */}
-        {/* ========================================================================= */}
-        <Card className="p-6 sm:p-8 shadow-sm bg-card border-border">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex items-start sm:items-center gap-4">
-              <div className="w-16 h-16 rounded-xl bg-primary text-primary-foreground font-bold text-2xl flex items-center justify-center shadow-xs shrink-0">
-                {userInitials}
+          {/* Quick Metrics Bar */}
+          <div className="flex flex-wrap items-center gap-3">
+            <Card className="px-4 py-2.5 flex items-center gap-2.5 shadow-xs border-border">
+              <div className="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-600 flex items-center justify-center">
+                <Flame className="w-4.5 h-4.5" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-foreground">{user.streakDays}-Day Streak</div>
+                <div className="text-sm text-muted-foreground font-mono">Daily defense active</div>
+              </div>
+            </Card>
+
+            <Card className="px-4 py-2.5 flex items-center gap-2.5 shadow-xs border-border">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                <Zap className="w-4.5 h-4.5" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-foreground">{user.totalXp} Total XP</div>
+                <div className="text-sm text-muted-foreground font-mono">
+                  {user.leagueRank > 0 ? `Rank #${user.leagueRank} in cohort` : 'Division: Bronze'}
+                </div>
+              </div>
+            </Card>
+
+            <Card className="px-4 py-2.5 shadow-xs border-border hover:border-primary/40 transition-colors">
+              <Link href="/resume-analyzer" className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-700 flex items-center justify-center font-bold font-mono text-sm">
+                  {user.atsScore > 0 ? `${user.atsScore}%` : 'Scan'}
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-foreground">ATS Score</div>
+                  <div className="text-sm text-emerald-700 font-mono">
+                    {user.atsScore > 0 ? 'Verified Match' : 'Upload Resume'}
+                  </div>
+                </div>
+              </Link>
+            </Card>
+          </div>
+        </div>
+      </Card>
+
+      {/* ========================================================================= */}
+      {/* 2. HOW AIGNITE WORKS: 3-STEP DAILY MASTERY WORKFLOW */}
+      {/* ========================================================================= */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <h2 className="text-lg font-bold text-foreground font-sans">
+              How AIgnite Works - Your Daily 3-Step Routine
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Follow this 18-minute daily loop to build verified applied AI competence and get discovered by hiring teams.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Step 1: Daily AI Spark */}
+          <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
+                  1
+                </div>
+                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
+                  5 Mins
+                </Badge>
               </div>
               <div className="space-y-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground font-sans tracking-tight">
-                    Welcome back, {user.name}!
-                  </h1>
-                  <Badge variant="outline" className="gap-1 px-2.5 py-0.5 bg-primary/10 border-primary/20 text-primary text-sm font-bold font-mono">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Verified Student</span>
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground font-mono">
-                  {user.college} - @{user.username} - Next division: Gold AI Engineer
+                <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-primary" />
+                  <span>Daily AI Spark</span>
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Digest the latest production breakthroughs (FlashAttention-3, DeepSeek GRPO, vLLM) condensed into high-signal engineering cards.
                 </p>
               </div>
             </div>
+            <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
+              <Link href="/feed">
+                <span>Read Today&apos;s Spark</span>
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Link>
+            </Button>
+          </Card>
 
-            {/* Quick Metrics Bar */}
-            <div className="flex flex-wrap items-center gap-3">
-              <Card className="px-4 py-2.5 flex items-center gap-2.5 shadow-sm">
-                <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center font-bold">
-                  🔥
+          {/* Step 2: Spoken Voice Defense */}
+          <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
+                  2
                 </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground">{user.streakDays}-Day Streak</div>
-                  <div className="text-sm text-muted-foreground font-mono">Daily oral defense active</div>
-                </div>
-              </Card>
-
-              <Card className="px-4 py-2.5 flex items-center gap-2.5 shadow-sm">
-                <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-                  ⚡
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-foreground">{user.totalXp} Total XP</div>
-                  <div className="text-sm text-muted-foreground font-mono">
-                    {user.leagueRank > 0 ? `Rank #${user.leagueRank} in cohort` : 'Division: Bronze'}
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="px-4 py-2.5 shadow-sm hover:border-primary/40 transition-colors cursor-pointer">
-                <Link href="/resume-analyzer" className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold font-mono text-sm">
-                    {user.atsScore > 0 ? `${user.atsScore}%` : 'Scan'}
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-foreground">ATS Score</div>
-                    <div className="text-sm text-emerald-600 dark:text-emerald-400 font-mono">
-                      {user.atsScore > 0 ? 'Verified Match' : 'Upload Resume'}
-                    </div>
-                  </div>
-                </Link>
-              </Card>
-            </div>
-          </div>
-        </Card>
-
-        {/* ========================================================================= */}
-        {/* 2. VERIFIED AI REPORT CARD & ORAL DEFENSE TELEMETRY */}
-        {/* ========================================================================= */}
-        <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-primary" />
-                <h2 className="text-lg font-bold text-foreground font-sans">
-                  Verified AI Report Card &amp; Spoken Telemetry
-                </h2>
+                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
+                  3 Mins
+                </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Recruiter-visible 5-axis competency evaluation aggregated across your daily oral defense sessions.
-              </p>
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
+                  <Mic className="w-4 h-4 text-primary" />
+                  <span>Voice Oral Defense</span>
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Answer today&apos;s AI Problem of the Day into your microphone. Receive real-time speech cadence, filler detection, and STAR scoring.
+                </p>
+              </div>
             </div>
+            <Button asChild size="sm" className="w-full font-bold text-sm">
+              <Link href="/coach">
+                <span>Practice POTD</span>
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Link>
+            </Button>
+          </Card>
 
-            <div className="flex items-center gap-3 self-start sm:self-center">
-              {reportCard && (
-                <div className="text-right">
-                  <span className="text-sm uppercase font-mono text-muted-foreground block">
-                    Composite Index
-                  </span>
-                  <span className="text-2xl font-black font-mono text-primary">
-                    {reportCard.overallScore.toFixed(1)}{' '}
-                    <span className="text-sm font-normal text-muted-foreground">/ 10</span>
-                  </span>
+          {/* Step 3: Company Packs & Sandbox */}
+          <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
+                  3
                 </div>
-              )}
-              <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-xs">
-                <Link href="/coach">
-                  <Mic className="w-3.5 h-3.5" />
-                  <span>Practice POTD</span>
-                </Link>
-              </Button>
+                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
+                  10 Mins
+                </Badge>
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
+                  <Cpu className="w-4 h-4 text-primary" />
+                  <span>Interactive Architecture Lab</span>
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Test sub-50ms latency SLAs in the Architecture Sandbox, complete company interview missions, and debug production PyTorch bugs.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
+              <Link href="/sandbox">
+                <span>Launch Architecture Lab</span>
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Link>
+            </Button>
+          </Card>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3. VERIFIED AI REPORT CARD & ORAL DEFENSE TELEMETRY */}
+      {/* ========================================================================= */}
+      <Card className="p-6 sm:p-8 space-y-6 shadow-xs border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-bold text-foreground font-sans">
+                Verified AI Report Card &amp; Spoken Telemetry
+              </h2>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Recruiter-visible 5-axis competency evaluation aggregated across your spoken defense sessions.
+            </p>
           </div>
 
-          {/* If report card exists, render 5-axis breakdown; otherwise render clean motivating empty state */}
-          {reportCard ? (
-            <>
-              {/* 5-Axis Score Breakdown */}
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
-                {[
-                  { label: 'Knowledge Depth', score: reportCard.knowledgeScore, sub: 'Algorithms & Math' },
-                  { label: 'Confidence & Pace', score: reportCard.confidenceScore, sub: reportCard.speechCadence },
-                  { label: 'Communication', score: reportCard.communicationScore, sub: 'STAR Structure' },
-                  { label: 'Practical Examples', score: reportCard.examplesScore, sub: 'VRAM & Latency Metrics' },
-                  { label: 'Industry Readiness', score: reportCard.industryLevelScore, sub: 'Senior Staff Bar' },
-                ].map((axis) => (
-                  <div key={axis.label} className="p-3.5 rounded-2xl bg-muted/50 border border-border/80 space-y-1.5">
-                    <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider block truncate">
-                      {axis.label}
-                    </span>
-                    <div className="text-xl font-black font-mono text-foreground">{axis.score.toFixed(1)}</div>
-                    <Progress value={(axis.score / 10) * 100} className="h-1.5" />
-                    <span className="text-sm font-mono text-muted-foreground block truncate">
-                      {axis.sub}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Spoken Telemetry Tags */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-sm font-mono text-muted-foreground">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="text-sm font-mono">
-                    Cadence: {reportCard.speechCadence}
-                  </Badge>
-                  <Badge variant="secondary" className="text-sm font-mono">
-                    Speech Fillers: {reportCard.fillerCount} detected (Elite Bar)
-                  </Badge>
-                  <Badge variant="outline" className="text-sm font-bold bg-emerald-500/10 border-emerald-500/20 text-emerald-700">
-                    ✓ Liveness Anti-Impersonation Checked
-                  </Badge>
-                </div>
-
-                <span className="text-sm text-primary font-bold">
-                  Visible to approved Google &amp; NVIDIA recruiters
+          <div className="flex items-center gap-3 self-start sm:self-center">
+            {reportCard && (
+              <div className="text-right">
+                <span className="text-sm uppercase font-mono text-muted-foreground block">
+                  Composite Index
+                </span>
+                <span className="text-2xl font-black font-mono text-primary">
+                  {reportCard.overallScore.toFixed(1)}{' '}
+                  <span className="text-sm font-normal text-muted-foreground">/ 10</span>
                 </span>
               </div>
-            </>
-          ) : (
-            <div className="p-8 text-center rounded-2xl bg-muted/30 border border-border/80 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto text-xl font-bold">
-                🎙️
-              </div>
-              <h3 className="text-base font-bold text-foreground font-sans">No Spoken Defense Records Yet</h3>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Answer today&apos;s AI Problem of the Day or take a mock interview on the Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified 5-axis report card.
-              </p>
-              <div className="pt-2">
-                <Button asChild className="font-bold text-sm shadow-xs gap-2">
-                  <Link href="/coach">
-                    <Mic className="w-4 h-4" />
-                    <span>Begin Voice Defense Session</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          )}
-        </Card>
-
-        {/* ========================================================================= */}
-        {/* 3. THE AI MODULE LEARNING SUITE (THE BLUEPRINT WORKBENCH) */}
-        {/* ========================================================================= */}
-        <section className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Layers className="w-5 h-5 text-primary" />
-                <h2 className="text-xl font-bold text-foreground font-sans">
-                  The AI Learning Suite (Module System)
-                </h2>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Action-Over-Consumption interactive modalities: theory, sequencing mini-games, debugging, tradeoff simulations, and custom builds.
-              </p>
-            </div>
+            )}
+            <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-xs">
+              <Link href="/coach">
+                <Mic className="w-3.5 h-3.5" />
+                <span>Practice POTD</span>
+              </Link>
+            </Button>
           </div>
+        </div>
 
-          {/* Modality Selector Tabs */}
-          <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-muted border border-border text-sm font-semibold">
-            {[
-              { id: 'builds', label: '🛠️ User Builds System', desc: 'AI System Sandbox' },
-              { id: 'bubble', label: '🫧 Bubble Game', desc: 'Pipeline Sequencer' },
-              { id: 'error', label: '🐞 Error Code', desc: 'Error Hunter' },
-              { id: 'simulator', label: '⚖️ Decision Simulator', desc: 'Tradeoff Evaluator' },
-              { id: 'mcq', label: '❓ Micro-Quiz (MCQs)', desc: '5s Knowledge Check' },
-              { id: 'text', label: '📖 Text Content', desc: 'Curated Theory' },
-            ].map((tab) => (
-              <Button
-                key={tab.id}
-                type="button"
-                variant={activeModuleTool === tab.id ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() =>
-                  setActiveModuleTool(
-                    tab.id as 'text' | 'bubble' | 'mcq' | 'error' | 'simulator' | 'builds'
-                  )
-                }
-                className="gap-1.5 font-bold text-sm h-9 px-3.5"
-              >
-                <span>{tab.label}</span>
-              </Button>
-            ))}
-          </div>
-
-          {/* Tab 1: USER BUILDS SYSTEM (SANDBOX) */}
-          {activeModuleTool === 'builds' && <UserBuildsSandbox />}
-
-          {/* Tab 2: PIPELINE BUBBLE GAME PREVIEW */}
-          {activeModuleTool === 'bubble' && (
-            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">🫧</span>
-                    <h3 className="text-lg font-bold text-foreground">Pipeline Bubble Game - RAG Master Mission</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Drag, drop, and connect the nodes in the exact sequential order to build an enterprise RAG pipeline under sub-50ms SLA.
-                  </p>
+        {reportCard ? (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
+              {[
+                { label: 'Knowledge Depth', score: reportCard.knowledgeScore, sub: 'Algorithms & Math' },
+                { label: 'Confidence & Pace', score: reportCard.confidenceScore, sub: reportCard.speechCadence },
+                { label: 'Communication', score: reportCard.communicationScore, sub: 'STAR Structure' },
+                { label: 'Practical Examples', score: reportCard.examplesScore, sub: 'VRAM & Latency Metrics' },
+                { label: 'Industry Readiness', score: reportCard.industryLevelScore, sub: 'Senior Staff Bar' },
+              ].map((axis) => (
+                <div key={axis.label} className="p-3.5 rounded-xl bg-muted/50 border border-border space-y-1.5">
+                  <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider block truncate">
+                    {axis.label}
+                  </span>
+                  <div className="text-xl font-black font-mono text-foreground">{axis.score.toFixed(1)}</div>
+                  <Progress value={(axis.score / 10) * 100} className="h-1.5" />
+                  <span className="text-sm font-mono text-muted-foreground block truncate">
+                    {axis.sub}
+                  </span>
                 </div>
-                <Button asChild className="font-bold text-sm gap-1.5 shadow-md shrink-0">
-                  <Link href="/packs/openai-pack">
-                    <span>Launch Full Screen Game</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </Button>
-              </div>
+              ))}
+            </div>
 
-              {/* Sample Bubble Pipeline Visual Representation */}
-              <div className="p-6 rounded-2xl bg-muted/40 border border-border flex flex-wrap items-center justify-center gap-3 font-mono text-sm">
-                {['Document Parser', 'Recursive Splitter', 'text-embedding-3', 'pgvector (HNSW)', 'Hybrid Retriever', 'Cohere Rerank', 'Prompt Template', 'LLM Generator'].map(
-                  (node, i, arr) => (
-                    <React.Fragment key={node}>
-                      <Badge variant="outline" className="px-3 py-2 bg-card border-primary/40 text-primary font-bold shadow-xs text-sm">
-                        {node}
-                      </Badge>
-                      {i < arr.length - 1 && <span className="text-muted-foreground font-black">&rarr;</span>}
-                    </React.Fragment>
-                  )
-                )}
-              </div>
-            </Card>
-          )}
-
-          {/* Tab 3: ERROR CODE / ERROR HUNTER */}
-          {activeModuleTool === 'error' && (
-            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <Bug className="w-5 h-5 text-destructive" />
-                    <h3 className="text-lg font-bold text-foreground">Error Code Hunter - PyTorch Gradient Spike</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Inspect the code snippet below. Identify the silent performance bug causing gradients to accumulate indefinitely across training epochs.
-                  </p>
-                </div>
-                <Badge variant="outline" className="px-2.5 py-1 bg-destructive/10 text-destructive text-sm font-mono font-bold border-destructive/20">
-                  Bug Detection: Active
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-sm font-mono text-muted-foreground">
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="secondary" className="text-sm font-mono">
+                  Cadence: {reportCard.speechCadence}
+                </Badge>
+                <Badge variant="secondary" className="text-sm font-mono">
+                  Speech Fillers: {reportCard.fillerCount} detected (Elite Bar)
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className="text-sm font-bold bg-emerald-500/10 border-emerald-500/20 text-emerald-700"
+                >
+                  ✓ Anti-Impersonation Checked
                 </Badge>
               </div>
 
-              {/* Broken Code Editor */}
-              <div className="rounded-2xl bg-black/90 border border-border p-4 font-mono text-sm text-foreground space-y-1">
-                <div className="text-muted-foreground"># PyTorch Training Loop Snippet</div>
-                <div className="text-purple-400">for epoch in range(num_epochs):</div>
-                <div className="pl-4 text-purple-400">for batch in dataloader:</div>
-                <div className="pl-8 text-foreground/80">outputs = model(batch[&apos;inputs&apos;])</div>
-                <div className="pl-8 text-foreground/80">loss = criterion(outputs, batch[&apos;targets&apos;])</div>
-                <div className="pl-8 text-destructive font-bold bg-destructive/15 px-2 py-0.5 rounded">
-                  loss.backward()  # &lt;-- BUG: Missing optimizer.zero_grad() before backward pass!
-                </div>
-                <div className="pl-8 text-foreground/80">optimizer.step()</div>
-              </div>
+              <span className="text-sm text-primary font-bold">
+                Visible to approved enterprise recruiters
+              </span>
+            </div>
+          </>
+        ) : (
+          <div className="p-8 text-center rounded-xl bg-muted/30 border border-border space-y-3">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto text-xl font-bold">
+              🎙️
+            </div>
+            <h3 className="text-base font-bold text-foreground font-sans">No Spoken Defense Records Yet</h3>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              Answer today&apos;s AI Problem of the Day on the Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified report card.
+            </p>
+            <div className="pt-2">
+              <Button asChild className="font-bold text-sm shadow-xs gap-2">
+                <Link href="/coach">
+                  <Mic className="w-4 h-4" />
+                  <span>Begin Voice Defense Session</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
+      </Card>
 
-              <div className="flex items-center justify-between pt-2">
-                <p className="text-sm text-muted-foreground">
-                  Without <code className="text-primary font-mono">optimizer.zero_grad()</code>, gradients from previous batches accumulate in tensor buffers.
-                </p>
-                <Button
-                  type="button"
-                  onClick={() => setErrorFixed(!errorFixed)}
-                  className="font-bold text-sm shadow-sm"
-                >
-                  {errorFixed ? '✓ Production Fix Applied (+20 XP)' : 'Apply Production Fix'}
-                </Button>
-              </div>
-            </Card>
-          )}
+      {/* ========================================================================= */}
+      {/* 4. WEEKLY LEAGUE STANDING (COMPACT PREVIEW - NOT FULL TABLE) */}
+      {/* ========================================================================= */}
+      <Card className="p-6 sm:p-8 space-y-5 shadow-xs border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-bold text-foreground font-sans">
+                Weekly Competitive League Standing
+              </h2>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              You are competing in a 30-student weekly cohort bracket. Top 5 students promote to Gold AI Engineer on Sunday.
+            </p>
+          </div>
 
-          {/* Tab 4: AI DECISION SIMULATOR */}
-          {activeModuleTool === 'simulator' && (
-            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <Scale className="w-5 h-5 text-chart-4" />
-                  <h3 className="text-lg font-bold text-foreground">AI Decision Simulator - Hardware SLA Dilemma</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  You have a strict sub-40ms P95 latency SLA on an NVIDIA T4 GPU (16GB VRAM) for autonomous drone image reasoning. Which model family do you deploy?
-                </p>
-              </div>
+          <Button asChild variant="outline" size="sm" className="font-bold text-sm gap-1.5 shrink-0">
+            <Link href="/league">
+              <span>View Full Bracket &amp; Leaderboards</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </Button>
+        </div>
 
-              <div className="grid sm:grid-cols-2 gap-3 pt-2">
-                {[
-                  { id: 'A', text: 'Vision Transformer (ViT-Huge/14) with 632M parameters', verdict: 'Fails SLA: ~160ms latency on T4.' },
-                  { id: 'B', text: 'YOLOv11 / RT-DETR with TensorRT INT8 Quantization', verdict: '✓ Optimal: 18ms latency, 3.4GB VRAM footprint.' },
-                  { id: 'C', text: 'Unquantized CLIP-ViT-L/14 with Float32 tensors', verdict: 'Fails VRAM limit: CUDA OOM under batch concurrency.' },
-                  { id: 'D', text: 'Stable Diffusion Latent Encoder Backbone', verdict: 'Fails Latency: Diffusion latents introduce > 400ms overhead.' },
-                ].map((opt) => (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => setSelectedDecision(opt.id)}
-                    className={`p-4 rounded-2xl border text-left text-sm transition-all space-y-1.5 cursor-pointer ${
-                      selectedDecision === opt.id
-                        ? opt.id === 'B'
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-foreground'
-                          : 'bg-destructive/10 border-destructive/30 text-foreground'
-                        : 'bg-muted/40 border-border hover:border-primary/40'
-                    }`}
-                  >
-                    <div className="font-bold flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-lg bg-card border flex items-center justify-center font-mono">
-                        {opt.id}
-                      </span>
-                      <span>{opt.text}</span>
-                    </div>
-                    {selectedDecision === opt.id && (
-                      <p className={`text-sm font-mono ${opt.id === 'B' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-destructive'}`}>
-                        {opt.verdict}
-                      </p>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </Card>
-          )}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-1">
+            <span className="text-sm font-mono text-muted-foreground">Current Division</span>
+            <div className="text-base font-bold text-foreground flex items-center gap-2">
+              <span>🥈</span>
+              <span>{user.leagueTier}</span>
+            </div>
+          </div>
 
-          {/* Tab 5: MCQs & MICRO-QUIZZES */}
-          {activeModuleTool === 'mcq' && (
-            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-bold text-foreground">5-Second Micro-Quiz</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Why does DeepSeek-R1&apos;s Group Relative Policy Optimization (GRPO) use significantly less GPU memory than standard PPO?
-                </p>
-              </div>
+          <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-1">
+            <span className="text-sm font-mono text-muted-foreground">Cohort Bracket Position</span>
+            <div className="text-base font-bold text-foreground flex items-center gap-2">
+              <span className="text-primary font-mono text-lg font-black">
+                #{user.leagueRank > 0 ? user.leagueRank : 5}
+              </span>
+              <Badge variant="outline" className="text-sm font-mono bg-emerald-500/10 text-emerald-700 border-emerald-500/20">
+                Promotion Zone (Top 5)
+              </Badge>
+            </div>
+          </div>
 
-              <div className="space-y-2.5">
-                {[
-                  'It eliminates the Critic / Value network, avoiding an extra model copy in VRAM',
-                  'It forces 2-bit quantization on all attention weights',
-                  'It shrinks the context window from 32k down to 512 tokens',
-                  'It offloads weights to CPU RAM using PCIe Gen3',
-                ].map((option, idx) => {
-                  const isCorrect = idx === 0;
-                  const isSelected = selectedMcqOption === idx;
+          <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-1">
+            <span className="text-sm font-mono text-muted-foreground">Weekly Score</span>
+            <div className="text-base font-bold font-mono text-foreground">
+              {user.totalXp} XP earned this week
+            </div>
+          </div>
+        </div>
+      </Card>
 
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => {
-                        setSelectedMcqOption(idx);
-                        setMcqSubmitted(true);
-                      }}
-                      className={`w-full p-4 rounded-2xl border text-left text-sm transition-all flex items-center justify-between cursor-pointer ${
-                        mcqSubmitted
-                          ? isCorrect
-                            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold'
-                            : isSelected
-                            ? 'bg-destructive/10 border-destructive/30 text-destructive'
-                            : 'bg-muted/40 border-border text-muted-foreground'
-                          : 'bg-muted/40 border-border hover:border-primary/40 text-foreground'
-                      }`}
-                    >
-                      <span>{option}</span>
-                      {mcqSubmitted && isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
-                    </button>
-                  );
-                })}
-              </div>
+      {/* ========================================================================= */}
+      {/* 5. EXPLORE THE SUITE QUICK LAUNCH TILES */}
+      {/* ========================================================================= */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-bold text-foreground font-sans">
+          Quick Access Modules
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Link
+            href="/packs"
+            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors space-y-2 block shadow-xs"
+          >
+            <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Boxes className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-foreground font-sans">Company Packs</h3>
+            <p className="text-sm text-muted-foreground">
+              Targeted interview blueprints for OpenAI, Anthropic, Google DeepMind, and NVIDIA.
+            </p>
+          </Link>
 
-              {mcqSubmitted && (
-                <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-emerald-600 dark:text-emerald-400">
-                  <strong>Key Takeaway:</strong> GRPO computes baseline advantages by sampling a group of responses to the same prompt, removing the parameter-heavy critic model completely.
-                </div>
-              )}
-            </Card>
-          )}
+          <Link
+            href="/sandbox"
+            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors space-y-2 block shadow-xs"
+          >
+            <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Cpu className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-foreground font-sans">Architecture Lab</h3>
+            <p className="text-sm text-muted-foreground">
+              Interactive system builder with real-time latency, VRAM telemetry, and mini-games.
+            </p>
+          </Link>
 
-          {/* Tab 6: TEXT CONTENT (CURATED THEORY) */}
-          {activeModuleTool === 'text' && (
-            <Card className="p-6 sm:p-8 space-y-6 shadow-sm">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-bold text-foreground">Interactive Bite-Sized Reading</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  High-signal engineering breakdowns designed for rapid commute comprehension.
-                </p>
-              </div>
+          <Link
+            href="/games/pipeline-bubble"
+            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors space-y-2 block shadow-xs"
+          >
+            <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <CircleDot className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-foreground font-sans">Practice Games</h3>
+            <p className="text-sm text-muted-foreground">
+              Master RAG pipeline sequencing, PyTorch bug hunting, and hardware trade-offs.
+            </p>
+          </Link>
 
-              <div className="grid sm:grid-cols-3 gap-4">
-                {[
-                  {
-                    title: 'FlashAttention-3 TMA Acceleration',
-                    tag: 'CUDA Kernels',
-                    readTime: '3 min read',
-                    desc: 'Warp specialization separates producer warps doing asynchronous TMA memory transfers from consumer tensor core compute warps.',
-                  },
-                  {
-                    title: 'vLLM PagedAttention Virtual Memory',
-                    tag: 'Inference',
-                    readTime: '4 min read',
-                    desc: 'Solves internal memory fragmentation by partitioning the KV cache into fixed-size physical blocks instead of contiguous memory.',
-                  },
-                  {
-                    title: 'pgvector HNSW Graph Mechanics',
-                    tag: 'Vector DB',
-                    readTime: '3 min read',
-                    desc: 'Hierarchical Navigable Small World graphs enable sub-10ms logarithmic time vector retrieval across millions of dense vectors.',
-                  },
-                ].map((item) => (
-                  <Card
-                    key={item.title}
-                    className="p-5 bg-muted/40 hover:border-primary/40 transition-all space-y-2 flex flex-col justify-between shadow-none"
-                  >
-                    <div className="space-y-1.5">
-                      <Badge variant="outline" className="text-sm font-mono bg-primary/10 text-primary font-bold border-primary/20">
-                        {item.tag}
-                      </Badge>
-                      <h4 className="text-sm font-bold text-foreground font-sans">{item.title}</h4>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                    </div>
-                    <span className="text-sm font-mono text-muted-foreground block pt-2 border-t border-border/60">
-                      {item.readTime}
-                    </span>
-                  </Card>
-                ))}
-              </div>
-            </Card>
-          )}
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 4. MULTI-SCOPE COMPETITIVE LEADERBOARD (REGIONAL, NATIONAL, GLOBAL) */}
-        {/* ========================================================================= */}
-        <section>
-          <MultiScopeLeaderboard />
-        </section>
-      </main>
-
-      <MobileTabBar />
+          <Link
+            href="/resume-analyzer"
+            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors space-y-2 block shadow-xs"
+          >
+            <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <FileText className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-foreground font-sans">Resume ATS Radar</h3>
+            <p className="text-sm text-muted-foreground">
+              Real-time vector ATS scoring against elite AI role descriptions and hiring rubrics.
+            </p>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

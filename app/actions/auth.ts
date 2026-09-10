@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { db } from '@/lib/db';
-import { profiles } from '@/lib/db/schema';
+import { profiles, studentStats } from '@/lib/db/schema';
 import { eq, sql } from 'drizzle-orm';
 
 // Disallowed public email domains for recruiters
@@ -708,3 +708,110 @@ export async function getPlatformHealthAction(): Promise<PlatformHealthStatus> {
     },
   };
 }
+
+export interface CurrentStudentProfile {
+  fullName: string;
+  username: string;
+  email: string;
+  collegeOrCompany: string;
+  headline: string;
+  totalPoints: number;
+  currentStreak: number;
+  leagueTier: string;
+  leagueRank: number;
+  atsScore: number;
+}
+
+/**
+ * 12. Retrieve authenticated student profile from DB/session
+ */
+export async function getCurrentStudentProfileAction(): Promise<CurrentStudentProfile | null> {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('aignite_session')?.value;
+
+  if (!sessionCookie) {
+    return null;
+  }
+
+  let session: { email?: string; fullName?: string; username?: string; role?: string } = {};
+  try {
+    session = JSON.parse(sessionCookie);
+  } catch {
+    return null;
+  }
+
+  const email = session.email || '';
+  let fullName = session.fullName || (email ? email.split('@')[0] : 'Learner');
+  let username = session.username || (email ? email.split('@')[0] : 'learner');
+  let collegeOrCompany = 'AI Engineering Campus';
+  let headline = 'Aspiring AI Systems Engineer';
+  let totalPoints = 415;
+  let currentStreak = 3;
+  let leagueTier = 'Silver AI Engineer';
+  let leagueRank = 5;
+  let atsScore = 84;
+
+  if (db && email) {
+    try {
+      const dbProfile = await db.query.profiles.findFirst({
+        where: eq(profiles.username, username),
+      });
+
+      if (dbProfile) {
+        fullName = dbProfile.fullName || fullName;
+        username = dbProfile.username || username;
+        collegeOrCompany = dbProfile.collegeOrCompany || collegeOrCompany;
+        headline = dbProfile.headline || headline;
+
+        const stats = await db.query.studentStats.findFirst({
+          where: eq(studentStats.studentId, dbProfile.id),
+        });
+
+        if (stats) {
+          totalPoints = stats.totalPoints || totalPoints;
+          currentStreak = stats.currentStreak || currentStreak;
+          leagueTier = stats.currentLeagueTier || leagueTier;
+          leagueRank = stats.overallRanking || leagueRank;
+        }
+      }
+    } catch (err) {
+      console.warn('Could not load student profile from database:', err);
+    }
+  }
+
+  return {
+    fullName,
+    username,
+    email,
+    collegeOrCompany,
+    headline,
+    totalPoints,
+    currentStreak,
+    leagueTier,
+    leagueRank,
+    atsScore,
+  };
+}
+
+/**
+ * 13. Sign Out Action
+ */
+export async function signOutAction() {
+  const cookieStore = await cookies();
+  cookieStore.delete('aignite_session');
+  cookieStore.delete('aignite_recruiter_session');
+  cookieStore.delete('aignite_demo_otp');
+  cookieStore.delete('sb_token');
+
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createClient();
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.warn('Supabase signOut error:', err);
+    }
+  }
+
+  return { success: true };
+}
+

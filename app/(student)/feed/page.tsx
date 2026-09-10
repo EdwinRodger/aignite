@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Navbar } from '@/components/navigation/Navbar';
-import { MobileTabBar } from '@/components/navigation/MobileTabBar';
+
 import { FeedCard } from '@/components/feed/FeedCard';
 import { FeedFilterBar } from '@/components/feed/FeedFilterBar';
 import { FeedSidebar } from '@/components/feed/FeedSidebar';
@@ -64,11 +63,8 @@ export default function FeedPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col pb-20 md:pb-12">
-      <Navbar />
-
-      <main id="main-content" className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Page Banner / Header */}
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Page Banner / Header */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -156,10 +152,6 @@ export default function FeedPage() {
             />
           </div>
         </div>
-      </main>
-
-      {/* Mobile Bottom Tab Navigation */}
-      <MobileTabBar />
     </div>
   );
 }

@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from '@/components/navigation/Navbar';
-import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { VoiceRecorder } from '@/components/coach/VoiceRecorder';
 import { ReportCardModal } from '@/components/coach/ReportCardModal';
 import { DAILY_COACH_QUESTIONS, CoachQuestion, CoachEvaluationReport } from '@/lib/coach-data';
@@ -53,11 +51,8 @@ export default function CoachPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col pb-20 md:pb-12">
-      <Navbar />
-
-      <main id="main-content" className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Page Banner / Header */}
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* Page Banner / Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-6">
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -239,7 +234,6 @@ export default function CoachPage() {
             </Card>
           </aside>
         </div>
-      </main>
 
       {/* AI Report Card Modal on Evaluation Completion */}
       {evaluationReport && (
@@ -249,8 +243,6 @@ export default function CoachPage() {
           onContinue={() => setEvaluationReport(null)}
         />
       )}
-
-      <MobileTabBar />
     </div>
   );
 }
