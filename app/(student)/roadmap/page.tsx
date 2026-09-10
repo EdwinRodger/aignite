@@ -18,7 +18,7 @@ export default function RoadmapPage() {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
         {/* Header */}
-        <section className="text-center space-y-3 relative">
+        <section className="text-center space-y-4 relative">
           <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-primary text-sm font-semibold">
             <Map className="w-3.5 h-3.5" />
             <span>Interactive Competency Tree</span>
@@ -32,7 +32,7 @@ export default function RoadmapPage() {
             The complete 6-stage pathway to becoming an AI Systems Architect. Master mathematical intuition, PyTorch internals, RAG vector retrieval, and distributed CUDA training with interactive proof-of-skill challenges.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-mono text-muted-foreground pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-mono text-muted-foreground pt-1">
             <span className="flex items-center gap-1">
               <Sparkles className="w-4 h-4 text-primary" />
               <span>6 Progressive Milestone Stages</span>
@@ -50,14 +50,17 @@ export default function RoadmapPage() {
           </div>
 
           {/* Callout Banner */}
-          <Card className="p-4 max-w-xl mx-auto flex items-center justify-between gap-4 text-sm text-left shadow-sm">
-            <div className="space-y-0.5">
-              <span className="font-bold text-foreground">Want to verify your current level?</span>
-              <p className="text-muted-foreground text-sm">
+          <Card className="p-4 sm:p-5 max-w-2xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm text-left shadow-xs border-border rounded-2xl bg-card">
+            <div className="space-y-1">
+              <div className="font-bold text-foreground flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span>Want to verify your current level?</span>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 Run your resume through our AI ATS Analyzer to detect exactly which milestone stage you fit into.
               </p>
             </div>
-            <Button asChild size="sm" className="font-bold text-sm shrink-0 gap-1">
+            <Button asChild size="sm" className="font-bold text-sm shrink-0 gap-1.5 rounded-xl">
               <Link href="/resume-analyzer">
                 <span>Scan Resume</span>
                 <ArrowRight className="w-3.5 h-3.5" />
