@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Lora, IBM_Plex_Mono } from "next/font/google";
+import { Nunito, Lora, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const fontSans = Inter({
+const fontSans = Nunito({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -36,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground">{children}</body>
+      <body className={`${fontSans.className} min-h-full flex flex-col font-sans bg-background text-foreground`}>{children}</body>
     </html>
   );
 }
