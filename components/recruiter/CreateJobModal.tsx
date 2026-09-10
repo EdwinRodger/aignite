@@ -286,7 +286,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
             <Button
               type="submit"
               disabled={loading}
-              className="rounded-xl font-bold shadow-md shadow-primary/20 gap-1.5"
+              className="rounded-lg font-bold shadow-xs gap-1.5"
             >
               {loading ? (
                 <>

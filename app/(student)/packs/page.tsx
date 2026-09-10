@@ -74,14 +74,9 @@ export default function CompanyPacksPage() {
           {filteredPacks.map((pack) => (
             <Card
               key={pack.slug}
-              className={`${pack.borderColor} p-6 shadow-xl relative overflow-hidden flex flex-col justify-between transition-all hover:scale-[1.01]`}
+              className="border-border p-6 shadow-sm flex flex-col justify-between transition-all hover:border-border/80"
             >
-              {/* Decorative Subtle Gradient Background */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${pack.accentColor} pointer-events-none opacity-40`}
-              />
-
-              <div className="relative z-10 space-y-4">
+              <div className="space-y-4">
                 {/* Header with Company Logo / Badge */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2.5">
@@ -145,13 +140,13 @@ export default function CompanyPacksPage() {
               </div>
 
               {/* Action Button */}
-              <div className="relative z-10 pt-6 mt-4 border-t border-border/60 flex items-center justify-between">
+              <div className="pt-6 mt-4 border-t border-border/60 flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Sparkles className="w-3.5 h-3.5 text-primary" />
                   <span>Interactive Games Included</span>
                 </div>
 
-                <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-md shadow-primary/20">
+                <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-xs">
                   <Link href={`/packs/${pack.slug}`}>
                     <span>Launch Pack</span>
                     <ArrowRight className="w-3.5 h-3.5" />

@@ -60,14 +60,12 @@ export default function RecruiterLoginPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
-
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
         <div className="w-full max-w-md relative z-10">
-          <Card className="p-6 sm:p-8 shadow-xl shadow-black/20 space-y-6">
+          <Card className="p-6 sm:p-8 shadow-sm border-border space-y-6">
             {/* Header */}
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-accent border border-primary/20 text-primary mb-1 shadow-sm">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent border border-primary/20 text-primary mb-1">
                 <Building2 className="w-6 h-6" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground font-sans">
@@ -124,7 +122,7 @@ export default function RecruiterLoginPage() {
                 type="submit"
                 size="lg"
                 disabled={loading || !workEmail.trim()}
-                className="w-full font-bold text-sm shadow-lg shadow-primary/25 gap-2"
+                className="w-full font-bold text-sm shadow-xs gap-2"
               >
                 {loading ? (
                   <>

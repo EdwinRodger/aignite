@@ -105,11 +105,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
   };
 
   return (
-    <Card className="w-full rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden space-y-6">
-      {/* Decorative Ambient Background Glows */}
-      <div className="absolute -top-20 -right-20 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
-
+    <Card className="w-full rounded-xl p-5 sm:p-6 shadow-sm space-y-6">
       {/* Header & Mission Briefing */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-4">
         <div>
@@ -207,7 +203,7 @@ export function BubbleGame({ mission, packSlug, onCompleted }: BubbleGameProps) 
                 key={slotIdx}
                 className={`min-h-[90px] rounded-xl border-2 transition-all p-3 flex flex-col justify-between relative group ${
                   placed
-                    ? 'border-primary/50 bg-card shadow-md shadow-primary/5'
+                    ? 'border-primary/40 bg-card shadow-xs'
                     : 'border-dashed border-border/80 bg-muted/20 items-center justify-center text-muted-foreground'
                 }`}
               >

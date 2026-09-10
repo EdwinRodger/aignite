@@ -46,14 +46,11 @@ export default function LoginPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
-        {/* Subtle Warm Flame ambient glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[300px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
         <div className="w-full max-w-md relative z-10">
-          <Card className="shadow-xl shadow-black/20">
+          <Card className="shadow-sm border-border">
             <CardHeader className="text-center space-y-2 pb-4">
-              <div className="mx-auto inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-accent border border-primary/20 text-primary mb-1 shadow-sm">
+              <div className="mx-auto inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent border border-primary/20 text-primary mb-1">
                 <Flame className="w-6 h-6" />
               </div>
               <CardTitle className="text-2xl font-bold tracking-tight text-foreground font-sans">
@@ -100,7 +97,7 @@ export default function LoginPage() {
                   type="submit"
                   size="lg"
                   disabled={loading || !email.trim()}
-                  className="w-full font-bold text-sm shadow-lg shadow-primary/25 gap-2"
+                  className="w-full font-bold text-sm shadow-xs gap-2"
                 >
                   {loading ? (
                     <>

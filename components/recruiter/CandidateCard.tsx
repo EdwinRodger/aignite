@@ -15,11 +15,11 @@ interface CandidateCardProps {
 }
 
 const TIER_META: Record<string, { label: string; icon: string; badgeClass: string }> = {
-  bronze: { label: 'Bronze AI Eng', icon: '🥉', badgeClass: 'bg-amber-700/15 border-amber-700/30 text-amber-600 dark:text-amber-400' },
-  silver: { label: 'Silver AI Eng', icon: '🥈', badgeClass: 'bg-slate-500/15 border-slate-500/30 text-slate-700 dark:text-slate-300' },
-  gold: { label: 'Gold AI Eng', icon: '🥇', badgeClass: 'bg-yellow-500/15 border-yellow-500/30 text-yellow-600 dark:text-yellow-400' },
-  diamond: { label: 'LLM Master', icon: '💎', badgeClass: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-600 dark:text-cyan-400' },
-  architect: { label: 'AI Architect', icon: '👑', badgeClass: 'bg-primary/15 border-primary/30 text-primary font-bold shadow-sm shadow-primary/20' },
+  bronze: { label: 'Bronze AI Eng', icon: '🥉', badgeClass: 'bg-amber-100/80 border-amber-300 text-amber-900' },
+  silver: { label: 'Silver AI Eng', icon: '🥈', badgeClass: 'bg-slate-100 border-slate-300 text-slate-800' },
+  gold: { label: 'Gold AI Eng', icon: '🥇', badgeClass: 'bg-amber-100/80 border-amber-300 text-amber-900' },
+  diamond: { label: 'LLM Master', icon: '💎', badgeClass: 'bg-slate-100 border-slate-300 text-slate-800' },
+  architect: { label: 'AI Architect', icon: '👑', badgeClass: 'bg-primary/10 border-primary/30 text-primary font-bold shadow-xs' },
 };
 
 export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardProps) {
@@ -27,7 +27,7 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
   const rep = candidate.reportCard;
 
   return (
-    <Card className="p-6 sm:p-7 shadow-lg shadow-black/5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between group rounded-3xl">
+    <Card className="p-6 sm:p-7 shadow-sm hover:border-border/80 transition-all flex flex-col justify-between group rounded-xl">
       <CardContent className="p-0 space-y-4">
         {/* Header Info */}
         <div className="flex items-start justify-between gap-3">
@@ -148,7 +148,7 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
         </Button>
         <Button
           onClick={() => onInvite(candidate)}
-          className="flex-1 rounded-xl text-sm font-bold shadow-md shadow-primary/20 gap-1.5"
+          className="flex-1 rounded-xl text-sm font-bold shadow-xs gap-1.5"
         >
           <Send className="w-3.5 h-3.5" />
           <span>Invite Candidate</span>

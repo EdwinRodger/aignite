@@ -39,7 +39,7 @@ export function RoadmapNodeTree() {
   return (
     <div className="relative max-w-4xl mx-auto space-y-8">
       {/* Central Guide Line */}
-      <div className="absolute left-6 sm:left-8 top-10 bottom-10 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-border pointer-events-none hidden sm:block" />
+      <div className="absolute left-6 sm:left-8 top-10 bottom-10 w-0.5 bg-border pointer-events-none hidden sm:block" />
 
       {AI_CAREER_ROADMAP.map((stage: RoadmapStage) => {
         const isExpanded = expandedStages.includes(stage.id);
@@ -50,11 +50,11 @@ export function RoadmapNodeTree() {
           <div key={stage.id} className="relative sm:pl-20 group">
             {/* Stage Milestone Indicator Icon on the line */}
             <div
-              className={`hidden sm:flex absolute left-4.5 -translate-x-1/2 top-7 w-7 h-7 rounded-full items-center justify-center font-bold text-sm shadow-md border-2 z-10 transition-transform group-hover:scale-110 ${
+              className={`hidden sm:flex absolute left-4.5 -translate-x-1/2 top-7 w-7 h-7 rounded-full items-center justify-center font-bold text-sm shadow-xs border-2 z-10 transition-transform group-hover:scale-110 ${
                 isCompleted
-                  ? 'bg-emerald-500 border-emerald-400 text-white'
+                  ? 'bg-emerald-600 border-emerald-500 text-white'
                   : isInProgress
-                  ? 'bg-primary border-primary/80 text-primary-foreground animate-pulse'
+                  ? 'bg-primary border-primary/80 text-primary-foreground'
                   : 'bg-card border-border text-muted-foreground'
               }`}
             >
@@ -69,9 +69,9 @@ export function RoadmapNodeTree() {
 
             {/* Stage Card */}
             <Card
-              className={`rounded-3xl border transition-all overflow-hidden shadow-lg shadow-black/5 ${
+              className={`rounded-xl border transition-all overflow-hidden shadow-xs ${
                 isInProgress
-                  ? 'border-primary/50 shadow-xl shadow-primary/5 ring-1 ring-primary/20'
+                  ? 'border-primary/50'
                   : isCompleted
                   ? 'border-emerald-500/30'
                   : 'border-border'

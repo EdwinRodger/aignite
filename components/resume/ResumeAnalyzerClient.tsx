@@ -215,13 +215,11 @@ export function ResumeAnalyzerClient() {
         /* Results Section */
         <div className="space-y-8 animate-in fade-in duration-300">
           {/* Top Score Banner */}
-          <Card className="rounded-3xl p-6 sm:p-8 shadow-xl shadow-black/10 space-y-6 relative overflow-hidden">
-            <div className="absolute -top-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
-
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <Card className="rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex items-center gap-5">
                 {/* Radial Score Gauge */}
-                <div className="relative w-24 h-24 rounded-full bg-muted border-4 border-primary/30 flex items-center justify-center shadow-lg shrink-0">
+                <div className="relative w-24 h-24 rounded-full bg-muted border-4 border-primary/30 flex items-center justify-center shadow-xs shrink-0">
                   <div className="text-center">
                     <span className="text-3xl font-black font-mono text-primary leading-none block">
                       {result.overallAtsScore}
@@ -303,7 +301,7 @@ export function ResumeAnalyzerClient() {
           </Card>
 
           {/* Action Over Consumption: AIgnite Gap Bridge */}
-          <Card className="rounded-3xl bg-gradient-to-tr from-primary/10 via-card to-card border-primary/25 p-6 sm:p-8 space-y-6 shadow-lg">
+          <Card className="rounded-xl bg-card border-border p-6 sm:p-8 space-y-6 shadow-sm">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">

@@ -332,7 +332,7 @@ export function CandidateDossierModal({
               onClose();
               onInvite(candidate);
             }}
-            className="rounded-xl text-sm font-bold shadow-md shadow-primary/20 gap-2"
+            className="rounded-xl text-sm font-bold shadow-xs gap-2"
           >
             <Send className="w-4 h-4" />
             <span>Fast-Track Direct Interview Invitation</span>

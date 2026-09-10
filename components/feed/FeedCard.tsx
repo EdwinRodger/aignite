@@ -102,12 +102,8 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
   return (
     <Card
       id={post.id}
-      className="w-full max-w-xl mx-auto rounded-3xl bg-card text-card-foreground border border-border shadow-xl relative overflow-hidden transition-all duration-300 hover:border-border/80 flex flex-col mb-6"
+      className="w-full max-w-xl mx-auto rounded-xl bg-card text-card-foreground border border-border shadow-sm transition-all duration-300 hover:border-border/80 flex flex-col mb-6"
     >
-      {/* Decorative Warm Flame Ambient Glow */}
-      <div className="absolute -top-16 -right-16 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-16 -left-16 w-40 h-40 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
-
       {/* Card Header */}
       <CardHeader className="p-4 sm:p-5 border-b border-border/60 flex flex-row items-center justify-between gap-3 bg-muted/20 space-y-0">
         <div className="flex items-center gap-2 flex-wrap">
@@ -243,7 +239,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
               if (hasAnswered) {
                 if (isOptionCorrect) {
                   buttonStyle =
-                    'bg-primary/20 border-primary text-foreground shadow-xs shadow-primary/20 ring-1 ring-primary/40 font-semibold';
+                    'bg-primary/10 border-primary text-foreground shadow-xs font-semibold';
                 } else if (isSelected && !isOptionCorrect) {
                   buttonStyle = 'bg-destructive/20 border-destructive text-foreground';
                 } else {

@@ -74,7 +74,7 @@ export function AudioReaderButton({ textToRead, title }: AudioReaderButtonProps)
       aria-label={isPlaying ? 'Stop audio readout' : 'Listen to 30-second audio summary'}
       title={isPlaying ? 'Stop audio' : 'Listen hands-free'}
       className={`gap-1.5 text-sm font-medium ${
-        isPlaying ? 'shadow-sm shadow-primary/30 animate-pulse' : ''
+        isPlaying ? 'shadow-xs animate-pulse' : ''
       }`}
     >
       {isPlaying ? (

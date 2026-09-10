@@ -146,9 +146,9 @@ function VerifyOtpContent() {
 
   return (
     <div className="w-full max-w-md relative z-10">
-      <Card className="shadow-xl shadow-black/20">
+      <Card className="shadow-sm border-border">
         <CardHeader className="text-center space-y-2 pb-4">
-          <div className="mx-auto inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-accent border border-primary/20 text-primary mb-1 shadow-sm">
+          <div className="mx-auto inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent border border-primary/20 text-primary mb-1">
             <KeyRound className="w-6 h-6" />
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight text-foreground font-sans">
@@ -194,10 +194,10 @@ function VerifyOtpContent() {
                   onChange={(e) => handleChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
                   onPaste={handlePaste}
-                  className={`w-11 h-14 sm:w-13 sm:h-16 text-center text-xl sm:text-2xl font-bold font-mono rounded-2xl border transition-all outline-none ${
+                  className={`w-11 h-14 sm:w-13 sm:h-16 text-center text-xl sm:text-2xl font-bold font-mono rounded-xl border transition-all outline-none ${
                     digit
-                      ? 'bg-accent/40 border-primary text-foreground ring-1 ring-primary/40 shadow-xs'
-                      : 'bg-muted/40 border-border text-foreground hover:border-border/80 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-accent/10'
+                      ? 'bg-accent/40 border-primary text-foreground shadow-xs'
+                      : 'bg-muted/40 border-border text-foreground hover:border-border/80 focus:border-primary focus:ring-1 focus:ring-primary/20 focus:bg-accent/10'
                   }`}
                 />
               ))}
@@ -207,7 +207,7 @@ function VerifyOtpContent() {
               onClick={() => submitCode()}
               disabled={loading || !isComplete}
               size="lg"
-              className="w-full font-bold text-sm shadow-lg shadow-primary/25 gap-2"
+              className="w-full font-bold text-sm shadow-xs gap-2"
             >
               {loading ? (
                 <>
@@ -278,9 +278,7 @@ export default function VerifyOtpPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[300px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
         <Suspense fallback={<div className="text-center p-8 text-muted-foreground">Loading verification...</div>}>
           <VerifyOtpContent />
         </Suspense>

@@ -59,7 +59,6 @@ export default async function HomePage() {
       name: 'Google AI Pack',
       company: 'Google',
       icon: '🔴',
-      color: 'from-blue-600/20 to-emerald-600/20',
       borderColor: 'border-blue-500/30',
       badge: 'Gemma & TPU',
       description: 'Attention mechanisms, Gemma fine-tuning, TPU parallelization, and Vertex AI pipelines.',
@@ -69,7 +68,6 @@ export default async function HomePage() {
       name: 'NVIDIA AI Pack',
       company: 'NVIDIA',
       icon: '🟢',
-      color: 'from-emerald-600/20 to-teal-600/20',
       borderColor: 'border-emerald-500/30',
       badge: 'CUDA & TensorRT',
       description: 'CUDA kernels, model quantization (AWQ/FP8), TensorRT acceleration, and Triton Inference Server.',
@@ -79,7 +77,6 @@ export default async function HomePage() {
       name: 'OpenAI Pack',
       company: 'OpenAI',
       icon: '⚪',
-      color: 'from-emerald-950/40 to-muted/80',
       borderColor: 'border-emerald-500/30',
       badge: 'Function Calling',
       description: 'Tool use, agentic JSON schema calling, embedding fine-tuning, and structured reasoning.',
@@ -89,7 +86,6 @@ export default async function HomePage() {
       name: 'Microsoft AI Pack',
       company: 'Microsoft',
       icon: '🔷',
-      color: 'from-cyan-600/20 to-blue-600/20',
       borderColor: 'border-cyan-500/30',
       badge: 'Semantic Kernel',
       description: 'Azure AI Studio, Semantic Kernel agents, multi-agent orchestration, and Copilot patterns.',
@@ -99,7 +95,6 @@ export default async function HomePage() {
       name: 'Amazon AI Pack',
       company: 'Amazon AWS',
       icon: '🟠',
-      color: 'from-amber-600/20 to-orange-600/20',
       borderColor: 'border-amber-500/30',
       badge: 'Bedrock & SageMaker',
       description: 'AWS Bedrock foundation models, SageMaker distributed training, and serverless LLM deployment.',
@@ -204,17 +199,13 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* HERO SECTION */}
         {/* ========================================================================= */}
-        <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
-          {/* Ambient background glows: lightweight radial gradients */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[radial-gradient(ellipse_at_center,_oklch(0.6404_0.2153_35.9003_/_0.12)_0%,_transparent_75%)] pointer-events-none" />
-          <div className="absolute top-1/3 left-1/4 w-[350px] h-[250px] bg-[radial-gradient(ellipse_at_center,_oklch(0.9656_0.0176_39.4009_/_0.08)_0%,_transparent_70%)] pointer-events-none" />
-
+        <section className="relative pt-12 pb-20 md:pt-20 md:pb-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               {/* Left Column: Vision & Pitch */}
               <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
                 {/* SIH Pill Badge */}
-                <Badge variant="outline" className="gap-2 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm">
+                <Badge variant="outline" className="gap-2 px-3 py-1.5 rounded-full text-sm font-semibold shadow-xs">
                   <Flame className="w-4 h-4 text-primary" />
                   <span>Smart India Hackathon (SIH) 2026 Initiative</span>
                 </Badge>
@@ -235,7 +226,7 @@ export default async function HomePage() {
 
                 {/* Primary Action Buttons */}
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
-                  <Button asChild size="lg" className="w-full sm:w-auto px-6 py-6 rounded-xl font-bold text-sm gap-2">
+                  <Button asChild size="lg" className="w-full sm:w-auto px-6 py-6 rounded-xl font-bold text-sm gap-2 shadow-xs">
                     <Link href="/login">
                       <span>Start Learning</span>
                       <ArrowRight className="w-4 h-4" />
@@ -243,7 +234,7 @@ export default async function HomePage() {
                   </Button>
                   <Button asChild variant="outline" size="lg" className="w-full sm:w-auto px-6 py-6 rounded-xl font-bold text-sm gap-2">
                     <Link href="/resume-analyzer">
-                      <Sparkles className="w-4 h-4 text-emerald-500" />
+                      <Sparkles className="w-4 h-4 text-emerald-600" />
                       <span>Free AI Resume ATS</span>
                     </Link>
                   </Button>
@@ -294,7 +285,7 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* PUBLIC LEARNING & AI TOOLS SUITE (100% FREE ACCESS) */}
         {/* ========================================================================= */}
-        <section className="py-16 border-t border-border bg-gradient-to-b from-card/30 via-background to-background relative">
+        <section className="py-16 border-t border-border bg-muted/20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
               <div>
@@ -321,7 +312,7 @@ export default async function HomePage() {
                 return (
                   <Card
                     key={feat.title}
-                    className="p-6 rounded-2xl border-border hover:border-primary/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5"
+                    className="p-6 rounded-xl border-border hover:border-border/80 transition-all flex flex-col justify-between group hover:shadow-sm"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
@@ -358,12 +349,12 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* PROBLEM OF THE DAY (POTD) SPOTLIGHT */}
         {/* ========================================================================= */}
-        <section id="potd-spotlight" className="py-16 border-t border-border bg-muted/15 relative">
+        <section id="potd-spotlight" className="py-16 border-t border-border bg-muted/30 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
-                <Badge variant="outline" className="gap-2 px-3 py-1 rounded-full text-sm font-bold bg-orange-500/10 border-orange-500/20 text-orange-500">
-                  <Flame className="w-4 h-4" />
+                <Badge variant="outline" className="gap-2 px-3 py-1 rounded-full text-sm font-bold bg-amber-500/10 border-amber-500/20 text-amber-700">
+                  <Flame className="w-4 h-4 text-primary" />
                   <span>Problem of the Day - Daily Streak Driver</span>
                 </Badge>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
@@ -373,14 +364,14 @@ export default async function HomePage() {
                   Every morning at 06:00 IST, AIgnite drops one production interview scenario. Speak your answer into the voice coach or study key canonical trade-offs to keep your league streak burning.
                 </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-                  <Button asChild className="gap-2 text-sm font-bold rounded-xl shadow-lg shadow-primary/20">
+                  <Button asChild className="gap-2 text-sm font-bold rounded-lg shadow-xs">
                     <Link href="/coach">
                       <Mic className="w-4 h-4" />
                       <span>Solve in Voice Mock Interview</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" className="gap-2 text-sm font-bold rounded-xl">
+                  <Button asChild variant="outline" className="gap-2 text-sm font-bold rounded-lg">
                     <Link href="/feed">
                       <Sparkles className="w-4 h-4 text-primary" />
                       <span>Browse 5-Second Sparks</span>
@@ -503,7 +494,7 @@ export default async function HomePage() {
             </div>
 
             <div className="mt-10 text-center">
-              <Button asChild size="lg" className="gap-2 px-6 py-6 rounded-xl font-bold text-sm shadow-xl shadow-primary/20">
+              <Button asChild size="lg" className="gap-2 px-6 py-6 rounded-xl font-bold text-sm shadow-xs">
                 <Link href="/feed">
                   <Sparkles className="w-4 h-4" />
                   <span>Launch Interactive AI Sparks Feed</span>
@@ -707,11 +698,11 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* PUBLIC AI RESUME ATS ANALYZER */}
         {/* ========================================================================= */}
-        <section className="py-16 border-t border-border bg-gradient-to-b from-card/40 to-background">
+        <section className="py-16 border-t border-border bg-muted/20">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-12 gap-8 items-center">
               <div className="md:col-span-7 space-y-4 text-center md:text-left">
-                <Badge variant="outline" className="gap-2 px-3 py-1 bg-emerald-500/10 border-emerald-500/20 text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                <Badge variant="outline" className="gap-2 px-3 py-1 bg-emerald-500/10 border-emerald-500/20 text-sm font-bold text-emerald-700">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Public Acquisition Engine - 100% Free</span>
                 </Badge>
@@ -725,7 +716,7 @@ export default async function HomePage() {
                 </p>
 
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
-                  <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-lg shadow-primary/20 gap-2">
+                  <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-xs gap-2">
                     <Link href="/resume-analyzer">
                       <span>Analyze Your AI Resume Now</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -847,7 +838,7 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* RECRUITER MODE & ANTI-IMPERSONATION */}
         {/* ========================================================================= */}
-        <section className="py-16 border-t border-border bg-gradient-to-b from-background to-muted/30">
+        <section className="py-16 border-t border-border bg-muted/20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-sm font-bold text-primary">
               <Lock className="w-3.5 h-3.5" />
@@ -864,7 +855,7 @@ export default async function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-              <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-lg shadow-primary/20 gap-2">
+              <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-xs gap-2">
                 <Link href="/recruiter/apply">
                   <span>Apply for Recruiter Access (Company Email)</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -882,12 +873,12 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* MULTI-SCOPE COMPETITIVE LEADERBOARDS OVERVIEW */}
         {/* ========================================================================= */}
-        <section id="leaderboards" className="py-20 border-t border-border bg-gradient-to-b from-muted/20 via-background to-card/30 relative">
+        <section id="leaderboards" className="py-20 border-t border-border bg-background relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <Badge variant="outline" className="gap-2 px-3 py-1 bg-chart-5/10 border-chart-5/20 text-sm font-bold text-chart-5 mb-2">
-                  <Trophy className="w-3.5 h-3.5" />
+                <Badge variant="outline" className="gap-2 px-3 py-1 bg-muted border-border text-sm font-bold text-foreground mb-2">
+                  <Trophy className="w-3.5 h-3.5 text-primary" />
                   <span>Multi-Scope Competitive Leaderboard - Weekly League</span>
                 </Badge>
                 <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
@@ -897,7 +888,7 @@ export default async function HomePage() {
                   Compete with peers from your university, state, across India, and globally. Rank based on daily consistency (flame streak) or verified engineering score (XP).
                 </p>
               </div>
-              <Button asChild size="lg" className="font-bold text-sm shadow-lg shadow-primary/20 gap-2 shrink-0">
+              <Button asChild size="lg" className="font-bold text-sm shadow-xs gap-2 shrink-0">
                 <Link href="/league">
                   <span>View Full Division Leagues</span>
                   <ArrowRight className="w-3.5 h-3.5" />

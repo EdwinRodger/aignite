@@ -56,7 +56,7 @@ export const DAILY_COACH_QUESTIONS: CoachQuestion[] = [
     ],
     suggestedModelAnswer:
       'FlashAttention-3 maximizes Hopper H100 hardware by tackling the fundamental memory bandwidth bottleneck in attention computation. In traditional attention, intermediate N-by-N attention matrices must be read from and written to high-bandwidth global memory (HBM), creating an IO bottleneck. FlashAttention-3 introduces Warp Specialization, which partitions GPU warps into dedicated producer warps-responsible for loading tiles from HBM-and consumer warps-responsible for executing Tensor Core matrix operations. By leveraging Hopper’s hardware Tensor Memory Accelerator (TMA), producer warps asynchronously transfer data directly into shared memory (SRAM) without consuming register file bandwidth. Simultaneously, consumer warps compute FP8 scaled dot-products. This total overlap of memory transfers with computation allows FlashAttention-3 to sustain up to 75% of theoretical peak FP8 TFLOPs.',
-    estimatedSpeakingTime: '60–90 seconds',
+    estimatedSpeakingTime: '60-90 seconds',
   },
   {
     id: 'coach-grpo-reasoning',
@@ -77,7 +77,7 @@ export const DAILY_COACH_QUESTIONS: CoachQuestion[] = [
     ],
     suggestedModelAnswer:
       'In standard PPO, reinforcement learning requires two large models in GPU memory: the actor (policy) model and a critic (value) model of comparable size that estimates expected baseline returns. For 70B+ frontier models, this critic network doubles the memory footprint and communication overhead. DeepSeek-R1 introduces Group Relative Policy Optimization (GRPO) to eradicate the critic model entirely. Instead of predicting a state value with a secondary neural network, GRPO samples a group of diverse completions for each prompt, scores each output, and normalizes the reward relative to the group’s empirical mean and standard deviation. This slashes RL training memory by ~60%, allowing larger batch sizes or longer reasoning contexts. The architectural tradeoff is that GRPO requires sampling multiple trajectories per prompt, but for verifiable domains like mathematical proofs and programming unit tests, this group variance estimation is significantly more stable than an imperfect learned critic.',
-    estimatedSpeakingTime: '60–90 seconds',
+    estimatedSpeakingTime: '60-90 seconds',
   },
   {
     id: 'coach-vllm-paged-attention',
@@ -98,6 +98,6 @@ export const DAILY_COACH_QUESTIONS: CoachQuestion[] = [
     ],
     suggestedModelAnswer:
       'During auto-regressive decoding, the Key-Value (KV) cache grows dynamically with each generated token. In legacy inference systems, memory must be allocated contiguously in GPU VRAM for the maximum possible sequence length (e.g., 8k tokens) because future length cannot be known in advance. This causes massive internal fragmentation and memory reservation waste, often exceeding 60-80% of total GPU memory. PagedAttention solves this by adopting operating system virtual memory paging: it divides the KV cache into fixed-size virtual blocks (such as 16 tokens) that can reside in non-contiguous physical GPU memory blocks. A dynamic block table maps logical token positions to physical blocks on demand. This virtually eliminates memory fragmentation (dropping waste to under 4%), allowing GPUs to pack 2x to 4x more concurrent request streams on the exact same hardware.',
-    estimatedSpeakingTime: '45–75 seconds',
+    estimatedSpeakingTime: '45-75 seconds',
   },
 ];

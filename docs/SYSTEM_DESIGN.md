@@ -298,7 +298,7 @@ sequenceDiagram
 - **Speech Metrics Analyzed**:
   1. **Transcription**: Extracted via Gemini 2.0 Multimodal Audio or Whisper.
   2. **Filler Words Counter**: Deterministic regex counting instances of "um", "uh", "like", "you know", "actually".
-  3. **Pacing & Duration**: Words per minute (WPM) calculation (ideal range: 130–160 WPM).
+  3. **Pacing & Duration**: Words per minute (WPM) calculation (ideal range: 130-160 WPM).
   4. **Conceptual Accuracy**: Graded against canonical ground truth vectors stored in `interview_questions`.
 
 ### 4.2. Resume Analyzer Pipeline

@@ -138,12 +138,10 @@ export default function RecruiterDashboardPage() {
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Recruiter Enterprise Header */}
-        <Card className="p-6 sm:p-8 shadow-xl shadow-black/10 relative overflow-hidden bg-gradient-to-r from-card via-card to-muted border-border">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <Card className="p-6 sm:p-8 shadow-sm bg-card border-border">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-start sm:items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary/20 to-accent/30 border border-primary/30 flex items-center justify-center text-3xl shadow-sm shrink-0">
+              <div className="w-16 h-16 rounded-xl bg-muted border border-border flex items-center justify-center text-3xl shadow-xs shrink-0">
                 🏢
               </div>
               <div className="space-y-1">
@@ -151,7 +149,7 @@ export default function RecruiterDashboardPage() {
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground font-sans tracking-tight">
                     {recruiterInfo.company}
                   </h1>
-                  <Badge variant="outline" className="gap-1 px-2.5 py-0.5 bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-bold">
+                  <Badge variant="outline" className="gap-1 px-2.5 py-0.5 bg-emerald-500/10 border-emerald-500/20 text-emerald-700 text-sm font-bold">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>Verified Partner</span>
                   </Badge>
@@ -167,7 +165,7 @@ export default function RecruiterDashboardPage() {
               <Button
                 type="button"
                 onClick={() => setIsCreateJobOpen(true)}
-                className="font-bold text-sm shadow-md shadow-primary/20 gap-1.5"
+                className="font-bold text-sm shadow-xs gap-1.5"
               >
                 <Plus className="w-4 h-4" />
                 <span>Post AI Engineering Role</span>
@@ -447,7 +445,7 @@ export default function RecruiterDashboardPage() {
               <Button
                 type="button"
                 onClick={() => setIsCreateJobOpen(true)}
-                className="font-bold text-sm gap-1.5 shadow-md shadow-primary/20 shrink-0"
+                className="font-bold text-sm gap-1.5 shadow-xs shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>Post New AI Role</span>

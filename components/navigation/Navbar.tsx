@@ -76,10 +76,8 @@ export function Navbar() {
           aria-label="AIgnite Homepage"
           className="flex items-center gap-2 group rounded-xl p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-accent p-[1px] flex items-center justify-center shadow-lg shadow-primary/15 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-background rounded-[11px] flex items-center justify-center">
-              <Flame className="w-5 h-5 text-primary transition-colors" />
-            </div>
+          <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+            <Flame className="w-5 h-5 transition-colors" />
           </div>
           <span className="text-xl font-black tracking-tight text-foreground font-mono">
             <span className="text-primary font-extrabold underline decoration-primary/50 decoration-2 underline-offset-4">
@@ -246,7 +244,7 @@ export function Navbar() {
         {/* Auth / Dashboard CTA */}
         <div className="flex items-center gap-3">
           {userRole === 'student' ? (
-            <Button asChild size="default" className="rounded-xl font-semibold text-sm shadow-md shadow-primary/20">
+            <Button asChild size="default" className="rounded-lg font-semibold text-sm shadow-xs">
               <Link href="/dashboard" className="flex items-center gap-1.5">
                 <LayoutDashboard className="w-3.5 h-3.5" />
                 <span>Dashboard</span>
@@ -254,7 +252,7 @@ export function Navbar() {
               </Link>
             </Button>
           ) : userRole === 'recruiter' ? (
-            <Button asChild size="default" className="rounded-xl font-semibold text-sm shadow-md shadow-primary/20">
+            <Button asChild size="default" className="rounded-lg font-semibold text-sm shadow-xs">
               <Link href="/recruiter/dashboard" className="flex items-center gap-1.5">
                 <Briefcase className="w-3.5 h-3.5" />
                 <span>Recruiter Dashboard</span>
@@ -262,7 +260,7 @@ export function Navbar() {
               </Link>
             </Button>
           ) : (
-            <Button asChild size="default" className="rounded-xl font-semibold text-sm shadow-md shadow-primary/20">
+            <Button asChild size="default" className="rounded-lg font-semibold text-sm shadow-xs">
               <Link href="/login" className="flex items-center gap-1.5">
                 <span>Sign In</span>
                 <ArrowRight className="w-3.5 h-3.5" />

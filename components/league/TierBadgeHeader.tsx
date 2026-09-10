@@ -22,21 +22,15 @@ export function TierBadgeHeader({
   const isPromotionZone = userRank <= 6;
 
   return (
-    <Card className="rounded-3xl border-border shadow-xl relative overflow-hidden">
+    <Card className="rounded-xl border-border shadow-sm">
       <CardContent className="p-6 space-y-6">
-        {/* Decorative Ambient Radial Glow */}
-        <div className="absolute -top-24 -right-24 w-56 h-56 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-56 h-56 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
-
         {/* Main Division Banner */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-accent p-[1px] flex items-center justify-center shadow-xl shadow-primary/20 shrink-0">
-              <div className="w-full h-full bg-background rounded-[15px] flex items-center justify-center">
-                <span className="text-3xl select-none" role="img" aria-label={currentTier.name}>
-                  {currentTier.badgeIcon}
-                </span>
-              </div>
+            <div className="w-14 h-14 rounded-xl bg-muted border border-border flex items-center justify-center shadow-xs shrink-0">
+              <span className="text-3xl select-none" role="img" aria-label={currentTier.name}>
+                {currentTier.badgeIcon}
+              </span>
             </div>
 
             <div>
@@ -45,7 +39,7 @@ export function TierBadgeHeader({
                   Current Competitive Division
                 </span>
                 {isPromotionZone && (
-                  <Badge variant="outline" className="gap-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-sm">
+                  <Badge variant="outline" className="gap-1 bg-emerald-500/10 text-emerald-700 border-emerald-500/20 text-sm">
                     <ArrowUpRight className="w-3 h-3" />
                     <span>Promotion Zone (Rank #{userRank})</span>
                   </Badge>
@@ -96,7 +90,7 @@ export function TierBadgeHeader({
                   key={tier.id}
                   className={`p-3 rounded-xl border transition-all flex flex-col justify-between ${
                     isCurrent
-                      ? 'bg-primary/10 border-primary shadow-xs shadow-primary/10 ring-1 ring-primary/40'
+                      ? 'bg-primary/10 border-primary shadow-xs'
                       : 'bg-muted/20 border-border opacity-70'
                   }`}
                 >

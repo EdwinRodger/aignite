@@ -169,7 +169,7 @@ export function ErrorHunter({ scenario, packSlug, onCompleted }: ErrorHunterProp
 
             if (hasSubmitted) {
               if (opt.isCorrect) {
-                style = 'bg-primary/20 border-primary text-foreground shadow-sm shadow-primary/20 ring-1 ring-primary/40 font-semibold';
+                style = 'bg-primary/10 border-primary text-foreground shadow-xs font-semibold';
               } else if (isSelected && !opt.isCorrect) {
                 style = 'bg-destructive/20 border-destructive text-foreground';
               } else {

@@ -438,7 +438,7 @@ model.fit(X_train_scaled, y_train)`,
           verdict: 'rejected',
           tradeoffSummary: 'Impossible: A 70B model requires ~140GB just for weights, exceeding single chip HBM.',
           productionReasoning:
-            'Individual TPU v5e chips feature 16GB–32GB HBM. A 70B model cannot physically fit on a single chip without sharding.',
+            'Individual TPU v5e chips feature 16GB-32GB HBM. A 70B model cannot physically fit on a single chip without sharding.',
         },
       ],
       pointsAwarded: 25,

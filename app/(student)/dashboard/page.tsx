@@ -114,12 +114,10 @@ export default function StudentDashboardPage() {
         {/* ========================================================================= */}
         {/* 1. STUDENT PROFILE & STREAK HEADER */}
         {/* ========================================================================= */}
-        <Card className="p-6 sm:p-8 shadow-xl shadow-black/10 relative overflow-hidden bg-gradient-to-r from-card via-card to-muted border-border">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <Card className="p-6 sm:p-8 shadow-sm bg-card border-border">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-start sm:items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-accent text-primary-foreground font-black text-2xl flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
+              <div className="w-16 h-16 rounded-xl bg-primary text-primary-foreground font-bold text-2xl flex items-center justify-center shadow-xs shrink-0">
                 {userInitials}
               </div>
               <div className="space-y-1">
@@ -208,7 +206,7 @@ export default function StudentDashboardPage() {
                   </span>
                 </div>
               )}
-              <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-md shadow-primary/20">
+              <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-xs">
                 <Link href="/coach">
                   <Mic className="w-3.5 h-3.5" />
                   <span>Practice POTD</span>
@@ -251,7 +249,7 @@ export default function StudentDashboardPage() {
                   <Badge variant="secondary" className="text-sm font-mono">
                     Speech Fillers: {reportCard.fillerCount} detected (Elite Bar)
                   </Badge>
-                  <Badge variant="outline" className="text-sm font-bold bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                  <Badge variant="outline" className="text-sm font-bold bg-emerald-500/10 border-emerald-500/20 text-emerald-700">
                     ✓ Liveness Anti-Impersonation Checked
                   </Badge>
                 </div>
@@ -271,7 +269,7 @@ export default function StudentDashboardPage() {
                 Answer today&apos;s AI Problem of the Day or take a mock interview on the Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified 5-axis report card.
               </p>
               <div className="pt-2">
-                <Button asChild className="font-bold text-sm shadow-md shadow-primary/20 gap-2">
+                <Button asChild className="font-bold text-sm shadow-xs gap-2">
                   <Link href="/coach">
                     <Mic className="w-4 h-4" />
                     <span>Begin Voice Defense Session</span>

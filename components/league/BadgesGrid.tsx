@@ -38,7 +38,7 @@ export function BadgesGrid({ badges }: BadgesGridProps) {
               key={badge.id}
               className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
                 badge.isUnlocked
-                  ? 'bg-card border-primary/40 shadow-sm shadow-primary/5 hover:border-primary'
+                  ? 'bg-card border-border shadow-xs hover:border-primary/40'
                   : 'bg-muted/20 border-border opacity-60'
               }`}
             >

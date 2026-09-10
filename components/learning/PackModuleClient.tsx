@@ -67,10 +67,8 @@ export function PackModuleClient({ pack }: PackModuleClientProps) {
       </div>
 
       {/* Hero Pack Overview Card */}
-      <Card className={`rounded-2xl ${pack.borderColor} p-6 shadow-xl relative overflow-hidden`}>
-        <div className={`absolute inset-0 bg-gradient-to-br ${pack.accentColor} pointer-events-none opacity-40`} />
-
-        <div className="relative z-10 space-y-3">
+      <Card className="rounded-xl border-border p-6 shadow-sm">
+        <div className="space-y-3">
           <div className="flex items-center gap-2">
             <span className="text-3xl select-none" role="img" aria-label={pack.companyName}>
               {pack.badgeIcon}

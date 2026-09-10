@@ -151,7 +151,7 @@ Non-fungible verified skill badges displayed on profile:
   - **Regional Filter**: State, University, or City ranking for local competitive spirit (vital for SIH presentation).
 
 ### 5.6. AIgnite Pulse / AI Feed (The Productive Instagram Alternative)
-- **Problem Solved**: When standing in line, waiting for a bus, or doing routine chores, users habitually unlock their phones and doomscroll Instagram/Reels for 5–10 minutes with zero learning value.
+- **Problem Solved**: When standing in line, waiting for a bus, or doing routine chores, users habitually unlock their phones and doomscroll Instagram/Reels for 5-10 minutes with zero learning value.
 - **AIgnite Solution**: A vertical, snappy, Instagram-style feed containing strictly curated AI breakthroughs, research highlights, and architectural news.
 - **The Core Differentiator: Instant Embedded Micro-Quizzes**:
   - Instead of passive reading or watching, **every single feed card contains an interactive, 5-second check question**!

@@ -53,12 +53,8 @@ export function MicroQuizCard() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto rounded-3xl bg-card text-card-foreground border border-border p-5 shadow-2xl relative overflow-hidden">
+    <Card className="w-full max-w-md mx-auto rounded-xl bg-card text-card-foreground border border-border p-5 shadow-sm">
       <CardContent className="p-0 space-y-4">
-        {/* Decorative ambient glow */}
-        <div className="absolute -top-12 -right-12 w-36 h-36 bg-primary/15 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-accent/20 rounded-full blur-2xl pointer-events-none" />
-
         {/* Card Header & Tag */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
@@ -139,7 +135,7 @@ export function MicroQuizCard() {
 
               if (hasAnswered) {
                 if (option.isCorrect) {
-                  buttonStyle = 'bg-primary/20 border-primary text-foreground shadow-xs shadow-primary/20 ring-1 ring-primary/40 font-semibold';
+                  buttonStyle = 'bg-primary/10 border-primary text-foreground shadow-xs font-semibold';
                 } else if (isSelected && !option.isCorrect) {
                   buttonStyle = 'bg-destructive/20 border-destructive text-foreground';
                 } else {

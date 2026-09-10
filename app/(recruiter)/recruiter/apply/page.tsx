@@ -89,11 +89,9 @@ export default function RecruiterApplyPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[350px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
-
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
         <div className="w-full max-w-xl relative z-10">
-          <Card className="p-6 sm:p-8 shadow-xl shadow-black/20 space-y-6">
+          <Card className="p-6 sm:p-8 shadow-sm border-border space-y-6">
             {/* Header */}
             <div className="text-center space-y-2">
               <Badge variant="outline" className="gap-1.5 px-3 py-1 bg-accent border-primary/20 text-sm font-bold text-primary mb-1">
@@ -232,7 +230,7 @@ export default function RecruiterApplyPage() {
                 type="submit"
                 size="lg"
                 disabled={loading || !fullName.trim() || !companyName.trim() || !workEmail.trim()}
-                className="w-full font-bold text-sm shadow-lg shadow-primary/25 gap-2 mt-4"
+                className="w-full font-bold text-sm shadow-xs gap-2 mt-4"
               >
                 {loading ? (
                   <>

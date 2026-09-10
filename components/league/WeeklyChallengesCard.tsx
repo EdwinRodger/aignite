@@ -117,7 +117,7 @@ export function WeeklyChallengesCard({
                   isDone
                     ? 'border-emerald-500/40 bg-emerald-500/5'
                     : isOpen
-                    ? 'border-primary/50 bg-muted/30 shadow-md shadow-primary/5'
+                    ? 'border-primary/40 bg-muted/30 shadow-xs'
                     : 'border-border bg-card hover:border-border/80'
                 }`}
               >
@@ -181,7 +181,7 @@ export function WeeklyChallengesCard({
                           type="button"
                           onClick={() => handleSubmit(challenge.id)}
                           disabled={!answerText.trim() || isSubmitting}
-                          className="rounded-xl text-sm font-bold shadow-xs shadow-primary/20 gap-1.5"
+                          className="rounded-lg text-sm font-bold shadow-xs gap-1.5"
                         >
                           {isSubmitting ? (
                             <>

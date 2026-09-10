@@ -181,9 +181,9 @@ Evaluates the student's system design in the AI Lab interactive sandbox.
   1. Identifies all active league brackets for the week.
   2. Queries `league_participants` order by `points_earned DESC`.
   3. Divides brackets (30 learners per bracket):
-     - Ranks 1–5: `promotion_status = 'promoted'`. Updates user's `current_league_tier` to next tier.
-     - Ranks 6–24: `promotion_status = 'stayed'`.
-     - Ranks 25–30: `promotion_status = 'demoted'`. Lowers tier (unless already Bronze).
+     - Ranks 1-5: `promotion_status = 'promoted'`. Updates user's `current_league_tier` to next tier.
+     - Ranks 6-24: `promotion_status = 'stayed'`.
+     - Ranks 25-30: `promotion_status = 'demoted'`. Lowers tier (unless already Bronze).
   4. Archives the week's league and provisions new brackets for the upcoming week.
   5. Dispatches push notifications to mobile users via FCM.
 

@@ -81,15 +81,13 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-7 space-y-6">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl p-6 sm:p-7 space-y-6">
         {/* Header with Composite Score & Tier */}
         <DialogHeader className="border-b border-border/60 pb-5 text-left">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-accent p-[1px] flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-                <div className="w-full h-full bg-background rounded-[15px] flex items-center justify-center">
-                  <Trophy className="w-6 h-6 text-primary" />
-                </div>
+              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-xs shrink-0">
+                <Trophy className="w-6 h-6" />
               </div>
               <div>
                 <DialogDescription className="text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground">
@@ -275,7 +273,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
           <Button
             type="button"
             onClick={onContinue}
-            className="rounded-xl text-sm font-bold shadow-md shadow-primary/20 px-6"
+            className="rounded-lg text-sm font-bold shadow-xs px-6"
           >
             Done Practicing
           </Button>

@@ -207,7 +207,7 @@ export function FeedSidebar({
             <Button
               type="submit"
               disabled={isGenerating || !genTopic.trim()}
-              className="w-full rounded-xl text-sm font-semibold shadow-md shadow-primary/20 gap-1.5"
+              className="w-full rounded-xl text-sm font-semibold shadow-xs gap-1.5"
             >
               {isGenerating ? (
                 <>

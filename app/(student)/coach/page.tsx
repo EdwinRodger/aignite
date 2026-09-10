@@ -97,9 +97,7 @@ export default function CoachPage() {
           {/* Main Interview Practice Column */}
           <div className="lg:col-span-8 space-y-6">
             {/* Question of the Day Card */}
-            <Card className="p-6 shadow-xl relative overflow-hidden space-y-4">
-              <div className="absolute -top-16 -right-16 w-36 h-36 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-
+            <Card className="p-6 shadow-sm space-y-4">
               {/* Question Meta Badges */}
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2 flex-wrap">
