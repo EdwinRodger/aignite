@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  Flame,
   LayoutDashboard,
   Sparkles,
   Mic,
@@ -251,7 +250,7 @@ export function AppSidebar() {
       {/* Main Sidebar Shell */}
       <aside
         className={cn(
-          'fixed top-0 bottom-0 left-0 z-50 flex flex-col bg-card border-r border-border transition-all duration-200 ease-in-out',
+          'fixed top-0 bottom-0 left-0 z-50 flex flex-col bg-card border-r border-border transition-[width,transform] duration-200 ease-in-out',
           collapsed ? 'w-18' : 'w-64',
           'max-md:w-72 max-md:shadow-2xl',
           mobileOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'

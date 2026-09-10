@@ -99,7 +99,7 @@ export default function RecruiterLoginPage() {
 
             <form onSubmit={handleLoginCheck} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-foreground flex items-center justify-between">
+                <label htmlFor="recruiter-work-email" className="text-sm font-semibold text-foreground flex items-center justify-between">
                   <span>Corporate Work Email</span>
                   <Badge variant="outline" className="text-sm text-primary font-bold border-primary/20 bg-primary/5">Verified Domain</Badge>
                 </label>
@@ -108,8 +108,10 @@ export default function RecruiterLoginPage() {
                     <Mail className="w-4 h-4" />
                   </div>
                   <Input
+                    id="recruiter-work-email"
                     type="email"
                     required
+                    autoComplete="email"
                     value={workEmail}
                     onChange={(e) => setWorkEmail(e.target.value)}
                     placeholder="name@company.com"

@@ -15,10 +15,10 @@ interface CandidateCardProps {
 }
 
 const TIER_META: Record<string, { label: string; icon: string; badgeClass: string }> = {
-  bronze: { label: 'Bronze AI Eng', icon: '🥉', badgeClass: 'bg-amber-100/80 border-amber-300 text-amber-900' },
-  silver: { label: 'Silver AI Eng', icon: '🥈', badgeClass: 'bg-slate-100 border-slate-300 text-slate-800' },
-  gold: { label: 'Gold AI Eng', icon: '🥇', badgeClass: 'bg-amber-100/80 border-amber-300 text-amber-900' },
-  diamond: { label: 'LLM Master', icon: '💎', badgeClass: 'bg-slate-100 border-slate-300 text-slate-800' },
+  bronze: { label: 'Bronze AI Eng', icon: '🥉', badgeClass: 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300 font-semibold' },
+  silver: { label: 'Silver AI Eng', icon: '🥈', badgeClass: 'bg-slate-500/10 border-slate-500/30 text-slate-700 dark:text-slate-300 font-semibold' },
+  gold: { label: 'Gold AI Eng', icon: '🥇', badgeClass: 'bg-amber-500/15 border-amber-500/40 text-amber-800 dark:text-amber-300 font-bold' },
+  diamond: { label: 'LLM Master', icon: '💎', badgeClass: 'bg-blue-500/10 border-blue-500/30 text-blue-700 dark:text-blue-300 font-bold' },
   architect: { label: 'AI Architect', icon: '👑', badgeClass: 'bg-primary/10 border-primary/30 text-primary font-bold shadow-xs' },
 };
 

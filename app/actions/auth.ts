@@ -749,7 +749,7 @@ export async function getCurrentStudentProfileAction(): Promise<CurrentStudentPr
   let currentStreak = 3;
   let leagueTier = 'Silver AI Engineer';
   let leagueRank = 5;
-  let atsScore = 84;
+  const atsScore = 84;
 
   if (db && email) {
     try {

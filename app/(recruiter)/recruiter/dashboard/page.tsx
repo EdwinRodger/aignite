@@ -15,7 +15,7 @@ import { CandidateCard } from '@/components/recruiter/CandidateCard';
 import { CandidateDossierModal } from '@/components/recruiter/CandidateDossierModal';
 import { InterviewInviteModal } from '@/components/recruiter/InterviewInviteModal';
 import { CreateJobModal } from '@/components/recruiter/CreateJobModal';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -136,7 +136,7 @@ export default function RecruiterDashboardPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-12">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main id="main-content" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Recruiter Enterprise Header */}
         <Card className="p-6 sm:p-8 shadow-sm bg-card border-border">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -278,7 +278,9 @@ export default function RecruiterDashboardPage() {
                 <div className="relative flex-1">
                   <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <Input
+                    id="recruiter-candidate-search"
                     type="text"
+                    aria-label="Search candidates by name, college, or skills"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && applyFilters()}

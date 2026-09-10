@@ -9,12 +9,12 @@
   --card-foreground: oklch(0.18 0.01 260);
   --popover: oklch(1.000 0 0);
   --popover-foreground: oklch(0.18 0.01 260);
-  --primary: oklch(0.55 0.18 38);
+  --primary: oklch(0.51 0.20 38);
   --primary-foreground: oklch(1.000 0 0);
   --secondary: oklch(0.96 0.004 260);
   --secondary-foreground: oklch(0.20 0.01 260);
   --muted: oklch(0.965 0.004 260);
-  --muted-foreground: oklch(0.48 0.02 260);
+  --muted-foreground: oklch(0.44 0.02 260);
   --accent: oklch(0.965 0.015 40);
   --accent-foreground: oklch(0.45 0.16 36);
   --destructive: oklch(0.58 0.20 25);
@@ -61,8 +61,8 @@
   --card-foreground: oklch(0.9551 0 0);
   --popover: oklch(0.2138 0.0019 286.2347);
   --popover-foreground: oklch(0.9551 0 0);
-  --primary: oklch(0.60 0.19 38);
-  --primary-foreground: oklch(1.0000 0 0);
+  --primary: oklch(0.64 0.20 38);
+  --primary-foreground: oklch(0.12 0.02 40);
   --secondary: oklch(0.25 0.01 260);
   --secondary-foreground: oklch(0.9551 0 0);
   --muted: oklch(0.25 0.005 260);
@@ -141,9 +141,6 @@
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
 
-  --text-xs: 0.875rem;
-  --text-xs--line-height: 1.25rem;
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -194,4 +191,18 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+  }
 }

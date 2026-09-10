@@ -13,7 +13,7 @@ function StudentLayoutInner({ children }: { children: React.ReactNode }) {
       <AppSidebar />
       <div
         className={cn(
-          'flex-1 flex flex-col transition-all duration-200 ease-in-out',
+          'flex-1 flex flex-col transition-[padding] duration-200 ease-in-out',
           collapsed ? 'md:pl-18' : 'md:pl-64'
         )}
       >

@@ -10,7 +10,6 @@ import { sendStudentOtp } from '@/app/actions/auth';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Mail, ArrowRight, Sparkles, ShieldCheck, Loader2, AlertCircle } from 'lucide-react';
 
 export default function LoginPage() {
@@ -93,6 +92,7 @@ export default function LoginPage() {
                       id="email"
                       type="email"
                       required
+                      autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="learner@university.edu"

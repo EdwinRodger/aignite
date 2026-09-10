@@ -199,11 +199,12 @@ export function UserBuildsSandbox() {
         <div className="lg:col-span-7 space-y-4">
           {/* Mission Target */}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+            <label htmlFor="sandbox-mission" className="text-sm font-semibold text-foreground flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
-              <span>Target Mission & Production SLA</span>
+              <span>Target Mission &amp; Production SLA</span>
             </label>
             <select
+              id="sandbox-mission"
               value={config.mission}
               onChange={(e) => setConfig({ ...config, mission: e.target.value })}
               className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
@@ -223,11 +224,12 @@ export function UserBuildsSandbox() {
           {/* Vector Indexing & Chunk Size */}
           <div className="grid sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <label htmlFor="sandbox-vector-index" className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-secondary-foreground" />
                 <span>Vector Index (pgvector)</span>
               </label>
               <select
+                id="sandbox-vector-index"
                 value={config.vectorIndex}
                 onChange={(e) =>
                   setConfig({
@@ -235,7 +237,7 @@ export function UserBuildsSandbox() {
                     vectorIndex: e.target.value as 'hnsw' | 'ivfflat' | 'flat',
                   })
                 }
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
               >
                 <option value="hnsw">HNSW Graph (M=16, ef=64) - High Recall</option>
                 <option value="ivfflat">IVFFlat (lists=100) - Low Memory</option>
@@ -244,17 +246,18 @@ export function UserBuildsSandbox() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-foreground flex items-center justify-between">
+              <label htmlFor="sandbox-chunk-size" className="text-sm font-semibold text-foreground flex items-center justify-between">
                 <span>Chunk Size &amp; Overlap</span>
                 <span className="text-sm font-mono text-primary">{config.chunkSize} / {config.chunkOverlap} tokens</span>
               </label>
               <select
+                id="sandbox-chunk-size"
                 value={`${config.chunkSize}-${config.chunkOverlap}`}
                 onChange={(e) => {
                   const [size, overlap] = e.target.value.split('-').map(Number);
                   setConfig({ ...config, chunkSize: size, chunkOverlap: overlap });
                 }}
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
               >
                 <option value="256-32">256 tokens (32 overlap) - Fine Granularity</option>
                 <option value="512-64">512 tokens (64 overlap) - Industry Standard</option>
@@ -266,11 +269,12 @@ export function UserBuildsSandbox() {
           {/* Embedding Model & Serving Engine */}
           <div className="grid sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <label htmlFor="sandbox-embedding-model" className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-chart-4" />
                 <span>Embedding Model</span>
               </label>
               <select
+                id="sandbox-embedding-model"
                 value={config.embeddingModel}
                 onChange={(e) =>
                   setConfig({
@@ -278,7 +282,7 @@ export function UserBuildsSandbox() {
                     embeddingModel: e.target.value as 'text-embedding-3-large' | 'bge-m3' | 'nomic-embed',
                   })
                 }
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
               >
                 <option value="bge-m3">BGE-M3 (1024-dim, Multi-Lingual)</option>
                 <option value="text-embedding-3-large">text-embedding-3-large (3072-dim)</option>
@@ -287,11 +291,12 @@ export function UserBuildsSandbox() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <label htmlFor="sandbox-inference-engine" className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-chart-1" />
                 <span>Inference Engine</span>
               </label>
               <select
+                id="sandbox-inference-engine"
                 value={config.inferenceEngine}
                 onChange={(e) =>
                   setConfig({
@@ -299,7 +304,7 @@ export function UserBuildsSandbox() {
                     inferenceEngine: e.target.value as 'vllm-fp8' | 'tensorrt-llm' | 'pytorch-amp',
                   })
                 }
-                className="w-full px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
               >
                 <option value="vllm-fp8">vLLM FP8 (PagedAttention + KV-Block)</option>
                 <option value="tensorrt-llm">TensorRT-LLM (Warp-Specialized)</option>
@@ -317,26 +322,35 @@ export function UserBuildsSandbox() {
               </div>
               <button
                 type="button"
+                role="switch"
+                aria-checked={config.enableReranker}
+                aria-label="Toggle 2nd-stage Cohere cross-encoder reranker"
                 onClick={() => setConfig({ ...config, enableReranker: !config.enableReranker })}
-                className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  config.enableReranker ? 'bg-primary' : 'bg-muted-foreground/30'
-                }`}
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
               >
                 <div
-                  className={`w-5 h-5 rounded-full bg-white transition-transform absolute top-0.5 ${
-                    config.enableReranker ? 'left-5.5' : 'left-0.5'
+                  className={`w-11 h-6 rounded-full transition-colors relative ${
+                    config.enableReranker ? 'bg-primary' : 'bg-muted-foreground/30'
                   }`}
-                />
+                >
+                  <div
+                    className={`w-5 h-5 rounded-full bg-card border border-border/40 shadow-xs transition-transform absolute top-0.5 ${
+                      config.enableReranker ? 'left-5.5' : 'left-0.5'
+                    }`}
+                  />
+                </div>
               </button>
             </div>
 
             <div className="p-3 rounded-2xl bg-muted/60 border border-border space-y-1">
               <div className="flex items-center justify-between text-sm">
-                <span className="font-bold text-foreground">Sampling Temperature</span>
+                <label htmlFor="sandbox-temperature" className="font-bold text-foreground">Sampling Temperature</label>
                 <span className="font-mono text-primary font-bold">{config.temperature.toFixed(1)}</span>
               </div>
               <input
+                id="sandbox-temperature"
                 type="range"
+                aria-label="Sampling Temperature"
                 min="0"
                 max="1.0"
                 step="0.1"

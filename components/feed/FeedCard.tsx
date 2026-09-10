@@ -307,7 +307,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             type="button"
             onClick={handleToggleLike}
             aria-label={isLiked ? 'Unlike spark' : 'Like spark'}
-            className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 cursor-pointer ${
+            className={`flex items-center gap-1.5 min-h-[44px] px-2.5 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl cursor-pointer ${
               isLiked ? 'text-primary font-semibold' : 'hover:text-foreground'
             }`}
           >
@@ -324,7 +324,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             type="button"
             onClick={handleToggleBookmark}
             aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark spark for revision'}
-            className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 cursor-pointer ${
+            className={`flex items-center gap-1.5 min-h-[44px] px-2.5 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl cursor-pointer ${
               isBookmarked ? 'text-primary font-semibold' : 'hover:text-foreground'
             }`}
           >
@@ -341,7 +341,7 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
             type="button"
             onClick={handleShare}
             aria-label="Share spark"
-            className="flex items-center gap-1.5 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1 cursor-pointer"
+            className="flex items-center gap-1.5 min-h-[44px] px-2.5 py-2 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl cursor-pointer"
           >
             {copiedShare ? (
               <>

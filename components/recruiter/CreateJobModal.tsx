@@ -119,8 +119,9 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
 
           {/* Title */}
           <div className="space-y-1.5">
-            <label className="font-semibold text-foreground">Role Title</label>
+            <label htmlFor="job-title" className="font-semibold text-foreground">Role Title</label>
             <Input
+              id="job-title"
               type="text"
               required
               value={title}
@@ -132,8 +133,9 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
           {/* Role Category & Location */}
           <div className="grid sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="font-semibold text-foreground">Role Category</label>
+              <label htmlFor="job-role-category" className="font-semibold text-foreground">Role Category</label>
               <select
+                id="job-role-category"
                 value={roleCategory}
                 onChange={(e) =>
                   setRoleCategory(
@@ -156,11 +158,12 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
             </div>
 
             <div className="space-y-1.5">
-              <label className="font-semibold text-foreground flex items-center gap-1">
+              <label htmlFor="job-location" className="font-semibold text-foreground flex items-center gap-1">
                 <MapPin className="w-3 h-3 text-primary" />
                 <span>Location</span>
               </label>
               <Input
+                id="job-location"
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -172,11 +175,12 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
           {/* Salary & Min Report Score */}
           <div className="grid sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="font-semibold text-foreground flex items-center gap-1">
+              <label htmlFor="job-salary-range" className="font-semibold text-foreground flex items-center gap-1">
                 <DollarSign className="w-3 h-3 text-emerald-500" />
                 <span>Salary / Compensation Band</span>
               </label>
               <Input
+                id="job-salary-range"
                 type="text"
                 value={salaryRange}
                 onChange={(e) => setSalaryRange(e.target.value)}
@@ -185,7 +189,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
             </div>
 
             <div className="space-y-1.5">
-              <label className="font-semibold text-foreground flex items-center justify-between">
+              <label htmlFor="job-min-report-score" className="font-semibold text-foreground flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Trophy className="w-3 h-3 text-chart-5" />
                   <span>Min AI Report Card Score</span>
@@ -193,6 +197,7 @@ export function CreateJobModal({ currentCompany, onClose, onCreated }: CreateJob
                 <span className="text-primary font-mono font-bold">{minReportScore.toFixed(1)} / 10</span>
               </label>
               <select
+                id="job-min-report-score"
                 value={minReportScore}
                 onChange={(e) => setMinReportScore(Number(e.target.value))}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-muted border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary text-sm"

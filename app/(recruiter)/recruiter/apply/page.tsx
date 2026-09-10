@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { submitRecruiterApplication } from '@/app/actions/auth';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -89,7 +89,7 @@ export default function RecruiterApplyPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-0">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
+      <main id="main-content" className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
         <div className="w-full max-w-xl relative z-10">
           <Card className="p-6 sm:p-8 shadow-sm border-border space-y-6">
             {/* Header */}
@@ -129,13 +129,15 @@ export default function RecruiterApplyPage() {
               {/* Full Name & Designation */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
+                  <label htmlFor="recruiter-fullname" className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <User className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Your Full Name</span>
                   </label>
                   <Input
+                    id="recruiter-fullname"
                     type="text"
                     required
+                    autoComplete="name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Satya Nadella"
@@ -144,13 +146,15 @@ export default function RecruiterApplyPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
+                  <label htmlFor="recruiter-designation" className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Briefcase className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Your Job Title</span>
                   </label>
                   <Input
+                    id="recruiter-designation"
                     type="text"
                     required
+                    autoComplete="organization-title"
                     value={recruiterDesignation}
                     onChange={(e) => setRecruiterDesignation(e.target.value)}
                     placeholder="e.g. Lead Technical Recruiter"
@@ -162,13 +166,15 @@ export default function RecruiterApplyPage() {
               {/* Company Name & Website */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
+                  <label htmlFor="recruiter-company-name" className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Building2 className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Company Name</span>
                   </label>
                   <Input
+                    id="recruiter-company-name"
                     type="text"
                     required
+                    autoComplete="organization"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     placeholder="e.g. NVIDIA Corporation"
@@ -177,13 +183,15 @@ export default function RecruiterApplyPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-foreground flex items-center gap-1">
+                  <label htmlFor="recruiter-company-website" className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Globe className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Company Website</span>
                   </label>
                   <Input
+                    id="recruiter-company-website"
                     type="text"
                     required
+                    autoComplete="url"
                     value={companyWebsite}
                     onChange={(e) => setCompanyWebsite(e.target.value)}
                     placeholder="nvidia.com"
@@ -194,7 +202,7 @@ export default function RecruiterApplyPage() {
 
               {/* Work Email */}
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-foreground flex items-center justify-between">
+                <label htmlFor="recruiter-corporate-email" className="text-sm font-semibold text-foreground flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <Mail className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>Corporate Work Email</span>
@@ -202,8 +210,10 @@ export default function RecruiterApplyPage() {
                   <Badge variant="outline" className="text-sm text-primary font-semibold border-primary/20 bg-primary/5">Strictly Corporate Domain</Badge>
                 </label>
                 <Input
+                  id="recruiter-corporate-email"
                   type="email"
                   required
+                  autoComplete="email"
                   value={workEmail}
                   onChange={(e) => setWorkEmail(e.target.value)}
                   placeholder="recruiter@nvidia.com"
@@ -213,11 +223,12 @@ export default function RecruiterApplyPage() {
 
               {/* LinkedIn URL */}
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-foreground flex items-center gap-1">
+                <label htmlFor="recruiter-linkedin" className="text-sm font-semibold text-foreground flex items-center gap-1">
                   <Link2 className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>Company / Recruiter LinkedIn URL (Optional Verification Proof)</span>
                 </label>
                 <Input
+                  id="recruiter-linkedin"
                   type="url"
                   value={linkedinUrl}
                   onChange={(e) => setLinkedinUrl(e.target.value)}

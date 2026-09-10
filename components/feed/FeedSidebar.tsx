@@ -199,6 +199,7 @@ export function FeedSidebar({
           <form onSubmit={handleGenerateSpark} className="space-y-2">
             <Input
               type="text"
+              aria-label="Topic or research paper for AI spark synthesis"
               value={genTopic}
               onChange={(e) => setGenTopic(e.target.value)}
               placeholder="e.g. FlashAttention-3, KV Cache..."

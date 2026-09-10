@@ -14,7 +14,6 @@ import {
   Sparkles,
   Cpu,
   Boxes,
-  Route,
   FileText,
   Flame,
   Zap,
@@ -94,29 +93,34 @@ export default function StudentDashboardPage() {
         }
       });
 
-    // 2. Merge local storage overrides if available
-    if (typeof window !== 'undefined') {
+    // 2. Merge local storage overrides if available (deferred to avoid cascading synchronous render)
+    queueMicrotask(() => {
+      if (!isMounted || typeof window === 'undefined') return;
       const storedPoints = localStorage.getItem('aignite_student_points');
       const storedStreak = localStorage.getItem('aignite_student_streak');
       const storedReport = localStorage.getItem('aignite_user_report_card');
       const storedUser = localStorage.getItem('aignite_user_profile');
 
-      if (storedUser) {
-        try {
-          const parsedUser = JSON.parse(storedUser);
-          setUser((prev) => ({ ...prev, ...parsedUser }));
-        } catch {
-          // fallback
-        }
+      if (storedUser || storedPoints || storedStreak) {
+        setUser((prev) => {
+          let updated = { ...prev };
+          if (storedUser) {
+            try {
+              updated = { ...updated, ...JSON.parse(storedUser) };
+            } catch {
+              // fallback
+            }
+          }
+          if (storedPoints) {
+            updated.totalXp = parseInt(storedPoints, 10);
+          }
+          if (storedStreak) {
+            updated.streakDays = parseInt(storedStreak, 10);
+          }
+          return updated;
+        });
       }
-      if (storedPoints) {
-        const pts = parseInt(storedPoints, 10);
-        setUser((prev) => ({ ...prev, totalXp: pts }));
-      }
-      if (storedStreak) {
-        const str = parseInt(storedStreak, 10);
-        setUser((prev) => ({ ...prev, streakDays: str }));
-      }
+
       if (storedReport) {
         try {
           const parsed = JSON.parse(storedReport);
@@ -125,7 +129,7 @@ export default function StudentDashboardPage() {
           // fallback
         }
       }
-    }
+    });
 
     return () => {
       isMounted = false;
