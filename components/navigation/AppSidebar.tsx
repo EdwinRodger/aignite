@@ -22,6 +22,7 @@ import {
   Bug,
   Scale,
   HelpCircle,
+  ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -31,6 +32,7 @@ interface NavItem {
   label: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
+  isProtected?: boolean;
 }
 
 interface NavSection {
@@ -42,8 +44,8 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Core Workflow',
     items: [
-      { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-      { label: 'Daily AI Sparks', href: '/feed', icon: Sparkles },
+      { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, isProtected: true },
+      { label: 'Daily AI Sparks', href: '/feed', icon: Sparkles, isProtected: true },
       { label: 'Voice Coach', href: '/coach', icon: Mic },
     ],
   },
@@ -51,7 +53,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'AI Learning Suite',
     items: [
       { label: 'Company Packs', href: '/packs', icon: Boxes },
-      { label: 'Architecture Sandbox', href: '/sandbox', icon: Cpu },
+      { label: 'Architecture Sandbox', href: '/sandbox', icon: Cpu, isProtected: true },
       { label: 'Career Roadmap', href: '/roadmap', icon: Route },
     ],
   },
@@ -109,13 +111,11 @@ export function AppSidebar() {
   const mobileOpen = sidebarCtx ? sidebarCtx.mobileOpen : localMobileOpen;
   const setMobileOpen = sidebarCtx ? sidebarCtx.setMobileOpen : setLocalMobileOpen;
 
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [studentProfile, setStudentProfile] = useState<{
     fullName: string;
     leagueTier: string;
-  }>({
-    fullName: 'Student Learner',
-    leagueTier: 'AI Engineer',
-  });
+  } | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   useEffect(() => {
@@ -124,30 +124,47 @@ export function AppSidebar() {
     // Load from database / session action
     getCurrentStudentProfileAction()
       .then((profile) => {
-        if (isMounted && profile) {
+        if (!isMounted) return;
+        if (profile) {
+          setIsLoggedIn(true);
           setStudentProfile({
             fullName: profile.fullName || 'Student Learner',
             leagueTier: profile.leagueTier || 'AI Engineer',
           });
+        } else {
+          // Check if local student session exists
+          if (typeof window !== 'undefined') {
+            const storedSession = localStorage.getItem('aignite_student_session');
+            if (storedSession) {
+              setIsLoggedIn(true);
+              const stored = localStorage.getItem('aignite_user_profile');
+              if (stored) {
+                try {
+                  const parsed = JSON.parse(stored);
+                  setStudentProfile({
+                    fullName: parsed.fullName || parsed.name || 'Student Learner',
+                    leagueTier: parsed.leagueTier || 'AI Engineer',
+                  });
+                } catch {
+                  setStudentProfile({ fullName: 'Student Learner', leagueTier: 'AI Engineer' });
+                }
+              } else {
+                setStudentProfile({ fullName: 'Student Learner', leagueTier: 'AI Engineer' });
+              }
+            } else {
+              setIsLoggedIn(false);
+              setStudentProfile(null);
+            }
+          }
         }
       })
       .catch(() => {
-        // Fallback to local profile if offline
+        if (!isMounted) return;
         if (typeof window !== 'undefined') {
-          const stored = localStorage.getItem('aignite_user_profile');
-          if (stored) {
-            try {
-              const parsed = JSON.parse(stored);
-              if (parsed.fullName || parsed.name) {
-                setStudentProfile({
-                  fullName: parsed.fullName || parsed.name,
-                  leagueTier: parsed.leagueTier || 'AI Engineer',
-                });
-              }
-            } catch {
-              // ignore
-            }
-          }
+          const storedSession = localStorage.getItem('aignite_student_session');
+          setIsLoggedIn(Boolean(storedSession));
+        } else {
+          setIsLoggedIn(false);
         }
       });
 
@@ -169,12 +186,14 @@ export function AppSidebar() {
       document.cookie = 'sb_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       document.cookie = 'aignite_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     }
+    setIsLoggedIn(false);
+    setStudentProfile(null);
     router.push('/login');
     router.refresh();
   };
 
   const userInitials =
-    studentProfile.fullName
+    studentProfile?.fullName
       .split(' ')
       .filter(Boolean)
       .map((n) => n[0])
@@ -182,11 +201,17 @@ export function AppSidebar() {
       .slice(0, 2)
       .toUpperCase() || 'AI';
 
+  const homeHref = isLoggedIn ? '/dashboard' : '/';
+  const visibleSections = NAV_SECTIONS.map((section) => ({
+    ...section,
+    items: section.items.filter((item) => (isLoggedIn ? true : !item.isProtected)),
+  })).filter((section) => section.items.length > 0);
+
   return (
     <>
       {/* Mobile Top App Bar */}
       <header className="md:hidden sticky top-0 z-40 w-full h-14 bg-background/95 backdrop-blur-md border-b border-border px-4 flex items-center justify-between">
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <Link href={homeHref} className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
             <Flame className="w-4.5 h-4.5" />
           </div>
@@ -227,7 +252,7 @@ export function AppSidebar() {
         {/* Brand Header */}
         <div className="h-16 border-b border-border flex items-center justify-between px-4 shrink-0">
           <Link
-            href="/dashboard"
+            href={homeHref}
             onClick={() => setMobileOpen(false)}
             className={cn('flex items-center gap-2.5 transition-opacity', collapsed ? 'justify-center w-full' : '')}
           >
@@ -276,7 +301,7 @@ export function AppSidebar() {
           aria-label="Application Navigation"
           className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin"
         >
-          {NAV_SECTIONS.map((section) => (
+          {visibleSections.map((section) => (
             <div key={section.title} className="space-y-1">
               {!collapsed && (
                 <div className="px-3 pb-1 text-sm font-mono font-bold uppercase tracking-wider text-muted-foreground/80">
@@ -320,44 +345,74 @@ export function AppSidebar() {
           ))}
         </nav>
 
-        {/* Bottom Student Profile Card & Sign Out */}
+        {/* Bottom Student Profile Card & Sign Out / Sign In CTA */}
         <div className="p-3 border-t border-border bg-muted/20 shrink-0 space-y-2">
-          <div
-            className={cn(
-              'p-2 rounded-lg border border-border bg-card flex items-center gap-2.5',
-              collapsed && 'justify-center p-1.5 border-transparent bg-transparent'
-            )}
-          >
-            <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground font-bold text-sm flex items-center justify-center shrink-0 font-mono">
-              {userInitials}
-            </div>
-            {!collapsed && (
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-bold text-foreground truncate">
-                  {studentProfile.fullName}
+          {isLoggedIn && studentProfile ? (
+            <>
+              <div
+                className={cn(
+                  'p-2 rounded-lg border border-border bg-card flex items-center gap-2.5',
+                  collapsed && 'justify-center p-1.5 border-transparent bg-transparent'
+                )}
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground font-bold text-sm flex items-center justify-center shrink-0 font-mono">
+                  {userInitials}
                 </div>
-                <div className="text-sm text-muted-foreground truncate font-mono">
-                  {studentProfile.leagueTier}
-                </div>
+                {!collapsed && (
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-bold text-foreground truncate">
+                      {studentProfile.fullName}
+                    </div>
+                    <div className="text-sm text-muted-foreground truncate font-mono">
+                      {studentProfile.leagueTier}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <div>
-            <button
-              type="button"
-              onClick={handleSignOut}
-              disabled={isSigningOut}
-              className={cn(
-                'w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer',
-                collapsed && 'justify-center px-0'
+              <div>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  disabled={isSigningOut}
+                  className={cn(
+                    'w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer',
+                    collapsed && 'justify-center px-0'
+                  )}
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4 shrink-0" />
+                  {!collapsed && <span>{isSigningOut ? 'Signing Out...' : 'Sign Out'}</span>}
+                </button>
+              </div>
+            </>
+          ) : (
+            <div>
+              {!collapsed ? (
+                <div className="p-3 rounded-2xl border border-primary/25 bg-primary/5 space-y-2 text-left">
+                  <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                    <Sparkles className="w-4 h-4" />
+                    <span>Student Account</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-snug">
+                    Sign in to track streaks, earn XP, and unlock your personal dashboard.
+                  </p>
+                  <Button asChild size="sm" className="w-full font-bold text-sm shadow-xs gap-1.5">
+                    <Link href="/login">
+                      <span>Sign In / Join</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </Button>
+                </div>
+              ) : (
+                <Button asChild variant="outline" size="sm" className="w-full p-0 h-9 justify-center" title="Sign In">
+                  <Link href="/login">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                  </Link>
+                </Button>
               )}
-              title="Sign Out"
-            >
-              <LogOut className="w-4 h-4 shrink-0" />
-              {!collapsed && <span>{isSigningOut ? 'Signing Out...' : 'Sign Out'}</span>}
-            </button>
-          </div>
+            </div>
+          )}
         </div>
       </aside>
     </>

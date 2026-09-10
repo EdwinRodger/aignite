@@ -9,16 +9,41 @@ import { CURATED_FEED_POSTS, FeedPost } from '@/lib/feed-data';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Flame } from 'lucide-react';
+import { Sparkles, Flame, Trophy } from 'lucide-react';
+import { getCurrentStudentProfileAction } from '@/app/actions/auth';
+import { ProtectedRouteGate } from '@/components/auth/ProtectedRouteGate';
 
 export default function FeedPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [activeCategory, setActiveCategory] = useState('All');
   const [posts, setPosts] = useState<FeedPost[]>(CURATED_FEED_POSTS);
   const [totalPoints, setTotalPoints] = useState(15);
   const [streakCount, setStreakCount] = useState(3);
 
-  // Load points & streak from localStorage for realistic demo state
+  // Check student authentication & load stats
   useEffect(() => {
+    let isMounted = true;
+
+    getCurrentStudentProfileAction()
+      .then((profile) => {
+        if (!isMounted) return;
+        if (profile) {
+          setIsAuthenticated(true);
+        } else if (typeof window !== 'undefined' && localStorage.getItem('aignite_student_session')) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        if (typeof window !== 'undefined' && localStorage.getItem('aignite_student_session')) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      });
+
     const timer = setTimeout(() => {
       if (typeof window !== 'undefined') {
         const storedPoints = localStorage.getItem('aignite_student_points');
@@ -27,7 +52,10 @@ export default function FeedPage() {
         if (storedStreak) setStreakCount(parseInt(storedStreak, 10));
       }
     }, 0);
-    return () => clearTimeout(timer);
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
   }, []);
 
   const handleSelectCategory = (cat: string) => {
@@ -61,6 +89,44 @@ export default function FeedPage() {
     setPosts((prev) => [newSpark, ...prev]);
     setActiveCategory('All');
   };
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="w-full max-w-5xl mx-auto px-4 py-20 flex items-center justify-center">
+        <div className="flex items-center gap-2.5 text-muted-foreground font-mono text-sm">
+          <Sparkles className="w-4 h-4 animate-spin text-primary" />
+          <span>Verifying student account...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <ProtectedRouteGate
+        title="Interactive AI Sparks Feed"
+        badge="Account Feature - Student Sign In Required"
+        description="The daily AI Sparks feed delivers 5-minute architectural breakdowns with active retention check quizzes, bookmarking, and custom paper synthesis for registered students."
+        features={[
+          {
+            title: 'Active Recall Check Quizzes',
+            description: 'Single-tap comprehension checks that reinforce bleeding-edge AI paper concepts.',
+            icon: Sparkles,
+          },
+          {
+            title: 'Daily Streak & League Points',
+            description: 'Answer daily sparks to build your consistency streak and earn weekly promotion XP.',
+            icon: Flame,
+          },
+          {
+            title: 'Gemini Paper Synthesizer',
+            description: 'Generate on-demand bite-sized sparks from any technical paper or URL using Gemini 2.5.',
+            icon: Trophy,
+          },
+        ]}
+      />
+    );
+  }
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

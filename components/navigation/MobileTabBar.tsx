@@ -1,20 +1,52 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, Mic, Trophy, Layers, User } from 'lucide-react';
+import { Sparkles, Mic, Trophy, Layers, User, LayoutDashboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getAuthUserAction } from '@/app/actions/auth';
 
 export function MobileTabBar() {
   const pathname = usePathname();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function check() {
+      try {
+        const res = await getAuthUserAction();
+        if (res.loggedIn && res.role === 'student') {
+          setIsLoggedIn(true);
+          return;
+        }
+      } catch {
+        // ignore
+      }
+
+      if (typeof window !== 'undefined') {
+        const studentSession = localStorage.getItem('aignite_student_session');
+        setIsLoggedIn(Boolean(studentSession));
+      }
+    }
+    check();
+  }, []);
 
   const tabs = [
-    { href: '/feed', label: 'Sparks', icon: Sparkles, activeColor: 'text-primary' },
+    {
+      href: isLoggedIn ? '/feed' : '/#ai-sparks',
+      label: 'Sparks',
+      icon: Sparkles,
+      activeColor: 'text-primary',
+    },
     { href: '/coach', label: 'Voice Coach', icon: Mic, activeColor: 'text-chart-1' },
     { href: '/league', label: 'League', icon: Trophy, activeColor: 'text-chart-5' },
     { href: '/packs', label: 'Packs', icon: Layers, activeColor: 'text-secondary-foreground' },
-    { href: '/login', label: 'Profile', icon: User, activeColor: 'text-chart-4' },
+    {
+      href: isLoggedIn ? '/dashboard' : '/login',
+      label: isLoggedIn ? 'Dashboard' : 'Sign In',
+      icon: isLoggedIn ? LayoutDashboard : User,
+      activeColor: 'text-chart-4',
+    },
   ];
 
   return (

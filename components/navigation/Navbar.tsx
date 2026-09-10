@@ -45,11 +45,10 @@ export function Navbar() {
 
       if (typeof window !== 'undefined') {
         const recruiterSession = localStorage.getItem('aignite_recruiter_session');
-        const studentStreak = localStorage.getItem('aignite_student_streak');
         const studentSession = localStorage.getItem('aignite_student_session');
         if (recruiterSession) {
           setUserRole('recruiter');
-        } else if (studentStreak || studentSession) {
+        } else if (studentSession) {
           setUserRole('student');
         } else {
           setUserRole(null);

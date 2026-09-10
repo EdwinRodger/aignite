@@ -22,8 +22,10 @@ import {
   CircleDot,
 } from 'lucide-react';
 import { getCurrentStudentProfileAction } from '@/app/actions/auth';
+import { ProtectedRouteGate } from '@/components/auth/ProtectedRouteGate';
 
 export default function StudentDashboardPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [user, setUser] = useState({
     name: 'AI Learner',
     username: 'learner',
@@ -53,7 +55,9 @@ export default function StudentDashboardPage() {
     // 1. Fetch real student profile from database / session
     getCurrentStudentProfileAction()
       .then((profile) => {
-        if (isMounted && profile) {
+        if (!isMounted) return;
+        if (profile) {
+          setIsAuthenticated(true);
           setUser((prev) => ({
             ...prev,
             name: profile.fullName || prev.name,
@@ -65,10 +69,29 @@ export default function StudentDashboardPage() {
             leagueRank: profile.leagueRank || prev.leagueRank,
             atsScore: profile.atsScore || prev.atsScore,
           }));
+        } else {
+          // Check if local student session exists
+          if (typeof window !== 'undefined') {
+            const studentSession = localStorage.getItem('aignite_student_session');
+            if (studentSession) {
+              setIsAuthenticated(true);
+            } else {
+              setIsAuthenticated(false);
+            }
+          } else {
+            setIsAuthenticated(false);
+          }
         }
       })
       .catch((err) => {
         console.warn('Could not load student profile from database:', err);
+        if (!isMounted) return;
+        if (typeof window !== 'undefined') {
+          const studentSession = localStorage.getItem('aignite_student_session');
+          setIsAuthenticated(Boolean(studentSession));
+        } else {
+          setIsAuthenticated(false);
+        }
       });
 
     // 2. Merge local storage overrides if available
@@ -108,6 +131,21 @@ export default function StudentDashboardPage() {
       isMounted = false;
     };
   }, []);
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="w-full max-w-7xl mx-auto px-4 py-20 flex items-center justify-center">
+        <div className="flex items-center gap-2.5 text-muted-foreground font-mono text-sm">
+          <Sparkles className="w-4 h-4 animate-spin text-primary" />
+          <span>Verifying student account...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <ProtectedRouteGate title="Student Engineering Dashboard" />;
+  }
 
   const userInitials =
     user.name

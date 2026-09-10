@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { UserBuildsSandbox } from '@/components/dashboard/UserBuildsSandbox';
 import { Card } from '@/components/ui/card';
@@ -14,9 +14,62 @@ import {
   Bug,
   Scale,
   HelpCircle,
+  Sparkles,
 } from 'lucide-react';
+import { getCurrentStudentProfileAction } from '@/app/actions/auth';
+import { ProtectedRouteGate } from '@/components/auth/ProtectedRouteGate';
 
 export default function SandboxPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    getCurrentStudentProfileAction()
+      .then((profile) => {
+        if (!isMounted) return;
+        if (profile) {
+          setIsAuthenticated(true);
+        } else if (typeof window !== 'undefined' && localStorage.getItem('aignite_student_session')) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        if (typeof window !== 'undefined' && localStorage.getItem('aignite_student_session')) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="w-full max-w-5xl mx-auto px-4 py-20 flex items-center justify-center">
+        <div className="flex items-center gap-2.5 text-muted-foreground font-mono text-sm">
+          <Sparkles className="w-4 h-4 animate-spin text-primary" />
+          <span>Verifying student account...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <ProtectedRouteGate
+        title="Architecture Sandbox & Telemetry Lab"
+        badge="Protected Lab - Account Required"
+        description="Configure enterprise AI architectures, inspect real-time latency and VRAM telemetry, test index scaling, and validate production SLAs with your student profile."
+      />
+    );
+  }
+
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header Banner - Company Packs button removed as requested */}

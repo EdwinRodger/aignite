@@ -265,8 +265,8 @@ export default function MicroQuizPage() {
               <span>Retry Quiz</span>
             </Button>
             <Button asChild className="font-bold text-sm gap-1.5 shadow-xs">
-              <Link href="/dashboard">
-                <span>Return to Dashboard</span>
+              <Link href="/packs">
+                <span>Explore Company Packs</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>
