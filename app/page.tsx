@@ -2,8 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
-import { MobileLaunchRedirector } from '@/components/navigation/MobileLaunchRedirector';
-import { MicroQuizCard } from '@/components/feed/MicroQuizCard';
 import {
   Sparkles,
   Flame,
@@ -22,37 +20,16 @@ import {
   Award,
   Zap,
 } from 'lucide-react';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { AuthRedirector } from '@/components/navigation/AuthRedirector';
 import { DAILY_COACH_QUESTIONS } from '@/lib/coach-data';
 import { AI_CAREER_ROADMAP } from '@/lib/roadmap-data';
 import { MultiScopeLeaderboard } from '@/components/dashboard/MultiScopeLeaderboard';
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
 export default async function HomePage() {
-  const cookieStore = await cookies();
-  const studentSession = cookieStore.get('aignite_session')?.value;
-  if (studentSession) {
-    redirect('/dashboard');
-  }
-  const recruiterSession = cookieStore.get('aignite_recruiter_session')?.value;
-  if (recruiterSession) {
-    try {
-      const parsed = JSON.parse(recruiterSession);
-      if (parsed.status === 'pending') {
-        redirect('/recruiter/pending');
-      } else {
-        redirect('/recruiter/dashboard');
-      }
-    } catch {
-      redirect('/recruiter/dashboard');
-    }
-  }
 
   const companyPacks = [
     {
@@ -192,8 +169,6 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/25 pb-20 md:pb-0">
       <Navbar />
-      <AuthRedirector />
-      <MobileLaunchRedirector />
 
       <main id="main-content" className="flex-1">
         {/* ========================================================================= */}
@@ -259,24 +234,81 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              {/* Right Column: Live Interactive Feed Card (Playable on Landing Page) */}
-              <div className="lg:col-span-5 flex flex-col items-center">
-                <div className="text-center mb-2">
-                  <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 justify-center">
-                    <Sparkles className="w-3.5 h-3.5 text-primary" />
-                    <span>Live Interactive Feed Preview (Try It)</span>
-                  </span>
-                </div>
-                <MicroQuizCard />
-                <div className="mt-3 text-center">
-                  <Link
-                    href="/feed"
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline group"
-                  >
-                    <span>Explore all 8+ AI Sparks & Full Feed</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                  </Link>
-                </div>
+              {/* Right Column: Platform Overview & Daily Habit Pillars */}
+              <div className="lg:col-span-5">
+                <Card className="p-6 rounded-2xl border-border bg-card shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                        <Flame className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-foreground">The AIgnite Daily Habit</div>
+                        <div className="text-sm text-muted-foreground">5-Minute Production Engineering</div>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="px-2.5 py-0.5 text-sm font-bold font-mono bg-primary/10 text-primary border-primary/20">
+                      Habit Loop
+                    </Badge>
+                  </div>
+
+                  {/* 3 Core Habits */}
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-xl border border-border bg-muted/30 flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-sm font-bold text-foreground">Daily AI Sparks</span>
+                          <span className="text-sm font-mono text-primary font-bold">5 Min</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
+                          Architectural breakdowns of FlashAttention-3, DeepSeek-R1, and vLLM with instant check quizzes.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl border border-border bg-muted/30 flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-chart-1/15 border border-chart-1/25 flex items-center justify-center text-chart-1 shrink-0 mt-0.5">
+                        <Mic className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-sm font-bold text-foreground">Voice Mock Interview</span>
+                          <span className="text-sm font-mono text-chart-1 font-bold">Daily POTD</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
+                          Defend real engineering trade-offs out loud with instant AI cadence, fluency, and depth scoring.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl border border-border bg-muted/30 flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-sm font-bold text-foreground">AI Resume ATS Radar</span>
+                          <span className="text-sm font-mono text-emerald-600 font-bold">Instant</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
+                          Instant 0-100 score, missing skill gap identification, and alignment with Google &amp; NVIDIA hiring bars.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <Button asChild className="w-full font-bold text-sm shadow-xs gap-2">
+                      <Link href="/login">
+                        <span>Get Started Free</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </Card>
               </div>
             </div>
           </div>
@@ -372,9 +404,9 @@ export default async function HomePage() {
                     </Link>
                   </Button>
                   <Button asChild variant="outline" className="gap-2 text-sm font-bold rounded-lg">
-                    <Link href="/feed">
+                    <Link href="#ai-sparks">
                       <Sparkles className="w-4 h-4 text-primary" />
-                      <span>Browse 5-Second Sparks</span>
+                      <span>Browse 5-Minute Sparks</span>
                     </Link>
                   </Button>
                 </div>
@@ -441,66 +473,115 @@ export default async function HomePage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* THE PRODUCTIVE INSTAGRAM ALTERNATIVE */}
+        {/* DAILY AI SPARKS - 5-MINUTE MICRO-HABIT */}
         {/* ========================================================================= */}
-        <section className="py-16 border-y border-border bg-muted/20 relative">
+        <section id="ai-sparks" className="py-20 border-y border-border bg-muted/20 relative scroll-mt-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="text-sm font-bold uppercase tracking-widest text-primary mb-2 block">
-                The Productive Instagram Alternative
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                Turn Downtime into High-Yield AI Mastery
+            <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
+              <Badge variant="outline" className="gap-2 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 border-primary/20 text-primary">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Daily AI Sparks - 5-Minute Micro-Habit</span>
+              </Badge>
+              <h2 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">
+                Turn Downtime into High-Yield AI Systems Mastery
               </h2>
-              <p className="text-sm text-muted-foreground mt-2">
-                Standing in an elevator or waiting in line? Instead of opening reels, open AIgnite.
-                Every card delivers one critical breakthrough paired with an instant 5-second check question.
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                Replace mindless social media doomscrolling with bite-sized, verified AI engineering breakthroughs.
+                Every spark delivers one bleeding-edge paper or architectural breakdown paired with a 5-second check question to reinforce active retention.
               </p>
+              <div className="pt-1">
+                <Badge variant="secondary" className="text-sm font-medium px-3 py-1 text-muted-foreground">
+                  Interactive Sparks Feed is an Account Feature - Free for all registered students
+                </Badge>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
-                  <Sparkles className="w-5 h-5" />
+            {/* 4 Feature Pillars Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors bg-card flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-foreground mb-2">Curated Breakthroughs</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Zero generic fluff tutorials. In-depth technical breakdowns covering FlashAttention-3, DeepSeek-R1 GRPO, vLLM PagedAttention, and AWQ/FP8 quantization.
+                  </p>
                 </div>
-                <h3 className="text-base font-bold text-foreground mb-2">Curated AI Breakthroughs</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  No generic software tutorials. Zero noise. Strictly deep-dive breakthroughs in LLMs,
-                  FlashAttention, RAG architectures, and model quantization.
-                </p>
+                <div className="mt-4 pt-3 border-t border-border text-sm font-mono text-primary font-bold">
+                  Production Level
+                </div>
               </Card>
 
-              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
-                  <Brain className="w-5 h-5" />
+              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors bg-card flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
+                    <Brain className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-foreground mb-2">5-Second Check Quizzes</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Passive reading does not stick. Every spark challenges you with single-tap check questions that award instant points toward your weekly league standing.
+                  </p>
                 </div>
-                <h3 className="text-base font-bold text-foreground mb-2">5-Second Embedded Quizzes</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Passive reading fails retention. Every card tests your comprehension with single-tap check questions
-                  rewarding immediate points toward your league standing.
-                </p>
+                <div className="mt-4 pt-3 border-t border-border text-sm font-mono text-primary font-bold">
+                  Active Recall
+                </div>
               </Card>
 
-              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
-                  <Flame className="w-5 h-5" />
+              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors bg-card flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-foreground mb-2">Gemini AI Synthesizer</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Read a new arXiv paper or NVIDIA tech report? Paste any topic or URL into the sidebar synthesizer to generate custom bite-sized sparks instantly.
+                  </p>
                 </div>
-                <h3 className="text-base font-bold text-foreground mb-2">Mobile Default Landing</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Open the app on your phone and dive straight into the swipeable feed.
-                  Configurable in preferences if you prefer the dashboard or voice coach first.
-                </p>
+                <div className="mt-4 pt-3 border-t border-border text-sm font-mono text-primary font-bold">
+                  Gemini 2.5 Powered
+                </div>
+              </Card>
+
+              <Card className="p-6 rounded-2xl border-border hover:border-primary/40 transition-colors bg-card flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
+                    <Flame className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-foreground mb-2">Daily Streak System</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Build a consistent learning habit in just 5 minutes a day. Track your flame streaks, save bookmarks, and climb the competitive division leagues.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-border text-sm font-mono text-primary font-bold">
+                  Streak Motivation
+                </div>
               </Card>
             </div>
 
-            <div className="mt-10 text-center">
-              <Button asChild size="lg" className="gap-2 px-6 py-6 rounded-xl font-bold text-sm shadow-xs">
-                <Link href="/feed">
-                  <Sparkles className="w-4 h-4" />
-                  <span>Launch Interactive AI Sparks Feed</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Button>
+            {/* CTA Banner */}
+            <div className="mt-12 p-8 rounded-3xl border border-border bg-card shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="space-y-1 text-center sm:text-left">
+                <div className="text-lg font-bold text-foreground">
+                  Ready to replace social doomscrolling with AI mastery?
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Sign in or create a free account to unlock the full interactive AI Sparks Feed.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full sm:w-auto">
+                <Button asChild size="lg" className="w-full sm:w-auto px-6 font-bold text-sm shadow-xs gap-2">
+                  <Link href="/login">
+                    <span>Sign In to Access Sparks</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto font-bold text-sm">
+                  <Link href="/login">
+                    <span>Create Free Account</span>
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
@@ -699,7 +780,7 @@ export default async function HomePage() {
         {/* PUBLIC AI RESUME ATS ANALYZER */}
         {/* ========================================================================= */}
         <section className="py-16 border-t border-border bg-muted/20">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-12 gap-8 items-center">
               <div className="md:col-span-7 space-y-4 text-center md:text-left">
                 <Badge variant="outline" className="gap-2 px-3 py-1 bg-emerald-500/10 border-emerald-500/20 text-sm font-bold text-emerald-700">
@@ -723,7 +804,7 @@ export default async function HomePage() {
                     </Link>
                   </Button>
                   <span className="text-sm font-mono text-muted-foreground">
-                    ⚡ Instant feedback - Gemini 2.0 Flash powered
+                    ⚡ Instant feedback - Gemini 2.5 Flash powered
                   </span>
                 </div>
               </div>
@@ -839,33 +920,127 @@ export default async function HomePage() {
         {/* RECRUITER MODE & ANTI-IMPERSONATION */}
         {/* ========================================================================= */}
         <section className="py-16 border-t border-border bg-muted/20">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-            <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-sm font-bold text-primary">
-              <Lock className="w-3.5 h-3.5" />
-              <span>Gated Recruiter Mode & Anti-Impersonation</span>
-            </Badge>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column: Sourcing & Security Pitch */}
+              <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+                <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-sm font-bold text-primary">
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Gated Recruiter Mode - Anti-Impersonation Verified</span>
+                </Badge>
 
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-              Direct Recruiter Pipeline Without Resume Fluff
-            </h2>
+                <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+                  Direct Recruiter Pipeline Without Resume Fluff
+                </h2>
 
-            <p className="text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Recruiter accounts undergo manual verification and corporate domain validation to prevent student impersonation.
-              Verified hiring managers search candidates based on proven skills: verified badges, league tiers, and real mock interview metrics.
-            </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Recruiter accounts undergo strict corporate domain validation and manual review to eliminate student impersonation.
+                  Verified hiring managers search candidates based on demonstrated engineering capability: verified module badges, weekly league rankings, and oral mock interview telemetry.
+                </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-              <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-xs gap-2">
-                <Link href="/recruiter/apply">
-                  <span>Apply for Recruiter Access (Company Email)</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto font-bold text-sm gap-2">
-                <Link href="/recruiter/login">
-                  <span>Approved Recruiter Sign In</span>
-                </Link>
-              </Button>
+                {/* 3 Verification Pillars */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-left">
+                  <div className="p-3 rounded-xl border border-border bg-card">
+                    <div className="flex items-center gap-2 mb-1">
+                      <ShieldCheck className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-bold text-foreground">Corporate Gated</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Work email validation prevents fraudulent recruiter profiles.
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-xl border border-border bg-card">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span className="text-sm font-bold text-foreground">Proof-of-Skill</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Ranked by verified code runs, not inflated resume keywords.
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-xl border border-border bg-card">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Trophy className="w-4 h-4 text-chart-5" />
+                      <span className="text-sm font-bold text-foreground">League Rank</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Shortlist candidates by regional, state, or national divisions.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                  <Button asChild size="lg" className="w-full sm:w-auto font-bold text-sm shadow-xs gap-2">
+                    <Link href="/recruiter/apply">
+                      <span>Apply for Recruiter Access (Company Email)</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="w-full sm:w-auto font-bold text-sm gap-2">
+                    <Link href="/recruiter/login">
+                      <span>Approved Recruiter Sign In</span>
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right Column: Recruiter Talent Card Preview */}
+              <div className="lg:col-span-5">
+                <Card className="p-6 shadow-xl space-y-4 bg-card">
+                  <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                        <ShieldCheck className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-foreground">Verified Candidate Card</div>
+                        <div className="text-sm text-muted-foreground">Recruiter Search View</div>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="px-2.5 py-0.5 text-sm font-bold font-mono bg-emerald-500/10 text-emerald-700 border-emerald-500/20">
+                      Verified
+                    </Badge>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-muted/40 border border-border space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-foreground">AI Systems Engineer Candidate</span>
+                      <span className="text-sm font-mono text-muted-foreground">Rank #14 State</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      <Badge variant="secondary" className="text-sm font-semibold">
+                        NVIDIA CUDA Specialist
+                      </Badge>
+                      <Badge variant="outline" className="text-sm font-semibold border-primary/30 text-primary">
+                        Gold League Tier
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 text-sm font-mono">
+                    <div className="flex justify-between p-2 rounded-lg bg-muted/30 border border-border/60">
+                      <span className="text-muted-foreground">Voice Defense Depth</span>
+                      <span className="text-primary font-bold">8.7 / 10</span>
+                    </div>
+                    <div className="flex justify-between p-2 rounded-lg bg-muted/30 border border-border/60">
+                      <span className="text-muted-foreground">Google &amp; NVIDIA ATS Match</span>
+                      <span className="text-emerald-600 font-bold">94%</span>
+                    </div>
+                    <div className="flex justify-between p-2 rounded-lg bg-muted/30 border border-border/60">
+                      <span className="text-muted-foreground">Consistency Habit</span>
+                      <span className="text-orange-500 font-bold">🔥 14-Day Streak</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 text-center">
+                    <span className="text-sm text-muted-foreground font-mono">
+                      Corporate domain required - Student access restricted
+                    </span>
+                  </div>
+                </Card>
+              </div>
             </div>
           </div>
         </section>

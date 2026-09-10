@@ -160,14 +160,17 @@ export function Navbar() {
               </DropdownMenuItem>
 
               <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
-                <Link href="/feed" className="flex items-start gap-3 w-full">
+                <Link
+                  href={userRole === 'student' ? '/feed' : '/#ai-sparks'}
+                  className="flex items-start gap-3 w-full"
+                >
                   <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
                     <Flame className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="text-sm font-bold text-foreground">AIgnite Pulse (Sparks)</div>
                     <div className="text-sm text-muted-foreground leading-snug">
-                      Interactive architectural micro-quizzes
+                      5-minute architectural micro-quizzes
                     </div>
                   </div>
                 </Link>
