@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Sparkles,
   Flame,
@@ -73,10 +74,17 @@ export function Navbar() {
         <Link
           href="/"
           aria-label="AIgnite Homepage"
-          className="flex items-center gap-2 group rounded-xl p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="flex items-center gap-2.5 group rounded-xl p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-            <Flame className="w-5 h-5 transition-colors" />
+          <div className="w-8 h-8 flex items-center justify-center shrink-0">
+            <Image
+              src="/logo-icon.png"
+              alt="AIgnite Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain"
+              priority
+            />
           </div>
           <span className="text-xl font-black tracking-tight text-foreground font-mono">
             <span className="text-primary font-extrabold underline decoration-primary/50 decoration-2 underline-offset-4">

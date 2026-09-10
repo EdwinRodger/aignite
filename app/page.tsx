@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import {
@@ -1080,7 +1081,14 @@ export default async function HomePage() {
       {/* Footer */}
       <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <Image
+              src="/logo-icon.png"
+              alt="AIgnite Logo"
+              width={20}
+              height={20}
+              className="w-5 h-5 object-contain shrink-0"
+            />
             <span className="font-bold text-foreground font-mono">AIgnite</span>
             <span>- Smart India Hackathon (SIH) 2026</span>
           </div>

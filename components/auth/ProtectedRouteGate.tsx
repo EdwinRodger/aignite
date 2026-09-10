@@ -2,11 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
-  Lock,
   Sparkles,
   ArrowRight,
   Flame,
@@ -53,10 +53,15 @@ export function ProtectedRouteGate({
       <Card className="p-6 sm:p-10 rounded-3xl border-border bg-card shadow-md space-y-8 text-center">
         {/* Header Badge & Title */}
         <div className="space-y-4 max-w-2xl mx-auto">
-          <div className="inline-flex items-center justify-center">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-2 shadow-xs">
-              <Lock className="w-7 h-7" />
-            </div>
+          <div className="inline-flex items-center justify-center mb-2">
+            <Image
+              src="/logo-icon.png"
+              alt="AIgnite Logo"
+              width={56}
+              height={56}
+              className="w-14 h-14 object-contain"
+              priority
+            />
           </div>
 
           <div>

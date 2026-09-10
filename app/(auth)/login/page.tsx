@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
@@ -10,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Flame, Mail, ArrowRight, Sparkles, ShieldCheck, Loader2, AlertCircle } from 'lucide-react';
+import { Mail, ArrowRight, Sparkles, ShieldCheck, Loader2, AlertCircle } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,8 +51,15 @@ export default function LoginPage() {
         <div className="w-full max-w-md relative z-10">
           <Card className="shadow-sm border-border">
             <CardHeader className="text-center space-y-2 pb-4">
-              <div className="mx-auto inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent border border-primary/20 text-primary mb-1">
-                <Flame className="w-6 h-6" />
+              <div className="mx-auto inline-flex items-center justify-center mb-1">
+                <Image
+                  src="/logo-icon.png"
+                  alt="AIgnite Logo"
+                  width={44}
+                  height={44}
+                  className="w-11 h-11 object-contain"
+                  priority
+                />
               </div>
               <CardTitle className="text-2xl font-bold tracking-tight text-foreground font-sans">
                 Sign in to <span className="text-primary font-extrabold font-mono">AIgnite</span>
