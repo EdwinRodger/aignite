@@ -242,6 +242,52 @@ export const jobPostings = pgTable('job_postings', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
+// 9. Architecture Deep-Dives & Technical Verification Checkpoints
+export const deepDives = pgTable('deep_dives', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  slug: text('slug').unique().notNull(),
+  title: text('title').notNull(),
+  summary: text('summary').notNull(),
+  keyTakeaway: text('key_takeaway').notNull(),
+  sourceName: text('source_name').notNull(),
+  sourceUrl: text('source_url').notNull(),
+  category: text('category').notNull(), // 'Inference & Infra', 'Agents & RL', 'GenAI & LLMs', 'Vision & Multimodal', 'Kernel Optimization'
+  tagBadge: text('tag_badge').notNull(),
+  readTime: text('read_time').default('2 min read').notNull(),
+  difficulty: text('difficulty').default('Intermediate').notNull(), // 'Foundational', 'Intermediate', 'Advanced', 'Staff/Principal'
+  metrics: jsonb('metrics').$type<{ label: string; value: string }[]>().notNull(),
+  diagramComparison: jsonb('diagram_comparison').$type<{
+    before: string;
+    after: string;
+    advantage: string;
+  }>().notNull(),
+  likesCount: integer('likes_count').default(0).notNull(),
+  bookmarksCount: integer('bookmarks_count').default(0).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+});
+
+export const deepDiveQuizzes = pgTable('deep_dive_quizzes', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  deepDiveId: uuid('deep_dive_id').references(() => deepDives.id, { onDelete: 'cascade' }).notNull(),
+  questionText: text('question_text').notNull(),
+  options: jsonb('options').$type<string[]>().notNull(),
+  correctOptionIndex: integer('correct_option_index').notNull(),
+  explanation: text('explanation').notNull(),
+});
+
+export const deepDiveUserInteractions = pgTable('deep_dive_user_interactions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id').references(() => profiles.id, { onDelete: 'cascade' }).notNull(),
+  deepDiveId: uuid('deep_dive_id').references(() => deepDives.id, { onDelete: 'cascade' }).notNull(),
+  liked: boolean('liked').default(false).notNull(),
+  bookmarked: boolean('bookmarked').default(false).notNull(),
+  quizCompleted: boolean('quiz_completed').default(false).notNull(),
+  selectedOptionIndex: integer('selected_option_index'),
+  isQuizCorrect: boolean('is_quiz_correct'),
+  interactedAt: timestamp('interacted_at', { withTimezone: true }).defaultNow(),
+});
+
 // Relational Definitions
 export const profilesRelations = relations(profiles, ({ one, many }) => ({
   stats: one(studentStats, {
@@ -255,6 +301,7 @@ export const profilesRelations = relations(profiles, ({ one, many }) => ({
   coachSubmissions: many(dailyCoachSubmissions),
   potdSubmissions: many(dailyPotdSubmissions),
   feedInteractions: many(feedUserInteractions),
+  deepDiveInteractions: many(deepDiveUserInteractions),
 }));
 
 export const feedPostsRelations = relations(feedPosts, ({ one, many }) => ({
@@ -263,4 +310,30 @@ export const feedPostsRelations = relations(feedPosts, ({ one, many }) => ({
     references: [feedPostQuizzes.postId],
   }),
   interactions: many(feedUserInteractions),
+}));
+
+export const deepDivesRelations = relations(deepDives, ({ one, many }) => ({
+  quiz: one(deepDiveQuizzes, {
+    fields: [deepDives.id],
+    references: [deepDiveQuizzes.deepDiveId],
+  }),
+  interactions: many(deepDiveUserInteractions),
+}));
+
+export const deepDiveQuizzesRelations = relations(deepDiveQuizzes, ({ one }) => ({
+  deepDive: one(deepDives, {
+    fields: [deepDiveQuizzes.deepDiveId],
+    references: [deepDives.id],
+  }),
+}));
+
+export const deepDiveUserInteractionsRelations = relations(deepDiveUserInteractions, ({ one }) => ({
+  user: one(profiles, {
+    fields: [deepDiveUserInteractions.userId],
+    references: [profiles.id],
+  }),
+  deepDive: one(deepDives, {
+    fields: [deepDiveUserInteractions.deepDiveId],
+    references: [deepDives.id],
+  }),
 }));

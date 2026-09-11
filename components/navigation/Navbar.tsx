@@ -210,7 +210,7 @@ export function Navbar() {
                   <div>
                     <div className="text-sm font-bold text-foreground">Architecture Deep-Dives</div>
                     <div className="text-sm text-muted-foreground leading-snug">
-                      Systems diagrams & paper synthesizer
+                      Systems diagrams & technical breakdowns
                     </div>
                   </div>
                 </Link>

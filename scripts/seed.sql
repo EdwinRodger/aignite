@@ -71,3 +71,161 @@ VALUES
   ('44444444-4444-4444-a444-444444444401', '2026-09-09', 'GPU Kernel Architecture', 'Explain how FlashAttention-3 avoids HBM bandwidth bottlenecks on NVIDIA Hopper (H100). What role do asynchronous TMA and Warp Specialization play?', '["Decouples memory loading warps from math warps via Warp Specialization", "Uses Hopper TMA to copy data directly from global HBM into shared memory", "Overlaps asynchronous data movement with FP8 matrix multiplication"]'::jsonb, 'Advanced'),
   ('44444444-4444-4444-a444-444444444402', '2026-09-10', 'Reinforcement Learning', 'Compare Group Relative Policy Optimization (GRPO) in DeepSeek-R1 with standard PPO. How does GRPO eliminate the value critic model?', '["Removes the dedicated critic network saving 60% VRAM", "Computes advantages across group responses generated per prompt", "Normalizes rewards across the group"]'::jsonb, 'Staff/Principal')
 ON CONFLICT (id) DO NOTHING;
+
+-- ===========================================================================
+-- 6. Architecture Deep-Dives & Technical Verification Checkpoints
+-- ===========================================================================
+CREATE TABLE IF NOT EXISTS deep_dives (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT UNIQUE NOT NULL,
+  title TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  key_takeaway TEXT NOT NULL,
+  source_name TEXT NOT NULL,
+  source_url TEXT NOT NULL,
+  category TEXT NOT NULL,
+  tag_badge TEXT NOT NULL,
+  read_time TEXT DEFAULT '2 min read' NOT NULL,
+  difficulty TEXT DEFAULT 'Intermediate' NOT NULL,
+  metrics JSONB NOT NULL,
+  diagram_comparison JSONB NOT NULL,
+  likes_count INTEGER DEFAULT 0 NOT NULL,
+  bookmarks_count INTEGER DEFAULT 0 NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS deep_dive_quizzes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  deep_dive_id UUID NOT NULL REFERENCES deep_dives(id) ON DELETE CASCADE,
+  question_text TEXT NOT NULL,
+  options JSONB NOT NULL,
+  correct_option_index INTEGER NOT NULL,
+  explanation TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS deep_dive_user_interactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  deep_dive_id UUID NOT NULL REFERENCES deep_dives(id) ON DELETE CASCADE,
+  liked BOOLEAN DEFAULT false NOT NULL,
+  bookmarked BOOLEAN DEFAULT false NOT NULL,
+  quiz_completed BOOLEAN DEFAULT false NOT NULL,
+  selected_option_index INTEGER,
+  is_quiz_correct BOOLEAN,
+  interacted_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(user_id, deep_dive_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_deep_dives_category ON deep_dives(category);
+CREATE INDEX IF NOT EXISTS idx_deep_dive_quizzes_dive ON deep_dive_quizzes(deep_dive_id);
+CREATE INDEX IF NOT EXISTS idx_deep_dive_user_interactions_uid ON deep_dive_user_interactions(user_id, deep_dive_id);
+
+INSERT INTO deep_dives (id, slug, title, summary, key_takeaway, source_name, source_url, category, tag_badge, read_time, difficulty, metrics, diagram_comparison, likes_count, bookmarks_count)
+VALUES
+  (
+    '11111111-0001-4000-a000-000000000001',
+    'deepseek-r1-grpo',
+    'DeepSeek-R1: Pure RL Reasoning Emergence via GRPO',
+    'DeepSeek-R1 demonstrates that high-order mathematical and algorithmic reasoning can emerge purely through large-scale reinforcement learning without human warm-up data. By replacing standard Proximal Policy Optimization (PPO) with Group Relative Policy Optimization (GRPO), it completely eliminates the memory-heavy value critic network.',
+    'Rule of thumb: In post-training reasoning pipelines, GRPO slashes training GPU memory footprint by ~60% by calculating rewards relative to sampled group outputs rather than maintaining a separate critic model.',
+    'DeepSeek AI Research',
+    'https://github.com/deepseek-ai/DeepSeek-R1',
+    'Agents & RL',
+    'LLM Post-Training',
+    '3 min read',
+    'Advanced',
+    '[{"label":"VRAM Savings","value":"~60%"},{"label":"Critic Memory","value":"0 GB (Eliminated)"},{"label":"AIME 2024 Score","value":"79.8% (Pass@1)"}]'::jsonb,
+    '{"before":"PPO: Actor + Critic (2x Model VRAM footprint)","after":"GRPO: Actor + Group Relative Score Normalization","advantage":"Bypasses training and synchronizing a separate value critic network"}'::jsonb,
+    342,
+    189
+  ),
+  (
+    '11111111-0002-4000-a000-000000000002',
+    'vllm-paged-attention',
+    'vLLM PagedAttention: Eradicating KV-Cache Memory Fragmentation',
+    'In conventional LLM serving, 60% to 80% of GPU memory is lost to fragmentation because KV-caches are allocated contiguously for maximum sequence lengths. Inspired by operating system virtual memory paging, PagedAttention stores non-contiguous tokens in dynamic physical blocks.',
+    'Rule of thumb: PagedAttention reduces KV-cache memory waste from >60% to under 4%, unlocking 2x to 4x higher serving throughput on identical GPU hardware.',
+    'vLLM Project / UC Berkeley',
+    'https://github.com/vllm-project/vllm',
+    'Inference & Infra',
+    'Inference Optimization',
+    '3 min read',
+    'Intermediate',
+    '[{"label":"Memory Waste","value":"<4% (vs 60-80%)"},{"label":"Serving Throughput","value":"2-4x Boost"},{"label":"Key Innovation","value":"OS-style Memory Paging"}]'::jsonb,
+    '{"before":"Contiguous Allocation: Over-allocated & fragmented static blocks","after":"Paged Blocks: Dynamic non-contiguous allocation via page tables","advantage":"Near-zero internal memory fragmentation and shared prefix caching"}'::jsonb,
+    512,
+    264
+  ),
+  (
+    '11111111-0003-4000-a000-000000000003',
+    'flashattention-3-hopper',
+    'FlashAttention-3: Async FP8 Tensor Cores & Warp Specialization',
+    'FlashAttention-3 unleashes Hopper architecture (H100/H200) capabilities by overlapping memory transfers with tensor core computation. By utilizing the Tensor Memory Accelerator (TMA) and Warp Specialization, it reaches up to 75% of theoretical peak FP8 TFLOPs.',
+    'Rule of thumb: Hardware-aware algorithms must decouple compute warps from memory-loading warps to hide memory latency on modern GPU microarchitectures.',
+    'Tri Dao / Princeton AI',
+    'https://tridao.me/blog/2024/flashdecoding/',
+    'Kernel Optimization',
+    'Kernel Engineering',
+    '4 min read',
+    'Staff/Principal',
+    '[{"label":"Speedup over FA-2","value":"1.5x - 2.0x"},{"label":"FP8 Utilization","value":"~75% Peak H100 TFLOPs"},{"label":"Core Mechanism","value":"Warp Specialization"}]'::jsonb,
+    '{"before":"FA-2: Synchronous GMEM -> SMEM -> Tensor Cores pipeline","after":"FA-3: Async TMA loads + Producer-Consumer Warp Specialization","advantage":"Hides global memory latency entirely behind arithmetic execution"}'::jsonb,
+    428,
+    310
+  ),
+  (
+    '11111111-0004-4000-a000-000000000004',
+    'speculative-decoding',
+    'Speculative Decoding: Breaking the Memory-Bandwidth Bottleneck',
+    'LLM inference is fundamentally memory-bandwidth bound: loading 70B weights for every single token forward pass wastes GPU compute. Speculative decoding uses a lightweight draft model to speculate multiple tokens, which the target model verifies in a single parallel step.',
+    'Rule of thumb: Speculative decoding yields 2x to 3x wall-clock latency reduction while preserving 100% mathematical equivalence to the target model output.',
+    'Google Research / DeepMind',
+    'https://arxiv.org/abs/2211.17192',
+    'Inference & Infra',
+    'Latency Reduction',
+    '3 min read',
+    'Intermediate',
+    '[{"label":"Latency Gain","value":"2-3x Lower P95"},{"label":"Distribution Fidelity","value":"100% Exact Match"},{"label":"Verification Cost","value":"1 Forward Pass for K tokens"}]'::jsonb,
+    '{"before":"Sequential Target: K forward passes for K generated tokens","after":"Draft (Fast K tokens) + Target 1-pass parallel verification","advantage":"Decouples token latency from target model weight reading overhead"}'::jsonb,
+    389,
+    205
+  )
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO deep_dive_quizzes (id, deep_dive_id, question_text, options, correct_option_index, explanation)
+VALUES
+  (
+    '22222222-0001-4000-b000-000000000001',
+    '11111111-0001-4000-a000-000000000001',
+    'Why does GRPO save ~60% VRAM compared to standard PPO during RL post-training?',
+    '["A) Uses 4-bit Quantized Weights to compress the KV-cache","B) Eliminates the Critic/Value Model entirely via relative group scoring","C) Truncates prompt context length to sub-2048 tokens"]'::jsonb,
+    1,
+    'GRPO compares outputs against the baseline reward of a sampled group of completions, completely eliminating the need to allocate and update a secondary value critic model in VRAM.'
+  ),
+  (
+    '22222222-0002-4000-b000-000000000002',
+    '11111111-0002-4000-a000-000000000002',
+    'How does PagedAttention eliminate memory fragmentation during continuous batching?',
+    '["A) By dropping prompt tokens whenever context exceeds 4096 tokens","B) By partitioning dynamic KV-cache into fixed-size virtual blocks mapped to physical memory","C) By sharing weights between the encoder and decoder attention heads"]'::jsonb,
+    1,
+    'PagedAttention adapts OS virtual memory paging, allowing tokens in the KV-cache to reside in non-contiguous physical blocks and eliminating over-allocation.'
+  ),
+  (
+    '22222222-0003-4000-b000-000000000003',
+    '11111111-0003-4000-a000-000000000003',
+    'What hardware architectural feature in NVIDIA Hopper enables FA-3 asynchronous loads?',
+    '["A) Tensor Memory Accelerator (TMA) for direct global-to-shared memory transfers","B) Software emulation of FP32 floating point operations","C) Complete elimination of SRAM scratchpad memory"]'::jsonb,
+    0,
+    'Hopper hardware TMA allows copying data directly from global HBM memory into shared memory asynchronously without consuming register file bandwidth.'
+  ),
+  (
+    '22222222-0004-4000-b000-000000000004',
+    '11111111-0004-4000-a000-000000000004',
+    'Why does speculative decoding maintain identical output distributions to the target model?',
+    '["A) The draft model is larger and more accurate than the target model","B) The target model validates draft tokens in parallel using modified rejection sampling","C) Tokens are selected purely by temperature=0 greedy search"]'::jsonb,
+    1,
+    'A modified rejection sampling scheme mathematically ensures that the accepted token distribution strictly matches sampling directly from the larger target model.'
+  )
+ON CONFLICT (id) DO NOTHING;
+
