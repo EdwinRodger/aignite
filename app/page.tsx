@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   Award,
   Zap,
+  Code2,
 } from 'lucide-react';
 import { DAILY_COACH_QUESTIONS } from '@/lib/coach-data';
 import { AI_CAREER_ROADMAP } from '@/lib/roadmap-data';
@@ -394,20 +395,20 @@ export default async function HomePage() {
                   Tackle Today&apos;s High-Yield Architecture Challenge
                 </h2>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Every morning at 06:00 IST, AIgnite drops one production interview scenario. Speak your answer into the voice coach or study key canonical trade-offs to keep your league streak burning.
+                  Every morning at 06:00 IST, AIgnite drops one production interview scenario. Solve the code challenge or practice your oral defense into the voice coach to keep your streak burning.
                 </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                   <Button asChild className="gap-2 text-sm font-bold rounded-lg shadow-xs">
-                    <Link href="/coach">
-                      <Mic className="w-4 h-4" />
-                      <span>Solve in Voice Mock Interview</span>
+                    <Link href="/potd">
+                      <Code2 className="w-4 h-4" />
+                      <span>Solve Problem of the Day</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </Button>
                   <Button asChild variant="outline" className="gap-2 text-sm font-bold rounded-lg">
-                    <Link href="#ai-sparks">
-                      <Sparkles className="w-4 h-4 text-primary" />
-                      <span>Browse 5-Minute Sparks</span>
+                    <Link href="/coach">
+                      <Mic className="w-4 h-4 text-primary" />
+                      <span>AI Voice Coach</span>
                     </Link>
                   </Button>
                 </div>

@@ -62,7 +62,7 @@ aignite_mobile/
 ├── App.tsx                     # Expo WebView host, bridge handler & back button navigation
 ├── app.json                    # Expo configuration, Android permissions & audio plugins
 ├── eas.json                    # EAS configuration for standalone Android APK & AAB builds
-├── package.json                # Expo SDK dependencies (expo-av, expo-haptics, webview, async-storage)
+├── package.json                # Expo SDK dependencies (safe-area-context, expo-haptics, webview, async-storage)
 ├── tsconfig.json               # Strict TypeScript configuration
 └── assets/                     # App icons and adaptive launcher drawables
 ```
@@ -127,7 +127,7 @@ triggerHaptic('error');
 
 The app needs audio recording permissions for the AI Voice Coach to capture answers and send audio tokens for scoring.
 
-1. **Expo Config Plugin & Android Manifest** (`app.json`):
+1. **Android Manifest Permissions** (`app.json`):
    ```json
    {
      "expo": {
@@ -138,21 +138,13 @@ The app needs audio recording permissions for the AI Voice Coach to capture answ
            "android.permission.RECORD_AUDIO",
            "android.permission.MODIFY_AUDIO_SETTINGS"
          ]
-       },
-       "plugins": [
-         [
-           "expo-av",
-           {
-             "microphonePermission": "Allow AIgnite to access your microphone for the Daily AI Voice Mock Interview Coach."
-           }
-         ]
-       ]
+       }
      }
    }
    ```
 
-2. **Upfront Runtime Permission Request** in `App.tsx`:
-   Using `Audio.requestPermissionsAsync()` from `expo-av` allows Expo Go to request Android system microphone permission upfront so the web app's `navigator.mediaDevices.getUserMedia()` operates seamlessly.
+2. **Upfront Runtime Permission Request via `PermissionsAndroid`** in `App.tsx`:
+   Instead of using external packages that cause native module linking errors in Expo Go, the app uses React Native's built-in `PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO)`. This runs natively without external binaries and is 100% stable in Expo Go.
 
 ---
 

@@ -132,10 +132,15 @@ export const feedUserInteractions = pgTable('feed_user_interactions', {
 export const dailyCoachQuestions = pgTable('daily_coach_questions', {
   id: uuid('id').defaultRandom().primaryKey(),
   forDate: text('for_date').unique().notNull(), // YYYY-MM-DD
+  title: text('title'),
   topic: text('topic').notNull(),
+  track: text('track'),
+  difficulty: text('difficulty').default('Beginner'),
   questionText: text('question_text').notNull(),
+  contextHint: text('context_hint'),
   sampleKeyPoints: jsonb('sample_key_points').$type<string[]>().notNull(),
-  difficulty: text('difficulty').default('Intermediate'),
+  suggestedModelAnswer: text('suggested_model_answer'),
+  estimatedSpeakingTime: text('estimated_speaking_time'),
 });
 
 export const dailyCoachSubmissions = pgTable('daily_coach_submissions', {
@@ -149,6 +154,39 @@ export const dailyCoachSubmissions = pgTable('daily_coach_submissions', {
   communicationScore: numeric('communication_score', { precision: 3, scale: 1 }).notNull(),
   overallScore: numeric('overall_score', { precision: 3, scale: 1 }).notNull(),
   aiFeedback: text('ai_feedback').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+// 6b. Problem of the Day (POTD) Questions & Submissions
+export const dailyPotdQuestions = pgTable('daily_potd_questions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  forDate: text('for_date').unique().notNull(), // YYYY-MM-DD
+  title: text('title').notNull(),
+  topic: text('topic').notNull(),
+  track: text('track').notNull(),
+  difficulty: text('difficulty').default('Beginner').notNull(),
+  problemStatement: text('problem_statement').notNull(),
+  scenario: text('scenario'),
+  codeSnippet: text('code_snippet'),
+  formulaDisplay: text('formula_display'),
+  options: jsonb('options').$type<string[]>().default([]).notNull(),
+  correctOptionIndex: integer('correct_option_index').default(0).notNull(),
+  explanation: text('explanation'),
+  hint: text('hint'),
+  pointsReward: integer('points_reward').default(25).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const dailyPotdSubmissions = pgTable('daily_potd_submissions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  studentId: uuid('student_id').references(() => profiles.id, { onDelete: 'cascade' }).notNull(),
+  potdId: uuid('potd_id').references(() => dailyPotdQuestions.id, { onDelete: 'cascade' }).notNull(),
+  submittedCode: text('submitted_code').default(''),
+  selectedOptionIndex: integer('selected_option_index'),
+  isCorrect: boolean('is_correct').default(false),
+  status: text('status').default('passed').notNull(),
+  pointsAwarded: integer('points_awarded').default(25).notNull(),
+  feedback: text('feedback'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -199,6 +237,7 @@ export const profilesRelations = relations(profiles, ({ one, many }) => ({
     references: [aiReportCards.studentId],
   }),
   coachSubmissions: many(dailyCoachSubmissions),
+  potdSubmissions: many(dailyPotdSubmissions),
   feedInteractions: many(feedUserInteractions),
 }));
 

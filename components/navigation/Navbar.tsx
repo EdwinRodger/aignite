@@ -17,6 +17,7 @@ import {
   LayoutDashboard,
   ChevronDown,
   Cpu,
+  Code2,
 } from 'lucide-react';
 import { getAuthUserAction } from '@/app/actions/auth';
 import { Button } from '@/components/ui/button';
@@ -126,14 +127,28 @@ export function Navbar() {
               </DropdownMenuItem>
 
               <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link href="/potd" className="flex items-start gap-3 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Code2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-foreground">Problem of the Day</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Daily AI architecture &amp; coding challenge
+                    </div>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
                 <Link href="/coach" className="flex items-start gap-3 w-full">
                   <div className="w-8 h-8 rounded-lg bg-chart-1/10 border border-chart-1/20 text-chart-1 flex items-center justify-center shrink-0 mt-0.5">
                     <Mic className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-foreground">Voice Mock Interview (POTD)</div>
+                    <div className="text-sm font-bold text-foreground">AI Voice Coach</div>
                     <div className="text-sm text-muted-foreground leading-snug">
-                      Daily oral defense & speech metrics
+                      Daily oral mock interview &amp; speech metrics
                     </div>
                   </div>
                 </Link>

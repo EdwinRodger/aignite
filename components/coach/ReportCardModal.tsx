@@ -62,10 +62,10 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
   }, [report.scores.compositeScore]);
 
   const getTierLabel = (score: number) => {
-    if (score >= 8.5) return { label: 'Principal / Staff Level', variant: 'default' as const };
-    if (score >= 7.0) return { label: 'Senior AI Engineer Level', variant: 'success' as const };
-    if (score >= 5.5) return { label: 'Mid-Level AI Engineer', variant: 'warning' as const };
-    return { label: 'Associate / Junior Candidate', variant: 'secondary' as const };
+    if (score >= 8.5) return { label: 'Staff AI Engineer', variant: 'default' as const };
+    if (score >= 7.0) return { label: 'Senior AI Engineer', variant: 'outline' as const };
+    if (score >= 5.0) return { label: 'Associate AI Engineer', variant: 'secondary' as const };
+    return { label: 'Needs Practice - Foundational', variant: 'destructive' as const };
   };
 
   const tier = getTierLabel(report.scores.compositeScore);
@@ -81,7 +81,7 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl p-6 sm:p-7 space-y-6">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl p-6 sm:p-7 pr-6 sm:pr-8 space-y-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
         {/* Header with Composite Score & Tier */}
         <DialogHeader className="border-b border-border/60 pb-5 text-left">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -238,25 +238,43 @@ export function ReportCardModal({ report, onClose, onContinue }: ReportCardModal
         </div>
 
         {/* Daily Streak Maintenance Callout */}
-        <div className="p-4 rounded-2xl bg-primary/10 border border-primary/25 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary">
-              <Flame className="w-5 h-5 animate-pulse" />
+        {report.scores.compositeScore >= 4.0 ? (
+          <div className="p-4 rounded-2xl bg-primary/10 border border-primary/25 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary">
+                <Flame className="w-5 h-5 animate-pulse" />
+              </div>
+              <div>
+                <span className="text-sm font-bold text-foreground block">
+                  Daily Habit Maintained! +25 League XP Claimed
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  Your daily interview streak is active. Keep returning daily for new questions.
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-sm font-bold text-foreground block">
-                Daily Habit Maintained! +25 League XP Claimed
-              </span>
-              <span className="text-sm text-muted-foreground">
-                Your daily interview streak is active. Keep returning daily at 8:00 AM.
-              </span>
+            <div className="hidden sm:flex items-center gap-1 font-mono font-bold text-primary text-sm">
+              <Zap className="w-4 h-4" />
+              <span>+25 XP</span>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-1 font-mono font-bold text-primary text-sm">
-            <Zap className="w-4 h-4" />
-            <span>+25 XP</span>
+        ) : (
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="text-sm font-bold text-foreground block">
+                  Passing Threshold Not Met (&lt; 4.0/10)
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  Review the model answer below and try again to unlock your daily streak XP.
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Action Buttons Footer */}
         <DialogFooter className="flex items-center justify-between pt-2 border-t border-border/60 sm:justify-between">

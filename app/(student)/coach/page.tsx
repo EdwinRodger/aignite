@@ -1,13 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VoiceRecorder } from '@/components/coach/VoiceRecorder';
 import { ReportCardModal } from '@/components/coach/ReportCardModal';
 import { DAILY_COACH_QUESTIONS, CoachQuestion, CoachEvaluationReport } from '@/lib/coach-data';
-import { evaluateCoachAnswerAction } from '@/app/actions/coach';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  getCoachQuestionsAction,
+  getCoachStreakAction,
+  evaluateCoachAnswerAction,
+} from '@/app/actions/coach';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   Mic,
   Flame,
@@ -16,14 +28,57 @@ import {
   HelpCircle,
   Calendar,
   Clock,
+  Info,
+  CheckCircle2,
+  Sparkles,
+  ChevronRight,
 } from 'lucide-react';
 
 export default function CoachPage() {
+  const [questions, setQuestions] = useState<CoachQuestion[]>(DAILY_COACH_QUESTIONS);
   const [selectedQuestion, setSelectedQuestion] = useState<CoachQuestion>(DAILY_COACH_QUESTIONS[0]);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [evaluationReport, setEvaluationReport] = useState<CoachEvaluationReport | null>(null);
-  const [streakDays, setStreakDays] = useState(4);
+  const [streakDays, setStreakDays] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isScoringGuideOpen, setIsScoringGuideOpen] = useState(false);
+  const [isQuestionBankOpen, setIsQuestionBankOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Sync questions and flame streak directly from Supabase
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadSupabaseData() {
+      try {
+        const [streakData, questionsData] = await Promise.all([
+          getCoachStreakAction(),
+          getCoachQuestionsAction(),
+        ]);
+
+        if (isMounted) {
+          if (streakData) {
+            setStreakDays(streakData.currentStreak);
+          }
+          if (questionsData && questionsData.length > 0) {
+            setQuestions(questionsData);
+            setSelectedQuestion(questionsData[0]);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load coach data from Supabase:', err);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadSupabaseData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleSubmitAnswer = async (transcript: string, durationSeconds: number) => {
     setIsEvaluating(true);
@@ -35,205 +90,321 @@ export default function CoachPage() {
     if (result.success && result.report) {
       setEvaluationReport(result.report);
 
-      // Increment streak in state & localStorage
-      setStreakDays((prev) => {
-        const next = prev + 1;
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('aignite_student_streak', next.toString());
-          const currentPts = parseInt(localStorage.getItem('aignite_student_points') || '25', 10);
-          localStorage.setItem('aignite_student_points', (currentPts + 25).toString());
-        }
-        return next;
-      });
+      // Directly update streak from Supabase result
+      if (result.updatedStreak !== undefined) {
+        setStreakDays(result.updatedStreak);
+      } else {
+        const updated = await getCoachStreakAction();
+        setStreakDays(updated.currentStreak);
+      }
     } else {
       setErrorMessage(result.error || 'Evaluation failed. Please try again.');
     }
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Page Banner / Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-              <Badge variant="outline" className="gap-1.5 px-3 py-1 text-sm font-bold bg-primary/10 text-primary border-primary/20">
-                <Mic className="w-3.5 h-3.5" />
-                <span>Daily Voice Coach</span>
-              </Badge>
-              <span className="text-sm text-muted-foreground font-mono">Morning Habit - 8:00 AM POTD</span>
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">
-              Audio-Based AI Mock Interview
-            </h1>
-            <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl leading-relaxed">
-              Maintain your daily speaking streak. Practice answering real staff-level AI systems interview questions out loud, and receive instant 5-axis automated scoring with feedback.
-            </p>
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 border-b border-border/60 pb-6">
+        <div className="space-y-3 flex-1">
+          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+            <Badge
+              variant="outline"
+              className="gap-1.5 px-3 py-1 text-sm font-bold bg-primary/10 text-primary border-primary/20"
+            >
+              <Mic className="w-3.5 h-3.5" />
+              <span>Daily AI Voice Coach</span>
+            </Badge>
+
+            <span className="text-sm text-muted-foreground font-mono">
+              Oral Defense &amp; Speech Metrics
+            </span>
           </div>
 
-          {/* Daily Streak Maintenance Badge */}
-          <Card className="p-3.5 flex items-center gap-3 shrink-0 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-              <Flame className="w-5 h-5 animate-pulse" />
-            </div>
-            <div>
-              <div className="text-sm font-bold text-foreground font-mono">
-                {streakDays} Day Flame Streak
-              </div>
-              <div className="text-sm text-primary font-semibold flex items-center gap-1">
-                <Zap className="w-3.5 h-3.5" />
-                <span>+25 XP per daily answer</span>
-              </div>
-            </div>
-          </Card>
-        </div>
+          <h1 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">
+            Audio-Based AI Mock Interview
+          </h1>
 
-        {/* 2-Column Responsive Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Main Interview Practice Column */}
-          <div className="lg:col-span-8 space-y-6">
-            {/* Question of the Day Card */}
-            <Card className="p-6 shadow-sm space-y-4">
-              {/* Question Meta Badges */}
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Badge variant="secondary" className="text-sm font-bold font-mono">
-                    {selectedQuestion.topic}
-                  </Badge>
-                  <Badge variant="outline" className="text-sm font-mono bg-primary/10 text-primary border-primary/20 font-semibold">
-                    {selectedQuestion.track}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground">- {selectedQuestion.difficulty}</span>
-                </div>
+          <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
+            Practice answering real AI systems interview questions out loud. Receive real-time speech cadence, filler detection, and 5-axis automated scoring to maintain your daily streak.
+          </p>
 
-                <div className="flex items-center gap-1 text-sm font-mono text-muted-foreground">
-                  <Clock className="w-3.5 h-3.5 text-primary" />
-                  <span>Target: {selectedQuestion.estimatedSpeakingTime}</span>
-                </div>
-              </div>
+          {/* Action Modals Triggered Under Description */}
+          <div className="flex items-center gap-3 pt-1 flex-wrap">
+            {/* 1. AI Oral Scoring Dimensions Modal Button */}
+            <Dialog open={isScoringGuideOpen} onOpenChange={setIsScoringGuideOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 text-sm font-semibold gap-1.5 rounded-lg border-border/80 text-foreground hover:bg-muted"
+                >
+                  <Info className="w-4 h-4 text-primary" />
+                  <span>AI Oral Scoring Dimensions</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+                    <Brain className="w-5 h-5 text-primary" />
+                    <span>AI Oral Scoring Dimensions</span>
+                  </DialogTitle>
+                  <DialogDescription className="text-sm text-muted-foreground">
+                    Every verbal answer is analyzed across 5 core dimensions to provide actionable feedback:
+                  </DialogDescription>
+                </DialogHeader>
 
-              {/* Question Text */}
-              <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight leading-snug">
-                {selectedQuestion.questionText}
-              </h2>
-
-              {/* Context Hint Callout */}
-              <div className="p-3.5 rounded-xl bg-muted/40 border border-border/80 flex items-start gap-2.5 text-sm">
-                <HelpCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-semibold text-foreground block">Architectural Prompt Hint:</span>
-                  <span className="text-muted-foreground leading-relaxed font-sans">{selectedQuestion.contextHint}</span>
-                </div>
-              </div>
-
-              {/* Expected Key Concepts Expected */}
-              <div className="space-y-2 pt-1">
-                <span className="text-sm uppercase font-mono tracking-wider text-muted-foreground block font-semibold">
-                  Key Production Concepts Expected by Evaluator:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {selectedQuestion.canonicalKeyPoints.map((pt, idx) => (
-                    <div
-                      key={idx}
-                      className="p-2.5 rounded-lg bg-muted/30 border border-border text-sm text-muted-foreground flex items-start gap-2"
-                    >
-                      <span className="text-primary font-bold mt-0.5">✓</span>
-                      <span>{pt}</span>
+                <div className="space-y-3 pt-2 text-sm text-muted-foreground">
+                  <div className="p-3.5 rounded-xl bg-muted/40 border border-border">
+                    <div className="font-bold text-foreground flex items-center justify-between mb-1">
+                      <span>1. Knowledge Depth</span>
+                      <Badge variant="secondary" className="font-mono text-sm">35% Weight</Badge>
                     </div>
-                  ))}
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Accuracy of domain mechanisms, mathematical formulations, and engineering tradeoffs.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/40 border border-border">
+                    <div className="font-bold text-foreground flex items-center justify-between mb-1">
+                      <span>2. Industry Readiness</span>
+                      <Badge variant="secondary" className="font-mono text-sm">20% Weight</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Awareness of real-world production constraints, scalability limits, and deployment reality.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/40 border border-border">
+                    <div className="font-bold text-foreground flex items-center justify-between mb-1">
+                      <span>3. Communication &amp; Structure</span>
+                      <Badge variant="secondary" className="font-mono text-sm">15% Weight</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Concise, organized delivery using standard patterns (STAR, definition first, then tradeoffs).
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/40 border border-border">
+                    <div className="font-bold text-foreground flex items-center justify-between mb-1">
+                      <span>4. Cadence &amp; Confidence</span>
+                      <Badge variant="secondary" className="font-mono text-sm">15% Weight</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Speech rate in the optimal 110-160 WPM window with minimal conversational filler words.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/40 border border-border">
+                    <div className="font-bold text-foreground flex items-center justify-between mb-1">
+                      <span>5. Concrete Examples</span>
+                      <Badge variant="secondary" className="font-mono text-sm">15% Weight</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Use of real metric examples, framework libraries, and operational failure modes.
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </DialogContent>
+            </Dialog>
 
-            {/* Error Feedback if any */}
-            {errorMessage && (
-              <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive text-sm text-destructive">
-                {errorMessage}
-              </div>
-            )}
+            {/* 2. Question Bank Modal Button (Moved from sidebar) */}
+            <Dialog open={isQuestionBankOpen} onOpenChange={setIsQuestionBankOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 text-sm font-semibold gap-1.5 rounded-lg border-border/80 text-foreground hover:bg-muted"
+                >
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span>Browse Question Bank ({questions.length})</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+                    <Calendar className="w-5 h-5 text-primary" />
+                    <span>Voice Interview Question Bank</span>
+                  </DialogTitle>
+                  <DialogDescription className="text-sm text-muted-foreground">
+                    Select a question to practice out loud. Questions are curated for beginner to moderate interview readiness:
+                  </DialogDescription>
+                </DialogHeader>
 
-            {/* Live Audio Recorder Workspace */}
-            <VoiceRecorder
-              onSubmitAnswer={handleSubmitAnswer}
-              isEvaluating={isEvaluating}
-            />
+                <div className="space-y-2.5 pt-2">
+                  {questions.map((q) => {
+                    const isSelected = selectedQuestion.id === q.id;
+
+                    return (
+                      <button
+                        key={q.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedQuestion(q);
+                          setEvaluationReport(null);
+                          setErrorMessage(null);
+                          setIsQuestionBankOpen(false);
+                        }}
+                        className={`w-full text-left p-3.5 rounded-xl border transition-all flex flex-col gap-1.5 cursor-pointer ${
+                          isSelected
+                            ? 'border-primary bg-primary/10 ring-1 ring-primary'
+                            : 'border-border hover:border-primary/40 hover:bg-muted/30 bg-card'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between w-full gap-2">
+                          <Badge variant="secondary" className="text-sm font-mono uppercase">
+                            {q.topic}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className={`text-sm font-mono font-semibold ${
+                              q.difficulty === 'Beginner'
+                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                            }`}
+                          >
+                            {q.difficulty}
+                          </Badge>
+                        </div>
+                        <div className="text-sm font-bold leading-snug text-foreground">
+                          {q.title}
+                        </div>
+                        <div className="text-sm text-muted-foreground line-clamp-2">
+                          {q.questionText}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Delivery Tips Section Inside Modal */}
+                <div className="mt-4 p-3.5 rounded-xl bg-muted/40 border border-border space-y-2 text-sm">
+                  <div className="flex items-center gap-1.5 font-bold text-foreground">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    <span>Quick Delivery Tips:</span>
+                  </div>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• State the primary definition or metric tradeoff in your first sentence.</li>
+                    <li>• Keep a steady speaking cadence between 110 and 160 words per minute.</li>
+                    <li>• Replace conversational filler sounds with brief 1-second strategic pauses.</li>
+                  </ul>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+
+        {/* Daily Flame Streak Badge - Synced directly with Supabase */}
+        <Card className="p-3.5 flex items-center gap-3 shrink-0 shadow-sm border-border">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+            <Flame className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <div className="text-sm font-bold text-foreground font-mono">
+              {isLoading ? '...' : `${streakDays} Day Flame Streak`}
+            </div>
+            <div className="text-sm text-primary font-semibold flex items-center gap-1">
+              <Zap className="w-3.5 h-3.5" />
+              <span>+25 XP per spoken answer</span>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Main Single-Column Practice Layout (No distracting sidebar) */}
+      <div className="space-y-6">
+        {/* Active Question Card */}
+        <Card className="p-6 sm:p-8 shadow-sm space-y-5 border-border">
+          {/* Question Meta Badges */}
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant="secondary" className="text-sm font-bold font-mono">
+                {selectedQuestion.topic}
+              </Badge>
+              <Badge
+                variant="outline"
+                className="text-sm font-mono bg-primary/10 text-primary border-primary/20 font-semibold"
+              >
+                {selectedQuestion.track}
+              </Badge>
+              <Badge
+                variant="outline"
+                className={`text-sm font-mono font-semibold ${
+                  selectedQuestion.difficulty === 'Beginner'
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                    : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                }`}
+              >
+                {selectedQuestion.difficulty} Level
+              </Badge>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1 text-sm font-mono text-muted-foreground">
+                <Clock className="w-3.5 h-3.5 text-primary" />
+                <span>Target: {selectedQuestion.estimatedSpeakingTime}</span>
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsQuestionBankOpen(true)}
+                className="h-7 text-sm font-medium gap-1 text-primary hover:text-primary/80 p-0"
+              >
+                <span>Change Question</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
           </div>
 
-          {/* Sidebar: Question Rotation & Past Assessments */}
-          <aside aria-label="Question selector" className="lg:col-span-4 space-y-5">
-            {/* Daily Questions Selector */}
-            <Card className="p-5 shadow-sm space-y-3">
-              <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
-                <Calendar className="w-4 h-4 text-primary" />
-                <span>Today &amp; Past Coach Questions</span>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Choose an interview challenge to practice:
-              </p>
+          {/* Question Text */}
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-snug">
+            {selectedQuestion.questionText}
+          </h2>
 
-              <div className="space-y-2">
-                {DAILY_COACH_QUESTIONS.map((q) => {
-                  const isSelected = selectedQuestion.id === q.id;
+          {/* Context Hint Callout */}
+          <div className="p-4 rounded-xl bg-muted/40 border border-border/80 flex items-start gap-3 text-sm">
+            <HelpCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+            <div>
+              <span className="font-semibold text-foreground block">Interview Prompt Hint:</span>
+              <span className="text-muted-foreground leading-relaxed font-sans">
+                {selectedQuestion.contextHint}
+              </span>
+            </div>
+          </div>
 
-                  return (
-                    <Button
-                      key={q.id}
-                      type="button"
-                      variant={isSelected ? 'default' : 'outline'}
-                      onClick={() => {
-                        setSelectedQuestion(q);
-                        setEvaluationReport(null);
-                        setErrorMessage(null);
-                      }}
-                      className="w-full text-left h-auto p-3 flex-col items-start justify-start gap-1"
-                    >
-                      <div className="flex items-center justify-between w-full gap-1 mb-0.5">
-                        <Badge variant="secondary" className="text-sm font-mono uppercase">
-                          {q.topic}
-                        </Badge>
-                        <span className="text-sm font-mono font-bold">
-                          {q.difficulty}
-                        </span>
-                      </div>
-                      <div className="text-sm font-bold leading-tight line-clamp-2 text-left w-full whitespace-normal">
-                        {q.title}
-                      </div>
-                    </Button>
-                  );
-                })}
-              </div>
-            </Card>
+          {/* Expected Key Concepts */}
+          <div className="space-y-2 pt-1">
+            <span className="text-sm uppercase font-mono tracking-wider text-muted-foreground block font-semibold">
+              Key Concepts Expected in Answer:
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {selectedQuestion.canonicalKeyPoints.map((pt, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 rounded-lg bg-muted/30 border border-border text-sm text-muted-foreground flex items-start gap-2.5"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <span>{pt}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
 
-            {/* Multi-Axis Scoring Criteria Card */}
-            <Card className="p-5 shadow-sm space-y-3">
-              <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
-                <Brain className="w-4 h-4 text-primary" />
-                <span>AI Scoring Dimensions</span>
-              </div>
-              <ul className="space-y-2.5 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-primary font-mono">1.</span>
-                  <span><strong>Knowledge Depth (35%)</strong>: Accuracy of hardware, algorithmic mechanisms, and loss functions.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-primary font-mono">2.</span>
-                  <span><strong>Industry Readiness (20%)</strong>: Alignment with senior/staff engineer hiring bars at top labs.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-primary font-mono">3.</span>
-                  <span><strong>Communication (15%)</strong>: Concise, structured delivery without rambles.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-primary font-mono">4.</span>
-                  <span><strong>Confidence &amp; Pace (15%)</strong>: Natural cadence (120-150 WPM) with minimal filler words.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-primary font-mono">5.</span>
-                  <span><strong>Concrete Examples (15%)</strong>: Real metrics, GPU microarchitectures, and frameworks.</span>
-                </li>
-              </ul>
-            </Card>
-          </aside>
-        </div>
+        {/* Error Feedback if any */}
+        {errorMessage && (
+          <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive text-sm text-destructive">
+            {errorMessage}
+          </div>
+        )}
+
+        {/* Live Audio Recorder Workspace */}
+        <VoiceRecorder
+          onSubmitAnswer={handleSubmitAnswer}
+          isEvaluating={isEvaluating}
+        />
+      </div>
 
       {/* AI Report Card Modal on Evaluation Completion */}
       {evaluationReport && (

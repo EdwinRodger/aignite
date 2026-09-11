@@ -3,8 +3,8 @@ export interface CoachQuestion {
   forDate: string; // YYYY-MM-DD or identifier
   title: string;
   topic: string;
-  track: 'Inference & Infra' | 'GenAI & LLMs' | 'Agents & RL' | 'Distributed Systems';
-  difficulty: 'Intermediate' | 'Advanced' | 'Staff/Principal';
+  track: 'Inference & Infra' | 'GenAI & LLMs' | 'Machine Learning' | 'Search & Embeddings' | 'Deep Learning';
+  difficulty: 'Beginner' | 'Moderate' | 'Intermediate';
   questionText: string;
   contextHint: string;
   canonicalKeyPoints: string[];
@@ -38,66 +38,87 @@ export interface CoachEvaluationReport {
 
 export const DAILY_COACH_QUESTIONS: CoachQuestion[] = [
   {
-    id: 'coach-flashattention-3',
-    forDate: '2026-09-09',
-    title: 'FlashAttention-3 & Hardware-Aware Memory Hierarchy',
-    topic: 'GPU Kernel Architecture',
-    track: 'Inference & Infra',
-    difficulty: 'Advanced',
-    questionText:
-      'Explain how FlashAttention-3 avoids HBM bandwidth bottlenecks on NVIDIA Hopper (H100). What role do asynchronous TMA (Tensor Memory Accelerator) and Warp Specialization play in reaching ~75% peak FP8 TFLOPs?',
-    contextHint:
-      'Mention global vs shared memory (HBM vs SRAM), the decoupling of producer and consumer warps, and how FP8 Tensor Cores overlap with data loading.',
-    canonicalKeyPoints: [
-      'Decouples memory loading warps (producers) from math computation warps (consumers) via Warp Specialization',
-      'Uses Hopper Tensor Memory Accelerator (TMA) to copy data directly from global HBM into shared memory asynchronously without using register file bandwidth',
-      'Overlaps asynchronous data movement with FP8 matrix multiplication to hide memory latency behind compute',
-      'Recomputes attention softmax on the fly during the backward pass instead of storing quadratic attention matrices in HBM',
-    ],
-    suggestedModelAnswer:
-      'FlashAttention-3 maximizes Hopper H100 hardware by tackling the fundamental memory bandwidth bottleneck in attention computation. In traditional attention, intermediate N-by-N attention matrices must be read from and written to high-bandwidth global memory (HBM), creating an IO bottleneck. FlashAttention-3 introduces Warp Specialization, which partitions GPU warps into dedicated producer warps-responsible for loading tiles from HBM-and consumer warps-responsible for executing Tensor Core matrix operations. By leveraging Hopper’s hardware Tensor Memory Accelerator (TMA), producer warps asynchronously transfer data directly into shared memory (SRAM) without consuming register file bandwidth. Simultaneously, consumer warps compute FP8 scaled dot-products. This total overlap of memory transfers with computation allows FlashAttention-3 to sustain up to 75% of theoretical peak FP8 TFLOPs.',
-    estimatedSpeakingTime: '60-90 seconds',
-  },
-  {
-    id: 'coach-grpo-reasoning',
-    forDate: '2026-09-10',
-    title: 'DeepSeek-R1 GRPO vs PPO for Post-Training RL',
-    topic: 'Reinforcement Learning',
-    track: 'Agents & RL',
-    difficulty: 'Staff/Principal',
-    questionText:
-      'Compare Group Relative Policy Optimization (GRPO) used in DeepSeek-R1 with standard Proximal Policy Optimization (PPO). How does GRPO eliminate the value critic model, and what architectural tradeoffs emerge during RL training?',
-    contextHint:
-      'Focus on GPU VRAM savings, group relative scoring vs baseline value networks, and reward variance on mathematical/code tasks.',
-    canonicalKeyPoints: [
-      'Standard PPO requires maintaining a separate critic model of equal size to estimate state values, consuming massive GPU VRAM',
-      'GRPO samples a group of outputs for each prompt and uses the mean and standard deviation of their group rewards as the baseline',
-      'Eliminates the entire critic network, freeing approximately 60% of GPU memory during post-training RL',
-      'Trades critic memory for increased output sampling per prompt, which works exceptionally well for deterministic verifiable rewards (math, coding)',
-    ],
-    suggestedModelAnswer:
-      'In standard PPO, reinforcement learning requires two large models in GPU memory: the actor (policy) model and a critic (value) model of comparable size that estimates expected baseline returns. For 70B+ frontier models, this critic network doubles the memory footprint and communication overhead. DeepSeek-R1 introduces Group Relative Policy Optimization (GRPO) to eradicate the critic model entirely. Instead of predicting a state value with a secondary neural network, GRPO samples a group of diverse completions for each prompt, scores each output, and normalizes the reward relative to the group’s empirical mean and standard deviation. This slashes RL training memory by ~60%, allowing larger batch sizes or longer reasoning contexts. The architectural tradeoff is that GRPO requires sampling multiple trajectories per prompt, but for verifiable domains like mathematical proofs and programming unit tests, this group variance estimation is significantly more stable than an imperfect learned critic.',
-    estimatedSpeakingTime: '60-90 seconds',
-  },
-  {
-    id: 'coach-vllm-paged-attention',
+    id: 'coach-what-is-ai',
     forDate: '2026-09-11',
-    title: 'vLLM PagedAttention & Dynamic Batching',
-    topic: 'LLM Serving & KV Cache',
-    track: 'Inference & Infra',
-    difficulty: 'Intermediate',
+    title: 'What is an AI Model and How Does It Learn?',
+    topic: 'AI Fundamentals',
+    track: 'Machine Learning',
+    difficulty: 'Beginner',
     questionText:
-      'Why is the KV cache the primary memory bottleneck in high-throughput LLM serving? Explain how vLLM’s PagedAttention solves internal and external memory fragmentation inspired by OS virtual memory.',
+      'In simple words, what is an AI model, and how does it learn from training data?',
     contextHint:
-      'Explain contiguous memory over-allocation for max context lengths vs non-contiguous block tables.',
+      'Explain that an AI model is a computer program that learns patterns from examples by adjusting internal weights to minimize prediction errors.',
     canonicalKeyPoints: [
-      'Traditional KV caches pre-allocate contiguous memory buffers for maximum sequence lengths, wasting 60-80% of memory on unused or fragmented tokens',
-      'PagedAttention partitions dynamic KV caches into fixed-size physical blocks (e.g. 16 tokens per block) mapped via virtual block tables',
-      'Enables non-contiguous memory allocation in physical GPU RAM, reducing memory waste to under 4%',
-      'Unlocks 2x to 4x higher serving concurrency and seamless KV-cache sharing during parallel sampling and beam search',
+      'An AI model is a software program trained on data to recognize patterns and make predictions',
+      'It learns by adjusting internal mathematical parameters (weights) to minimize errors',
+      'Requires input training examples to learn relationships instead of relying on hardcoded rules',
+      'Once trained, it can generalize and make predictions on brand-new, unseen data',
     ],
     suggestedModelAnswer:
-      'During auto-regressive decoding, the Key-Value (KV) cache grows dynamically with each generated token. In legacy inference systems, memory must be allocated contiguously in GPU VRAM for the maximum possible sequence length (e.g., 8k tokens) because future length cannot be known in advance. This causes massive internal fragmentation and memory reservation waste, often exceeding 60-80% of total GPU memory. PagedAttention solves this by adopting operating system virtual memory paging: it divides the KV cache into fixed-size virtual blocks (such as 16 tokens) that can reside in non-contiguous physical GPU memory blocks. A dynamic block table maps logical token positions to physical blocks on demand. This virtually eliminates memory fragmentation (dropping waste to under 4%), allowing GPUs to pack 2x to 4x more concurrent request streams on the exact same hardware.',
-    estimatedSpeakingTime: '45-75 seconds',
+      'An AI model is a software program that learns to solve tasks by analyzing patterns in data rather than following manually written rules. During training, the model is fed thousands or millions of examples. Each time it makes a prediction, it compares its guess with the correct answer and measures its error. Using an optimization algorithm like gradient descent, the model gradually tweaks its internal parameters-called weights-to reduce that error. Once training is complete, the model can look at brand-new, unseen data and accurately make predictions or generate answers.',
+    estimatedSpeakingTime: '30-45 seconds',
+  },
+  {
+    id: 'coach-what-is-prompt',
+    forDate: '2026-09-10',
+    title: 'What is a Prompt in Generative AI?',
+    topic: 'Prompt Engineering',
+    track: 'GenAI & LLMs',
+    difficulty: 'Beginner',
+    questionText:
+      'What is a prompt in Generative AI, and what are two simple ways to write a better prompt?',
+    contextHint:
+      'Define a prompt as the text instruction given to an AI. Mention giving clear context, specifying desired output format, or providing an example.',
+    canonicalKeyPoints: [
+      'A prompt is the natural language instruction or question given to an AI model',
+      'Way 1: Provide clear context and role instructions (e.g. "Act as a helpful tutor")',
+      'Way 2: Specify the exact output format (e.g. "Provide 3 concise bullet points")',
+      'Way 3: Provide a few-shot example to guide the desired tone and structure',
+    ],
+    suggestedModelAnswer:
+      'A prompt is the natural language instruction or query that a user sends to a generative AI model to tell it what task to perform. To write a better prompt, first be specific about your goal and desired format-for example, asking for "a 3-bullet summary suitable for a beginner" rather than just "summarize this". Second, give the model clear context or role instructions, such as "Act as a senior software tutor", and optionally provide a short example of what a good answer looks like so the model follows your expected structure.',
+    estimatedSpeakingTime: '30-45 seconds',
+  },
+  {
+    id: 'coach-supervised-vs-unsupervised',
+    forDate: '2026-09-09',
+    title: 'Supervised vs Unsupervised Learning',
+    topic: 'Machine Learning Types',
+    track: 'Machine Learning',
+    difficulty: 'Beginner',
+    questionText:
+      'What is the key difference between Supervised Learning and Unsupervised Learning? Give a simple example of each.',
+    contextHint:
+      'Focus on labeled data vs unlabeled data. For example: classifying spam emails (supervised) vs grouping customers by shopping habits (unsupervised).',
+    canonicalKeyPoints: [
+      'Supervised learning uses labeled data with known correct target outputs',
+      'Example of supervised learning: email spam classification (spam vs not spam) or house price prediction',
+      'Unsupervised learning uses unlabeled data where the model finds natural patterns or clusters',
+      'Example of unsupervised learning: customer segmentation or grouping similar news articles',
+    ],
+    suggestedModelAnswer:
+      'The main difference between supervised and unsupervised learning is whether the training data includes answer labels. In supervised learning, the model is trained on labeled input-output pairs-like thousands of emails marked "spam" or "inbox". The model learns the rule to map new emails to the correct label. In unsupervised learning, the data has no labels. The model explores the data to discover hidden patterns or clusters on its own-such as grouping online shoppers into different customer segments based on their browsing behavior.',
+    estimatedSpeakingTime: '30-45 seconds',
+  },
+  {
+    id: 'coach-what-is-hallucination',
+    forDate: '2026-09-08',
+    title: 'What is AI Hallucination and How Can We Reduce It?',
+    topic: 'AI Reliability',
+    track: 'GenAI & LLMs',
+    difficulty: 'Beginner',
+    questionText:
+      'What is an AI hallucination, why does it happen, and what is one simple way to reduce it?',
+    contextHint:
+      'Explain that LLMs predict the most probable next word rather than checking facts. Mention providing source text (RAG) or asking the model to say "I do not know".',
+    canonicalKeyPoints: [
+      'Hallucination happens when an AI generates false or invented facts with high confidence',
+      'It occurs because LLMs predict probable token sequences rather than querying a verified truth database',
+      'Way 1: Provide reference documents or source context for the model to ground its answer (RAG)',
+      'Way 2: Prompt the model explicitly to say "I do not know" if the information is not present in the prompt',
+    ],
+    suggestedModelAnswer:
+      'An AI hallucination occurs when a language model generates factually incorrect or completely fabricated information while sounding confident and convincing. This happens because large language models are trained to predict the most statistically probable next words in a sentence, not to verify truth against a database. One simple and effective way to reduce hallucinations is Retrieval-Augmented Generation, or RAG: we supply the model with reliable source documents directly inside the prompt and instruct it to answer strictly using only the provided facts.',
+    estimatedSpeakingTime: '30-45 seconds',
   },
 ];

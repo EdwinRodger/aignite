@@ -23,6 +23,7 @@ import {
   Scale,
   HelpCircle,
   ArrowRight,
+  Code2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -46,8 +47,9 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, isProtected: true },
       { label: 'AI Sparks Feed', href: '/feed', icon: Sparkles, isProtected: false },
-      { label: 'Deep Dives', href: '/deep-dives', icon: Cpu, isProtected: false },
+      { label: 'Problem of the Day', href: '/potd', icon: Code2, isProtected: false },
       { label: 'Voice Coach', href: '/coach', icon: Mic },
+      { label: 'Deep Dives', href: '/deep-dives', icon: Cpu, isProtected: false },
     ],
   },
   {

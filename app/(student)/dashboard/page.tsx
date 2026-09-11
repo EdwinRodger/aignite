@@ -19,6 +19,7 @@ import {
   Zap,
   TrendingUp,
   CircleDot,
+  Code2,
 } from 'lucide-react';
 import { getCurrentStudentProfileAction } from '@/app/actions/auth';
 import { ProtectedRouteGate } from '@/components/auth/ProtectedRouteGate';
@@ -245,7 +246,7 @@ export default function StudentDashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Step 1: Daily AI Spark */}
           <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
             <div className="space-y-3">
@@ -263,7 +264,7 @@ export default function StudentDashboardPage() {
                   <span>Daily AI Spark</span>
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Digest the latest production breakthroughs (FlashAttention-3, DeepSeek GRPO, vLLM) condensed into high-signal engineering cards.
+                  Digest the latest production breakthroughs and research insights condensed into high-signal cards.
                 </p>
               </div>
             </div>
@@ -275,12 +276,41 @@ export default function StudentDashboardPage() {
             </Button>
           </Card>
 
-          {/* Step 2: Spoken Voice Defense */}
+          {/* Step 2: Problem of the Day */}
+          <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-sm font-mono">
+                  2
+                </div>
+                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
+                  5 Mins
+                </Badge>
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
+                  <Code2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  <span>Problem of the Day</span>
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Solve daily hands-on technical and architecture challenges in code to reinforce core AI systems intuition.
+                </p>
+              </div>
+            </div>
+            <Button asChild size="sm" className="w-full font-bold text-sm">
+              <Link href="/potd">
+                <span>Solve Today&apos;s POTD</span>
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Link>
+            </Button>
+          </Card>
+
+          {/* Step 3: Spoken Voice Coach */}
           <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
-                  2
+                  3
                 </div>
                 <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
                   3 Mins
@@ -289,27 +319,27 @@ export default function StudentDashboardPage() {
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
                   <Mic className="w-4 h-4 text-primary" />
-                  <span>Voice Oral Defense</span>
+                  <span>AI Voice Coach</span>
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Answer today&apos;s AI Problem of the Day into your microphone. Receive real-time speech cadence, filler detection, and STAR scoring.
+                  Answer AI systems questions out loud into your microphone with real-time cadence and STAR scoring.
                 </p>
               </div>
             </div>
-            <Button asChild size="sm" className="w-full font-bold text-sm">
+            <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
               <Link href="/coach">
-                <span>Practice POTD</span>
+                <span>Practice Voice Coach</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </Link>
             </Button>
           </Card>
 
-          {/* Step 3: Company Packs & Sandbox */}
+          {/* Step 4: Company Packs & Sandbox */}
           <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
-                  3
+                  4
                 </div>
                 <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
                   10 Mins
@@ -318,16 +348,16 @@ export default function StudentDashboardPage() {
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
                   <Cpu className="w-4 h-4 text-primary" />
-                  <span>Interactive Architecture Lab</span>
+                  <span>Architecture Lab</span>
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Test sub-50ms latency SLAs in the Architecture Sandbox, complete company interview missions, and debug production PyTorch bugs.
+                  Test latency SLAs in the Sandbox, complete company interview missions, and debug production setups.
                 </p>
               </div>
             </div>
             <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
               <Link href="/sandbox">
-                <span>Launch Architecture Lab</span>
+                <span>Launch Lab</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </Link>
             </Button>
@@ -367,7 +397,7 @@ export default function StudentDashboardPage() {
             <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-xs">
               <Link href="/coach">
                 <Mic className="w-3.5 h-3.5" />
-                <span>Practice POTD</span>
+                <span>Launch Voice Coach</span>
               </Link>
             </Button>
           </div>
@@ -424,13 +454,13 @@ export default function StudentDashboardPage() {
             </div>
             <h3 className="text-base font-bold text-foreground font-sans">No Spoken Defense Records Yet</h3>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Answer today&apos;s AI Problem of the Day on the Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified report card.
+              Answer today&apos;s interview question on the AI Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified report card.
             </p>
             <div className="pt-2">
               <Button asChild className="font-bold text-sm shadow-xs gap-2">
                 <Link href="/coach">
                   <Mic className="w-4 h-4" />
-                  <span>Begin Voice Defense Session</span>
+                  <span>Begin Voice Coach Session</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
