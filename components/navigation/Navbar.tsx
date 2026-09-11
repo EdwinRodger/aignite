@@ -168,7 +168,7 @@ export function Navbar() {
 
               <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
                 <Link
-                  href={userRole === 'student' ? '/feed' : '/#ai-sparks'}
+                  href="/feed"
                   className="flex items-start gap-3 w-full"
                 >
                   <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">

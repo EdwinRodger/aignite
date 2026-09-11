@@ -24,12 +24,18 @@ interface ProtectedRouteGateProps {
     description: string;
     icon?: React.ComponentType<{ className?: string }>;
   }>;
+  allowGuestPreview?: boolean;
+  onGuestPreview?: () => void;
+  guestPreviewLabel?: string;
 }
 
 export function ProtectedRouteGate({
   title = 'Student Dashboard',
   badge = 'Protected Student Area - Account Required',
   description = 'Your personalized engineering telemetry, weekly league standing, interview report cards, and active flame streaks are saved directly to your verified student account.',
+  allowGuestPreview = false,
+  onGuestPreview,
+  guestPreviewLabel = 'Explore as Guest',
   features = [
     {
       title: 'Persistent Streak & League XP',
@@ -121,6 +127,18 @@ export function ProtectedRouteGate({
               <span>Create Free Account</span>
             </Link>
           </Button>
+          {allowGuestPreview && onGuestPreview && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="lg"
+              onClick={onGuestPreview}
+              className="w-full sm:w-auto font-bold text-sm text-primary hover:bg-primary/10 gap-1.5"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>{guestPreviewLabel}</span>
+            </Button>
+          )}
         </div>
 
         {/* Public Routes Alternative Link */}

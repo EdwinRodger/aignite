@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 
+import Link from 'next/link';
+
 import { FeedCard } from '@/components/feed/FeedCard';
 import { FeedFilterBar } from '@/components/feed/FeedFilterBar';
 import { FeedSidebar } from '@/components/feed/FeedSidebar';
@@ -15,6 +17,7 @@ import { ProtectedRouteGate } from '@/components/auth/ProtectedRouteGate';
 
 export default function FeedPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isGuestMode, setIsGuestMode] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
   const [posts, setPosts] = useState<FeedPost[]>(CURATED_FEED_POSTS);
   const [totalPoints, setTotalPoints] = useState(15);
@@ -48,8 +51,10 @@ export default function FeedPage() {
       if (typeof window !== 'undefined') {
         const storedPoints = localStorage.getItem('aignite_student_points');
         const storedStreak = localStorage.getItem('aignite_student_streak');
+        const storedGuest = localStorage.getItem('aignite_feed_guest');
         if (storedPoints) setTotalPoints(parseInt(storedPoints, 10));
         if (storedStreak) setStreakCount(parseInt(storedStreak, 10));
+        if (storedGuest === 'true') setIsGuestMode(true);
       }
     }, 0);
     return () => {
@@ -90,7 +95,7 @@ export default function FeedPage() {
     setActiveCategory('All');
   };
 
-  if (isAuthenticated === null) {
+  if (isAuthenticated === null && !isGuestMode) {
     return (
       <div className="w-full max-w-5xl mx-auto px-4 py-20 flex items-center justify-center">
         <div className="flex items-center gap-2.5 text-muted-foreground font-mono text-sm">
@@ -101,12 +106,20 @@ export default function FeedPage() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isGuestMode) {
     return (
       <ProtectedRouteGate
         title="Interactive AI Sparks Feed"
         badge="Account Feature - Student Sign In Required"
         description="The daily AI Sparks feed delivers 5-minute architectural breakdowns with active retention check quizzes, bookmarking, and custom paper synthesis for registered students."
+        allowGuestPreview={true}
+        guestPreviewLabel="Explore Sparks as Guest"
+        onGuestPreview={() => {
+          setIsGuestMode(true);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('aignite_feed_guest', 'true');
+          }
+        }}
         features={[
           {
             title: 'Active Recall Check Quizzes',
@@ -120,7 +133,7 @@ export default function FeedPage() {
           },
           {
             title: 'Gemini Paper Synthesizer',
-            description: 'Generate on-demand bite-sized sparks from any technical paper or URL using Gemini 2.5.',
+            description: 'Generate on-demand bite-sized sparks from any technical paper or URL using Gemini 3.6 Flash.',
             icon: Trophy,
           },
         ]}
@@ -130,6 +143,23 @@ export default function FeedPage() {
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Guest Mode Notification Banner */}
+      {isGuestMode && !isAuthenticated && (
+        <div className="mb-6 p-3.5 rounded-2xl bg-primary/10 border border-primary/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-foreground">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <span>
+              <strong>Guest Mode Active:</strong> You can solve micro-quizzes, listen to TTS summaries, and synthesize fresh paper cards. <Link href="/login" className="underline font-bold text-primary hover:text-primary/80">Sign in</Link> to save your streak and league points permanently.
+            </span>
+          </div>
+          <Button asChild size="sm" className="font-semibold text-sm shrink-0 shadow-xs">
+            <Link href="/login">Sign In to Save XP</Link>
+          </Button>
+        </div>
+      )}
+
       {/* Page Banner / Header */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
           <div>

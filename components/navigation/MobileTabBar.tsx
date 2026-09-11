@@ -33,7 +33,7 @@ export function MobileTabBar() {
 
   const tabs = [
     {
-      href: isLoggedIn ? '/feed' : '/#ai-sparks',
+      href: '/feed',
       label: 'Sparks',
       icon: Sparkles,
       activeColor: 'text-primary',

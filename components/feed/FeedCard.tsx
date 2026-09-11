@@ -45,7 +45,11 @@ export function FeedCard({ post, onAnswerCorrect }: FeedCardProps) {
     setSelectedIdx(index);
     setHasAnswered(true);
 
-    const result = await submitFeedQuizAnswer(post.id, post.quiz.id, index);
+    const result = await submitFeedQuizAnswer(post.id, post.quiz.id, index, {
+      correctOptionIndex: post.quiz.correctOptionIndex,
+      explanation: post.quiz.explanation,
+      pointsAwarded: post.quiz.pointsAwarded,
+    });
     setIsCorrect(result.isCorrect);
 
     if (result.isCorrect) {

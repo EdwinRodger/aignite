@@ -72,12 +72,12 @@ export function FeedSidebar({
     setIsGenerating(false);
 
     if (result.success && result.spark) {
-      setGenMessage('✨ New Spark Synthesized!');
+      setGenMessage(result.notice ? `✨ ${result.notice}` : '✨ New Spark Synthesized!');
       setGenTopic('');
       if (onSparkGenerated) {
         onSparkGenerated(result.spark);
       }
-      setTimeout(() => setGenMessage(null), 3000);
+      setTimeout(() => setGenMessage(null), 4000);
     } else {
       setGenMessage('⚠️ Could not generate spark at this time.');
       setTimeout(() => setGenMessage(null), 3000);
@@ -193,7 +193,7 @@ export function FeedSidebar({
             <span>Synthesize AI Spark</span>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Powered by Gemini. Generate a real-time micro-quiz card for any emerging paper.
+            Powered by Gemini 3.6 Flash (5 req/min, 20 req/day limits). Generate a real-time micro-quiz card for any emerging paper.
           </p>
 
           <form onSubmit={handleGenerateSpark} className="space-y-2">
