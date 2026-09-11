@@ -17,6 +17,29 @@ export async function getAuthenticatedStudentId(): Promise<string | null> {
       } = await supabase.auth.getUser();
 
       if (user && db) {
+        // First check if profile already exists for this user by id or email
+        const existingById = await db
+          .select({ id: profiles.id })
+          .from(profiles)
+          .where(eq(profiles.id, user.id))
+          .limit(1);
+
+        if (existingById.length > 0) {
+          return user.id;
+        }
+
+        if (user.email) {
+          const existingByEmail = await db
+            .select({ id: profiles.id })
+            .from(profiles)
+            .where(eq(profiles.email, user.email.toLowerCase()))
+            .limit(1);
+
+          if (existingByEmail.length > 0) {
+            return existingByEmail[0].id;
+          }
+        }
+
         // Ensure student profile exists in profiles table
         await db
           .insert(profiles)
@@ -25,6 +48,7 @@ export async function getAuthenticatedStudentId(): Promise<string | null> {
             role: 'student',
             fullName: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Student Learner',
             username: user.email?.split('@')[0] || `student_${user.id.slice(0, 8)}`,
+            email: user.email?.toLowerCase(),
             isVerified: true,
           })
           .onConflictDoNothing();
@@ -40,12 +64,31 @@ export async function getAuthenticatedStudentId(): Promise<string | null> {
       const cookieStore = await cookies();
       const sessionCookie = cookieStore.get('aignite_session')?.value;
       if (sessionCookie && db) {
-        let session: { username?: string; email?: string; fullName?: string } = {};
+        let session: { userId?: string; username?: string; email?: string; fullName?: string } = {};
         try {
           session = JSON.parse(sessionCookie);
         } catch {
           // parse error
         }
+
+        if (session.userId) {
+          const existing = await db
+            .select({ id: profiles.id })
+            .from(profiles)
+            .where(eq(profiles.id, session.userId))
+            .limit(1);
+          if (existing.length > 0) return existing[0].id;
+        }
+
+        if (session.email) {
+          const existing = await db
+            .select({ id: profiles.id })
+            .from(profiles)
+            .where(eq(profiles.email, session.email.toLowerCase()))
+            .limit(1);
+          if (existing.length > 0) return existing[0].id;
+        }
+
         const username = session.username || (session.email ? session.email.split('@')[0] : '');
 
         if (username) {
@@ -59,7 +102,7 @@ export async function getAuthenticatedStudentId(): Promise<string | null> {
             return existing[0].id;
           }
 
-          const newId = crypto.randomUUID();
+          const newId = session.userId || crypto.randomUUID();
           await db
             .insert(profiles)
             .values({
@@ -67,6 +110,7 @@ export async function getAuthenticatedStudentId(): Promise<string | null> {
               role: 'student',
               fullName: session.fullName || username || 'Student Learner',
               username,
+              email: session.email?.toLowerCase(),
               isVerified: true,
             })
             .onConflictDoNothing();

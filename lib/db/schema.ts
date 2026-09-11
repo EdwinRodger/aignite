@@ -20,6 +20,8 @@ export const profiles = pgTable('profiles', {
   role: text('role', { enum: ['student', 'recruiter', 'admin'] }).default('student').notNull(),
   fullName: text('full_name').notNull(),
   username: text('username').unique().notNull(),
+  email: text('email'),
+  onboardingCompleted: boolean('onboarding_completed').default(false),
   avatarUrl: text('avatar_url'),
   headline: text('headline'),
   bio: text('bio'),

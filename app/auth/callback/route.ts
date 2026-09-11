@@ -1,10 +1,10 @@
-﻿import { type EmailOtpType } from '@supabase/supabase-js';
+import { type EmailOtpType } from '@supabase/supabase-js';
 import { type NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import { db } from '@/lib/db';
 import { profiles } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
 
   const supabase = await createClient();
   let userEmail: string | null = null;
+  let authUserId: string | null = null;
 
   try {
     if (token_hash && type) {
@@ -24,11 +25,13 @@ export async function GET(request: NextRequest) {
       });
       if (!error && data?.user?.email) {
         userEmail = data.user.email;
+        authUserId = data.user.id;
       }
     } else if (code) {
       const { data, error } = await supabase.auth.exchangeCodeForSession(code);
       if (!error && data?.user?.email) {
         userEmail = data.user.email;
+        authUserId = data.user.id;
       }
     }
   } catch (err) {
@@ -36,12 +39,65 @@ export async function GET(request: NextRequest) {
   }
 
   if (userEmail) {
+    const normalizedEmail = userEmail.trim().toLowerCase();
+    let isCompleted = false;
+    let existingProfile: typeof profiles.$inferSelect | null | undefined = null;
+
+    if (db) {
+      try {
+        if (authUserId) {
+          existingProfile = await db.query.profiles.findFirst({
+            where: eq(profiles.id, authUserId),
+          });
+        }
+        if (!existingProfile) {
+          existingProfile = await db.query.profiles.findFirst({
+            where: or(
+              eq(profiles.email, normalizedEmail),
+              eq(profiles.workEmail, normalizedEmail)
+            ),
+          });
+        }
+        if (!existingProfile) {
+          existingProfile = await db.query.profiles.findFirst({
+            where: eq(profiles.username, normalizedEmail.split('@')[0]),
+          });
+        }
+
+        if (existingProfile) {
+          isCompleted =
+            existingProfile.onboardingCompleted === true ||
+            Boolean(
+              existingProfile.collegeOrCompany ||
+              existingProfile.headline ||
+              (existingProfile.fullName && existingProfile.fullName !== normalizedEmail.split('@')[0])
+            );
+
+          if (isCompleted && (!existingProfile.email || !existingProfile.onboardingCompleted)) {
+            await db
+              .update(profiles)
+              .set({
+                email: existingProfile.email || normalizedEmail,
+                onboardingCompleted: true,
+              })
+              .where(eq(profiles.id, existingProfile.id));
+          }
+        }
+      } catch (err) {
+        console.warn('Auth callback db query error:', err);
+      }
+    }
+
     const cookieStore = await cookies();
     cookieStore.set(
       'aignite_session',
       JSON.stringify({
-        email: userEmail,
+        userId: authUserId || existingProfile?.id,
+        email: normalizedEmail,
         role: 'student',
+        fullName: existingProfile?.fullName,
+        username: existingProfile?.username,
+        onboardingComplete: isCompleted,
         authenticatedAt: Date.now(),
       }),
       {
@@ -52,21 +108,7 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    // Check if user has already completed onboarding profile
-    let targetPath = '/onboarding';
-    if (db) {
-      try {
-        const existing = await db.query.profiles.findFirst({
-          where: eq(profiles.username, userEmail.split('@')[0]),
-        });
-        if (existing && existing.fullName && existing.fullName !== userEmail.split('@')[0]) {
-          targetPath = next.startsWith('/') ? next : '/dashboard';
-        }
-      } catch {
-        targetPath = '/onboarding';
-      }
-    }
-
+    const targetPath = isCompleted ? (next.startsWith('/') ? next : '/dashboard') : '/onboarding';
     return NextResponse.redirect(`${origin}${targetPath}`);
   }
 

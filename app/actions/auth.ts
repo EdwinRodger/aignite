@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { db } from '@/lib/db';
 import { profiles, studentStats } from '@/lib/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { eq, or, sql } from 'drizzle-orm';
 
 // Disallowed public email domains for recruiters
 const PUBLIC_EMAIL_DOMAINS = [
@@ -121,14 +121,16 @@ export async function verifyStudentOtp(email: string, token: string) {
   }
 
   const cookieStore = await cookies();
+  const normalizedEmail = email.trim().toLowerCase();
   let verified = false;
+  let authUserId: string | null = null;
 
   // 1. Try Supabase Auth token verification if configured
   if (isSupabaseConfigured()) {
     try {
       const supabase = await createClient();
       let { data, error } = await supabase.auth.verifyOtp({
-        email,
+        email: normalizedEmail,
         token,
         type: 'email',
       });
@@ -136,7 +138,7 @@ export async function verifyStudentOtp(email: string, token: string) {
       // If 'email' type fails, also try 'signup' in case the user was newly created with email confirmation enabled in Supabase
       if (error || !data?.user) {
         const signupRes = await supabase.auth.verifyOtp({
-          email,
+          email: normalizedEmail,
           token,
           type: 'signup',
         });
@@ -148,6 +150,7 @@ export async function verifyStudentOtp(email: string, token: string) {
 
       if (!error && data?.user) {
         verified = true;
+        authUserId = data.user.id;
       }
     } catch {
       // Fall back to demo OTP check
@@ -160,7 +163,10 @@ export async function verifyStudentOtp(email: string, token: string) {
     if (demoCookie) {
       try {
         const parsed = JSON.parse(demoCookie);
-        if (parsed.email === email && (token === '123456' || token === '12345678' || parsed.code === token)) {
+        if (
+          parsed.email?.toLowerCase() === normalizedEmail &&
+          (token === '123456' || token === '12345678' || parsed.code === token)
+        ) {
           verified = true;
         }
       } catch {
@@ -175,12 +181,75 @@ export async function verifyStudentOtp(email: string, token: string) {
     return { success: false, error: 'Invalid or expired verification code. Please try again.' };
   }
 
-  // Create session cookie
+  // Check if user has already completed profile
+  let needsOnboarding = true;
+  let existingProfile: typeof profiles.$inferSelect | null | undefined = null;
+
+  if (db) {
+    try {
+      // Priority 1: Check by Supabase auth user ID
+      if (authUserId) {
+        existingProfile = await db.query.profiles.findFirst({
+          where: eq(profiles.id, authUserId),
+        });
+      }
+
+      // Priority 2: Check by email or workEmail
+      if (!existingProfile) {
+        existingProfile = await db.query.profiles.findFirst({
+          where: or(
+            eq(profiles.email, normalizedEmail),
+            eq(profiles.workEmail, normalizedEmail)
+          ),
+        });
+      }
+
+      // Priority 3: Fallback check by username matching email prefix
+      if (!existingProfile) {
+        existingProfile = await db.query.profiles.findFirst({
+          where: eq(profiles.username, normalizedEmail.split('@')[0]),
+        });
+      }
+
+      if (existingProfile) {
+        const isCompleted =
+          existingProfile.onboardingCompleted === true ||
+          Boolean(
+            existingProfile.collegeOrCompany ||
+            existingProfile.headline ||
+            (existingProfile.fullName && existingProfile.fullName !== normalizedEmail.split('@')[0])
+          );
+
+        if (isCompleted) {
+          needsOnboarding = false;
+
+          // Backfill email or onboardingCompleted flag if missing
+          if (!existingProfile.email || !existingProfile.onboardingCompleted) {
+            await db
+              .update(profiles)
+              .set({
+                email: existingProfile.email || normalizedEmail,
+                onboardingCompleted: true,
+              })
+              .where(eq(profiles.id, existingProfile.id));
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Database error while checking profile status:', err);
+    }
+  }
+
+  // Create session cookie with full user identity
   cookieStore.set(
     'aignite_session',
     JSON.stringify({
-      email,
+      userId: authUserId || existingProfile?.id,
+      email: normalizedEmail,
       role: 'student',
+      fullName: existingProfile?.fullName,
+      username: existingProfile?.username,
+      onboardingComplete: !needsOnboarding,
       authenticatedAt: Date.now(),
     }),
     {
@@ -190,21 +259,6 @@ export async function verifyStudentOtp(email: string, token: string) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     }
   );
-
-  // Check if user has already completed profile
-  let needsOnboarding = true;
-  if (db) {
-    try {
-      const existing = await db.query.profiles.findFirst({
-        where: eq(profiles.username, email.split('@')[0]),
-      });
-      if (existing && existing.fullName && existing.fullName !== email.split('@')[0]) {
-        needsOnboarding = false;
-      }
-    } catch {
-      // Database not connected yet, allow onboarding
-    }
-  }
 
   return { success: true, needsOnboarding };
 }
@@ -220,48 +274,124 @@ export async function completeStudentOnboarding(data: OnboardingData) {
     return { success: false, error: 'Unauthorized. Please sign in first.' };
   }
 
-  const session = JSON.parse(sessionCookie);
+  let session: { userId?: string; email?: string; fullName?: string; username?: string } = {};
+  try {
+    session = JSON.parse(sessionCookie);
+  } catch {
+    return { success: false, error: 'Invalid session. Please sign in again.' };
+  }
+
+  const normalizedEmail = session.email?.trim().toLowerCase() || '';
+  let activeUserId = session.userId || null;
+
+  // Try to resolve user ID from Supabase server auth if available
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user?.id) {
+        activeUserId = user.id;
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  const cleanUsername = data.username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
 
   // Update Drizzle ORM if connected
   if (db) {
     try {
-      // Upsert profile
-      await db
-        .insert(profiles)
-        .values({
-          id: crypto.randomUUID(),
-          role: 'student',
-          fullName: data.fullName,
-          username: data.username.toLowerCase().replace(/[^a-z0-9_]/g, ''),
-          collegeOrCompany: data.collegeOrCompany,
-          headline: data.headline || 'Aspiring AI Systems Engineer',
-          bio: data.bio || '',
-          defaultMobileLandingPage: data.defaultMobileLandingPage || 'feed',
-          defaultWebLandingPage: 'dashboard',
-          isVerified: true,
-        })
-        .onConflictDoUpdate({
-          target: profiles.username,
-          set: {
-            fullName: data.fullName,
-            collegeOrCompany: data.collegeOrCompany,
-            headline: data.headline,
-            bio: data.bio,
-            defaultMobileLandingPage: data.defaultMobileLandingPage || 'feed',
-          },
+      // Check if profile already exists for this user (by userId, email, or current username)
+      let existingProfile: typeof profiles.$inferSelect | null | undefined = null;
+
+      if (activeUserId) {
+        existingProfile = await db.query.profiles.findFirst({
+          where: eq(profiles.id, activeUserId),
         });
+      }
+
+      if (!existingProfile && normalizedEmail) {
+        existingProfile = await db.query.profiles.findFirst({
+          where: eq(profiles.email, normalizedEmail),
+        });
+      }
+
+      if (!existingProfile && cleanUsername) {
+        existingProfile = await db.query.profiles.findFirst({
+          where: eq(profiles.username, cleanUsername),
+        });
+      }
+
+      if (existingProfile) {
+        // Update existing profile (preserves foreign keys on profiles.id like student_stats)
+        await db
+          .update(profiles)
+          .set({
+            fullName: data.fullName.trim(),
+            username: cleanUsername,
+            email: normalizedEmail || existingProfile.email,
+            collegeOrCompany: data.collegeOrCompany.trim(),
+            headline: data.headline?.trim() || 'Aspiring AI Systems Engineer',
+            bio: data.bio?.trim() || '',
+            defaultMobileLandingPage: data.defaultMobileLandingPage || 'feed',
+            onboardingCompleted: true,
+            isVerified: true,
+            updatedAt: new Date(),
+          })
+          .where(eq(profiles.id, existingProfile.id));
+
+        activeUserId = existingProfile.id;
+      } else {
+        // Insert new profile
+        const newId = activeUserId || crypto.randomUUID();
+        await db
+          .insert(profiles)
+          .values({
+            id: newId,
+            role: 'student',
+            fullName: data.fullName.trim(),
+            username: cleanUsername,
+            email: normalizedEmail,
+            collegeOrCompany: data.collegeOrCompany.trim(),
+            headline: data.headline?.trim() || 'Aspiring AI Systems Engineer',
+            bio: data.bio?.trim() || '',
+            defaultMobileLandingPage: data.defaultMobileLandingPage || 'feed',
+            defaultWebLandingPage: 'dashboard',
+            onboardingCompleted: true,
+            isVerified: true,
+          })
+          .onConflictDoUpdate({
+            target: profiles.username,
+            set: {
+              fullName: data.fullName.trim(),
+              email: normalizedEmail,
+              collegeOrCompany: data.collegeOrCompany.trim(),
+              headline: data.headline?.trim() || 'Aspiring AI Systems Engineer',
+              bio: data.bio?.trim() || '',
+              defaultMobileLandingPage: data.defaultMobileLandingPage || 'feed',
+              onboardingCompleted: true,
+              updatedAt: new Date(),
+            },
+          });
+
+        activeUserId = newId;
+      }
     } catch (err) {
-      console.warn('Database upsert error during onboarding:', err);
+      console.warn('Database error during onboarding:', err);
     }
   }
 
-  // Update session cookie with user display name
+  // Update session cookie with user display name and onboardingComplete = true
   cookieStore.set(
     'aignite_session',
     JSON.stringify({
       ...session,
-      fullName: data.fullName,
-      username: data.username,
+      userId: activeUserId || session.userId,
+      fullName: data.fullName.trim(),
+      username: cleanUsername,
       onboardingComplete: true,
     }),
     {
@@ -748,7 +878,7 @@ export async function getCurrentStudentProfileAction(): Promise<CurrentStudentPr
     return null;
   }
 
-  let session: { email?: string; fullName?: string; username?: string; role?: string } = {};
+  let session: { userId?: string; email?: string; fullName?: string; username?: string; role?: string } = {};
   try {
     session = JSON.parse(sessionCookie);
   } catch {
@@ -756,6 +886,7 @@ export async function getCurrentStudentProfileAction(): Promise<CurrentStudentPr
   }
 
   const email = session.email || '';
+  const userId = session.userId || '';
   let fullName = session.fullName || (email ? email.split('@')[0] : 'Learner');
   let username = session.username || (email ? email.split('@')[0] : 'learner');
   let collegeOrCompany = 'AI Engineering Campus';
@@ -766,11 +897,27 @@ export async function getCurrentStudentProfileAction(): Promise<CurrentStudentPr
   let leagueRank = 5;
   const atsScore = 84;
 
-  if (db && email) {
+  if (db && (email || userId || username)) {
     try {
-      const dbProfile = await db.query.profiles.findFirst({
-        where: eq(profiles.username, username),
-      });
+      let dbProfile: typeof profiles.$inferSelect | null | undefined = null;
+      if (userId) {
+        dbProfile = await db.query.profiles.findFirst({
+          where: eq(profiles.id, userId),
+        });
+      }
+      if (!dbProfile && email) {
+        dbProfile = await db.query.profiles.findFirst({
+          where: or(
+            eq(profiles.email, email.toLowerCase()),
+            eq(profiles.workEmail, email.toLowerCase())
+          ),
+        });
+      }
+      if (!dbProfile && username) {
+        dbProfile = await db.query.profiles.findFirst({
+          where: eq(profiles.username, username),
+        });
+      }
 
       if (dbProfile) {
         fullName = dbProfile.fullName || fullName;
