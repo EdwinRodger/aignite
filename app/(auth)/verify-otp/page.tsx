@@ -16,7 +16,7 @@ function VerifyOtpContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || 'learner@university.edu';
 
-  const [digits, setDigits] = useState(['', '', '', '', '', '']);
+  const [digits, setDigits] = useState(['', '', '', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resendTimer, setResendTimer] = useState(60);
@@ -53,11 +53,11 @@ function VerifyOtpContent() {
     setDigits(newDigits);
 
     // Auto-advance to next input
-    if (index < 5 && cleanVal) {
+    if (index < 7 && cleanVal) {
       inputRefs.current[index + 1]?.focus();
     }
 
-    // Auto submit if all 6 digits entered
+    // Auto submit if all 8 digits entered
     if (newDigits.every((d) => d !== '')) {
       const fullCode = newDigits.join('');
       submitCode(fullCode);
@@ -72,16 +72,19 @@ function VerifyOtpContent() {
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 8);
     if (!pasted) return;
 
     const newDigits = [...digits];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 8; i++) {
       newDigits[i] = pasted[i] || '';
     }
     setDigits(newDigits);
 
-    if (pasted.length === 6) {
+    if (pasted.length === 8) {
+      inputRefs.current[7]?.focus();
+      submitCode(pasted);
+    } else if (pasted.length === 6) {
       inputRefs.current[5]?.focus();
       submitCode(pasted);
     } else {
@@ -90,9 +93,9 @@ function VerifyOtpContent() {
   };
 
   const submitCode = async (codeToVerify?: string) => {
-    const code = codeToVerify || digits.join('');
-    if (code.length !== 6) {
-      setError('Please enter all 6 digits.');
+    const code = (codeToVerify || digits.join('')).trim();
+    if (code.length !== 8 && code.length !== 6) {
+      setError('Please enter the complete verification code.');
       return;
     }
 
@@ -137,15 +140,16 @@ function VerifyOtpContent() {
   };
 
   const handleAutoFillDemo = () => {
-    const demoCode = ['1', '2', '3', '4', '5', '6'];
+    const demoCode = ['1', '2', '3', '4', '5', '6', '7', '8'];
     setDigits(demoCode);
-    submitCode('123456');
+    submitCode('12345678');
   };
 
-  const isComplete = digits.every((d) => d !== '');
+  const enteredCount = digits.filter((d) => d !== '').length;
+  const canSubmit = enteredCount === 8 || enteredCount === 6;
 
   return (
-    <div className="w-full max-w-md relative z-10">
+    <div className="w-full max-w-lg relative z-10">
       <Card className="shadow-sm border-border">
         <CardHeader className="text-center space-y-2 pb-4">
           <div className="mx-auto inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent border border-primary/20 text-primary mb-1">
@@ -155,8 +159,8 @@ function VerifyOtpContent() {
             Enter Verification Code
           </CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
-            We sent a 6-digit code to{' '}
-            <span className="font-semibold text-foreground">{email}</span>
+            Enter the verification code sent to{' '}
+            <span className="font-semibold text-foreground">{email}</span>, or click the verification link in your email.
           </CardDescription>
         </CardHeader>
 
@@ -177,35 +181,41 @@ function VerifyOtpContent() {
             </div>
           )}
 
-          {/* 6-Digit Boxes */}
+          {/* OTP Input Boxes (8-digit / 6-digit responsive inputs) */}
           <div className="space-y-5">
-            <div className="flex items-center justify-between gap-2 sm:gap-2.5">
+            <div className="flex items-center justify-center gap-1 sm:gap-1.5 w-full px-1">
               {digits.map((digit, idx) => (
-                <input
-                  key={idx}
-                  ref={(el) => {
-                    inputRefs.current[idx] = el;
-                  }}
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleChange(idx, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(idx, e)}
-                  onPaste={handlePaste}
-                  className={`w-11 h-14 sm:w-13 sm:h-16 text-center text-xl sm:text-2xl font-bold font-mono rounded-xl border transition-all outline-none ${
-                    digit
-                      ? 'bg-accent/40 border-primary text-foreground shadow-xs'
-                      : 'bg-muted/40 border-border text-foreground hover:border-border/80 focus:border-primary focus:ring-1 focus:ring-primary/20 focus:bg-accent/10'
-                  }`}
-                />
+                <React.Fragment key={idx}>
+                  <input
+                    ref={(el) => {
+                      inputRefs.current[idx] = el;
+                    }}
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleChange(idx, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(idx, e)}
+                    onPaste={handlePaste}
+                    className={`flex-1 min-w-0 max-w-10 sm:max-w-11 h-12 sm:h-14 text-center text-lg sm:text-xl font-bold font-mono rounded-xl border transition-all outline-none ${
+                      digit
+                        ? 'bg-accent/40 border-primary text-foreground shadow-xs'
+                        : 'bg-muted/40 border-border text-foreground hover:border-border/80 focus:border-primary focus:ring-1 focus:ring-primary/20 focus:bg-accent/10'
+                    }`}
+                  />
+                  {idx === 3 && (
+                    <span className="shrink-0 text-muted-foreground/50 font-bold text-sm px-0.5 select-none" aria-hidden="true">
+                      -
+                    </span>
+                  )}
+                </React.Fragment>
               ))}
             </div>
 
             <Button
               onClick={() => submitCode()}
-              disabled={loading || !isComplete}
+              disabled={loading || !canSubmit}
               size="lg"
               className="w-full font-bold text-sm shadow-xs gap-2"
             >
@@ -260,7 +270,7 @@ function VerifyOtpContent() {
                 title="Click to auto-fill demo OTP and sign in"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Auto-fill 123456</span>
+                <span>Auto-fill 12345678</span>
               </Button>
             </div>
             <Link href="/login" className="text-muted-foreground hover:text-foreground text-sm underline underline-offset-2 transition-colors">

@@ -64,7 +64,7 @@ export default function LoginPage() {
                 Sign in to <span className="text-primary font-extrabold font-mono">AIgnite</span>
               </CardTitle>
               <CardDescription className="text-sm text-muted-foreground">
-                Passwordless login. We will send a 6-digit verification code to your email.
+                Passwordless login. We will send a verification code to your email.
               </CardDescription>
             </CardHeader>
 
@@ -110,7 +110,7 @@ export default function LoginPage() {
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Sending 6-Digit OTP...</span>
+                      <span>Sending Verification Code...</span>
                     </>
                   ) : (
                     <>

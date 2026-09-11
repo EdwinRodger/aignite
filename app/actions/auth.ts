@@ -72,10 +72,12 @@ export async function sendStudentOtp(email: string) {
   if (isSupabaseConfigured()) {
     try {
       const supabase = await createClient();
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
           shouldCreateUser: true,
+          emailRedirectTo: `${appUrl}/auth/callback`,
           data: { role: 'student' },
         },
       });
@@ -98,8 +100,8 @@ export async function sendStudentOtp(email: string) {
     }
   }
 
-  // Set demo OTP cookie for testing/hackathon presentation (Demo OTP: 123456)
-  const demoOtp = '123456';
+  // Set demo OTP cookie for testing/hackathon presentation (Demo OTP: 12345678)
+  const demoOtp = '12345678';
   cookieStore.set('aignite_demo_otp', JSON.stringify({ email, code: demoOtp, timestamp: Date.now() }), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -111,11 +113,11 @@ export async function sendStudentOtp(email: string) {
 }
 
 /**
- * 2. Verify 6-digit OTP
+ * 2. Verify OTP (Supports 6-digit and 8-digit codes)
  */
 export async function verifyStudentOtp(email: string, token: string) {
-  if (!email || !token || token.length !== 6) {
-    return { success: false, error: 'Please enter the complete 6-digit verification code.' };
+  if (!email || !token || (token.length !== 6 && token.length !== 8)) {
+    return { success: false, error: 'Please enter the complete verification code.' };
   }
 
   const cookieStore = await cookies();
@@ -125,11 +127,24 @@ export async function verifyStudentOtp(email: string, token: string) {
   if (isSupabaseConfigured()) {
     try {
       const supabase = await createClient();
-      const { data, error } = await supabase.auth.verifyOtp({
+      let { data, error } = await supabase.auth.verifyOtp({
         email,
         token,
         type: 'email',
       });
+
+      // If 'email' type fails, also try 'signup' in case the user was newly created with email confirmation enabled in Supabase
+      if (error || !data?.user) {
+        const signupRes = await supabase.auth.verifyOtp({
+          email,
+          token,
+          type: 'signup',
+        });
+        if (!signupRes.error && signupRes.data?.user) {
+          data = signupRes.data;
+          error = null;
+        }
+      }
 
       if (!error && data?.user) {
         verified = true;
@@ -145,13 +160,13 @@ export async function verifyStudentOtp(email: string, token: string) {
     if (demoCookie) {
       try {
         const parsed = JSON.parse(demoCookie);
-        if (parsed.email === email && (token === '123456' || parsed.code === token)) {
+        if (parsed.email === email && (token === '123456' || token === '12345678' || parsed.code === token)) {
           verified = true;
         }
       } catch {
         // Invalid cookie
       }
-    } else if (token === '123456') {
+    } else if (token === '123456' || token === '12345678') {
       verified = true;
     }
   }
