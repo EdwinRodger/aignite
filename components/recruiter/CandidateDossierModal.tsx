@@ -158,7 +158,7 @@ export function CandidateDossierModal({
             </div>
 
             {/* 5-Axis Score Breakdown */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
               {[
                 { name: 'Knowledge Depth', score: rep.knowledgeScore, desc: 'Algorithms, CUDA, RAG math' },
                 { name: 'Confidence & Pace', score: rep.confidenceScore, desc: `${rep.speechMetrics.wordsPerMinute} WPM (${rep.speechMetrics.paceRating})` },
@@ -198,12 +198,17 @@ export function CandidateDossierModal({
             </div>
 
             {/* Recent Spoken Answer Excerpt */}
-            <div className="p-4 rounded-xl bg-card border border-border/80 space-y-1.5">
-              <span className="text-sm font-bold text-foreground font-mono flex items-center gap-1.5">
-                <span>🎙️ Verbatim Spoken Defense Excerpt:</span>
-              </span>
+            <div className="p-4 rounded-xl bg-card border border-border/80 space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-sm font-bold text-foreground font-mono flex items-center gap-1.5">
+                  <span>🎙️ Verbatim Spoken Defense Excerpt</span>
+                </span>
+                <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 text-sm font-mono">
+                  Live AI Voice Telemetry
+                </Badge>
+              </div>
               <p className="text-sm text-foreground/90 font-serif italic leading-relaxed">
-                {rep.recentModelAnswerExcerpt}
+                &ldquo;{rep.recentModelAnswerExcerpt}&rdquo;
               </p>
             </div>
 

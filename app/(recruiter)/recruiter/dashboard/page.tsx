@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { Navbar } from '@/components/navigation/Navbar';
 import { MobileTabBar } from '@/components/navigation/MobileTabBar';
 import { CandidateTalent, RecruiterJob, InterviewInvitation } from '@/lib/recruiter-data';
@@ -12,9 +13,7 @@ import {
 } from '@/app/actions/recruiter';
 import { signOutUser, getAuthUserAction } from '@/app/actions/auth';
 import { CandidateCard } from '@/components/recruiter/CandidateCard';
-import { CandidateDossierModal } from '@/components/recruiter/CandidateDossierModal';
 import { InterviewInviteModal } from '@/components/recruiter/InterviewInviteModal';
-import { CreateJobModal } from '@/components/recruiter/CreateJobModal';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,11 +33,21 @@ import {
   DollarSign,
   MapPin,
   Calendar,
+  LayoutList,
+  LayoutGrid,
 } from 'lucide-react';
 
 export default function RecruiterDashboardPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'talent' | 'jobs' | 'invitations'>('talent');
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const [selectedTab, setSelectedTab] = useState<'talent' | 'jobs' | 'invitations'>('talent');
+  const activeTab = (tabParam === 'jobs' || tabParam === 'invitations' || tabParam === 'talent') ? tabParam : selectedTab;
+  const setActiveTab = (tab: 'talent' | 'jobs' | 'invitations') => {
+    setSelectedTab(tab);
+    router.replace(`/recruiter/dashboard?tab=${tab}`);
+  };
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -52,9 +61,7 @@ export default function RecruiterDashboardPage() {
   const [invitations, setInvitations] = useState<InterviewInvitation[]>([]);
 
   // Modal States
-  const [inspectingCandidate, setInspectingCandidate] = useState<CandidateTalent | null>(null);
   const [invitingCandidate, setInvitingCandidate] = useState<CandidateTalent | null>(null);
-  const [isCreateJobOpen, setIsCreateJobOpen] = useState(false);
 
   // Recruiter Profile Information
   const [recruiterInfo, setRecruiterInfo] = useState({
@@ -121,10 +128,6 @@ export default function RecruiterDashboardPage() {
     router.push('/recruiter/login');
   };
 
-  const handleJobCreated = (newJob: RecruiterJob) => {
-    setJobs([newJob, ...jobs]);
-  };
-
   const handleInviteSuccess = () => {
     startTransition(async () => {
       const invRes = await getRecruiterInvitationsAction();
@@ -163,12 +166,13 @@ export default function RecruiterDashboardPage() {
             {/* Quick Actions */}
             <div className="flex flex-wrap items-center gap-2.5">
               <Button
-                type="button"
-                onClick={() => setIsCreateJobOpen(true)}
+                asChild
                 className="font-bold text-sm shadow-xs gap-1.5"
               >
-                <Plus className="w-4 h-4" />
-                <span>Post AI Engineering Role</span>
+                <Link href="/recruiter/jobs/new">
+                  <Plus className="w-4 h-4" />
+                  <span>Post AI Engineering Role</span>
+                </Link>
               </Button>
 
               <Button
@@ -393,14 +397,62 @@ export default function RecruiterDashboardPage() {
               </div>
             </Card>
 
-            {/* Candidates Grid */}
+            {/* Candidate Pool Header & View Mode Switcher */}
+            <div className="flex items-center justify-between gap-4 pt-1">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-foreground font-sans">
+                  Candidate Talent Pool
+                </span>
+                <Badge variant="secondary" className="font-mono text-sm">
+                  {candidates.length} Available
+                </Badge>
+              </div>
+
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-1 bg-muted/60 p-1 rounded-xl border border-border">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('list')}
+                  aria-label="List View"
+                  className={`px-2.5 py-1 rounded-lg text-sm flex items-center gap-1.5 transition-colors ${
+                    viewMode === 'list'
+                      ? 'bg-card text-foreground shadow-2xs font-bold'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <LayoutList className="w-3.5 h-3.5 text-primary" />
+                  <span className="hidden sm:inline">List View</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  aria-label="Grid View"
+                  className={`px-2.5 py-1 rounded-lg text-sm flex items-center gap-1.5 transition-colors ${
+                    viewMode === 'grid'
+                      ? 'bg-card text-foreground shadow-2xs font-bold'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <LayoutGrid className="w-3.5 h-3.5 text-primary" />
+                  <span className="hidden sm:inline">Grid View</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Candidates Grid / List */}
             {candidates.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div
+                className={
+                  viewMode === 'list'
+                    ? 'space-y-4'
+                    : 'grid grid-cols-1 md:grid-cols-2 gap-5'
+                }
+              >
                 {candidates.map((candidate) => (
                   <CandidateCard
                     key={candidate.id}
                     candidate={candidate}
-                    onInspect={(c) => setInspectingCandidate(c)}
+                    viewMode={viewMode}
                     onInvite={(c) => setInvitingCandidate(c)}
                   />
                 ))}
@@ -445,12 +497,13 @@ export default function RecruiterDashboardPage() {
               </div>
 
               <Button
-                type="button"
-                onClick={() => setIsCreateJobOpen(true)}
+                asChild
                 className="font-bold text-sm gap-1.5 shadow-xs shrink-0"
               >
-                <Plus className="w-4 h-4" />
-                <span>Post New AI Role</span>
+                <Link href="/recruiter/jobs/new">
+                  <Plus className="w-4 h-4" />
+                  <span>Post New AI Role</span>
+                </Link>
               </Button>
             </div>
 
@@ -547,12 +600,13 @@ export default function RecruiterDashboardPage() {
                   Post your first AI role with verified thresholds to attract candidates filtered by league tier and technical badges.
                 </p>
                 <Button
-                  type="button"
-                  onClick={() => setIsCreateJobOpen(true)}
+                  asChild
                   className="font-bold text-sm mt-2 gap-1.5"
                 >
-                  <Plus className="w-4 h-4" />
-                  <span>Post First AI Role</span>
+                  <Link href="/recruiter/jobs/new">
+                    <Plus className="w-4 h-4" />
+                    <span>Post First AI Role</span>
+                  </Link>
                 </Button>
               </Card>
             )}
@@ -630,18 +684,6 @@ export default function RecruiterDashboardPage() {
         )}
       </main>
 
-      {/* Candidate Dossier Deep-Dive Modal */}
-      {inspectingCandidate && (
-        <CandidateDossierModal
-          candidate={inspectingCandidate}
-          onClose={() => setInspectingCandidate(null)}
-          onInvite={(c) => {
-            setInspectingCandidate(null);
-            setInvitingCandidate(c);
-          }}
-        />
-      )}
-
       {/* Direct Interview Invite Modal */}
       {invitingCandidate && (
         <InterviewInviteModal
@@ -650,15 +692,6 @@ export default function RecruiterDashboardPage() {
           currentCompany={recruiterInfo.company}
           onClose={() => setInvitingCandidate(null)}
           onSuccess={handleInviteSuccess}
-        />
-      )}
-
-      {/* Create Job Posting Modal */}
-      {isCreateJobOpen && (
-        <CreateJobModal
-          currentCompany={recruiterInfo.company}
-          onClose={() => setIsCreateJobOpen(false)}
-          onCreated={handleJobCreated}
         />
       )}
 
