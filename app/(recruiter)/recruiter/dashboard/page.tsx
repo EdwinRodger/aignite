@@ -35,9 +35,10 @@ import {
   Calendar,
   LayoutList,
   LayoutGrid,
+  Loader2,
 } from 'lucide-react';
 
-export default function RecruiterDashboardPage() {
+function RecruiterDashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
@@ -697,5 +698,23 @@ export default function RecruiterDashboardPage() {
 
       <MobileTabBar />
     </div>
+  );
+}
+
+export default function RecruiterDashboardPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary pb-20 md:pb-12">
+          <Navbar />
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-16 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 text-primary animate-spin" />
+          </main>
+          <MobileTabBar />
+        </div>
+      }
+    >
+      <RecruiterDashboardContent />
+    </React.Suspense>
   );
 }
