@@ -22,15 +22,7 @@ import {
 import { desc, eq, sql } from 'drizzle-orm';
 import { createClient as createSupabaseServerClient } from '@/lib/supabase/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// Helper to check if Supabase is properly configured
-function isSupabaseConfigured(): boolean {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !publishableKey) return false;
-  if (url.includes('placeholder.supabase.co') || publishableKey.includes('placeholder-publishable-key')) return false;
-  return true;
-}
+import { calculateAndSyncUserReportCard } from '@/lib/report-card';
 
 // =============================================================================
 // Gemini 3.6 Flash Rate Limiting & Quota Constraints
@@ -694,6 +686,11 @@ export async function recordFeedInteractionAction(params: {
           isQuizCorrect: params.isQuizCorrect,
           interactedAt: new Date(),
         });
+
+        // Sync report card on quiz completion
+        if (params.quizId) {
+          await calculateAndSyncUserReportCard(studentId);
+        }
       } catch (err) {
         console.warn('Could not insert feed_user_interactions row:', err);
       }

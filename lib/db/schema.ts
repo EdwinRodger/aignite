@@ -60,12 +60,19 @@ export const studentStats = pgTable('student_stats', {
 // 3. AI Interview Report Cards
 export const aiReportCards = pgTable('ai_report_cards', {
   studentId: uuid('student_id').primaryKey().references(() => profiles.id, { onDelete: 'cascade' }),
+  overallScore: numeric('overall_score', { precision: 3, scale: 1 }).default('0.0').notNull(),
   knowledgeScore: numeric('knowledge_score', { precision: 3, scale: 1 }).default('0.0').notNull(),
   confidenceScore: numeric('confidence_score', { precision: 3, scale: 1 }).default('0.0').notNull(),
   communicationScore: numeric('communication_score', { precision: 3, scale: 1 }).default('0.0').notNull(),
   examplesScore: numeric('examples_score', { precision: 3, scale: 1 }).default('0.0').notNull(),
   industryLevelScore: numeric('industry_level_score', { precision: 3, scale: 1 }).default('0.0').notNull(),
+  wordsPerMinute: integer('words_per_minute').default(130),
+  fillerCount: integer('filler_count').default(0),
+  paceRating: text('pace_rating').default('Natural & Confident'),
+  latestDefenseExcerpt: text('latest_defense_excerpt'),
   totalInterviewsCompleted: integer('total_interviews_completed').default(0).notNull(),
+  totalPotdCompleted: integer('total_potd_completed').default(0),
+  totalQuizzesCompleted: integer('total_quizzes_completed').default(0),
   strengths: jsonb('strengths').$type<string[]>(),
   areasForImprovement: jsonb('areas_for_improvement').$type<string[]>(),
   aiSummaryFeedback: text('ai_summary_feedback'),
@@ -202,6 +209,13 @@ export const resumeEvaluations = pgTable('resume_evaluations', {
   domainScores: jsonb('domain_scores').notNull(),
   skillGaps: jsonb('skill_gaps').$type<string[]>().notNull(),
   recommendations: jsonb('recommendations').$type<string[]>(),
+  parsedData: jsonb('parsed_data').$type<{
+    targetRole?: string;
+    summary?: string;
+    detectedSkills?: { category: string; skills: string[] }[];
+    projects?: { title: string; description: string; impact: string }[];
+    formattingAdvice?: string[];
+  }>(),
   embedding: customVector('embedding'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });

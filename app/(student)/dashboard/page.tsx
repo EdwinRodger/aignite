@@ -22,32 +22,24 @@ import {
   Code2,
 } from 'lucide-react';
 import { getCurrentStudentProfileAction } from '@/app/actions/auth';
+import { getUserReportCardAction, UserReportCardData } from '@/app/actions/report-card';
 import { ProtectedRouteGate } from '@/components/auth/ProtectedRouteGate';
 
 export default function StudentDashboardPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [user, setUser] = useState({
-    name: 'AI Learner',
+    name: 'Student',
     username: 'learner',
-    college: 'Student Campus',
-    streakDays: 3,
-    totalXp: 415,
-    leagueTier: 'Silver AI Engineer',
-    leagueRank: 5,
-    atsScore: 84,
+    college: 'Engineering Campus',
+    streakDays: 0,
+    totalXp: 0,
+    leagueTier: 'Bronze AI Engineer',
+    leagueRank: 0,
+    atsScore: 0,
     earnedBadges: [] as string[],
   });
 
-  const [reportCard, setReportCard] = useState<{
-    knowledgeScore: number;
-    confidenceScore: number;
-    communicationScore: number;
-    examplesScore: number;
-    industryLevelScore: number;
-    overallScore: number;
-    speechCadence: string;
-    fillerCount: number;
-  } | null>(null);
+  const [reportCard, setReportCard] = useState<UserReportCardData | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,26 +50,22 @@ export default function StudentDashboardPage() {
         if (!isMounted) return;
         if (profile) {
           setIsAuthenticated(true);
-          setUser((prev) => ({
-            ...prev,
-            name: profile.fullName || prev.name,
-            username: profile.username || prev.username,
-            college: profile.collegeOrCompany || prev.college,
-            totalXp: profile.totalPoints || prev.totalXp,
-            streakDays: profile.currentStreak || prev.streakDays,
-            leagueTier: profile.leagueTier || prev.leagueTier,
-            leagueRank: profile.leagueRank || prev.leagueRank,
-            atsScore: profile.atsScore || prev.atsScore,
-          }));
+          setUser({
+            name: profile.fullName || 'Student',
+            username: profile.username || 'learner',
+            college: profile.collegeOrCompany || 'Engineering Campus',
+            totalXp: profile.totalPoints ?? 0,
+            streakDays: profile.currentStreak ?? 0,
+            leagueTier: profile.leagueTier || 'Bronze AI Engineer',
+            leagueRank: profile.leagueRank ?? 0,
+            atsScore: profile.atsScore ?? 0,
+            earnedBadges: [],
+          });
         } else {
           // Check if local student session exists
           if (typeof window !== 'undefined') {
             const studentSession = localStorage.getItem('aignite_student_session');
-            if (studentSession) {
-              setIsAuthenticated(true);
-            } else {
-              setIsAuthenticated(false);
-            }
+            setIsAuthenticated(Boolean(studentSession));
           } else {
             setIsAuthenticated(false);
           }
@@ -94,43 +82,17 @@ export default function StudentDashboardPage() {
         }
       });
 
-    // 2. Merge local storage overrides if available (deferred to avoid cascading synchronous render)
-    queueMicrotask(() => {
-      if (!isMounted || typeof window === 'undefined') return;
-      const storedPoints = localStorage.getItem('aignite_student_points');
-      const storedStreak = localStorage.getItem('aignite_student_streak');
-      const storedReport = localStorage.getItem('aignite_user_report_card');
-      const storedUser = localStorage.getItem('aignite_user_profile');
-
-      if (storedUser || storedPoints || storedStreak) {
-        setUser((prev) => {
-          let updated = { ...prev };
-          if (storedUser) {
-            try {
-              updated = { ...updated, ...JSON.parse(storedUser) };
-            } catch {
-              // fallback
-            }
-          }
-          if (storedPoints) {
-            updated.totalXp = parseInt(storedPoints, 10);
-          }
-          if (storedStreak) {
-            updated.streakDays = parseInt(storedStreak, 10);
-          }
-          return updated;
-        });
-      }
-
-      if (storedReport) {
-        try {
-          const parsed = JSON.parse(storedReport);
-          setReportCard(parsed);
-        } catch {
-          // fallback
+    // 2. Fetch live report card directly from Supabase
+    getUserReportCardAction()
+      .then((res) => {
+        if (!isMounted) return;
+        if (res.success && res.reportCard) {
+          setReportCard(res.reportCard);
         }
-      }
-    });
+      })
+      .catch((err) => {
+        console.warn('Could not load report card from Supabase:', err);
+      });
 
     return () => {
       isMounted = false;
@@ -232,32 +194,24 @@ export default function StudentDashboardPage() {
       </Card>
 
       {/* ========================================================================= */}
-      {/* 2. HOW AIGNITE WORKS: 3-STEP DAILY MASTERY WORKFLOW */}
+      {/* 2. HOW AIGNITE WORKS: DAILY PRACTICE MODULES */}
       {/* ========================================================================= */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <h2 className="text-lg font-bold text-foreground font-sans">
-              How AIgnite Works - Your Daily 3-Step Routine
+              How AIgnite Works - Daily Practice Modules
             </h2>
             <p className="text-sm text-muted-foreground">
-              Follow this 18-minute daily loop to build verified applied AI competence and get discovered by hiring teams.
+              Complete daily sparks, coding challenges, oral defenses, and architecture labs to build verified applied AI competence.
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Step 1: Daily AI Spark */}
+          {/* Daily AI Spark */}
           <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
-                  1
-                </div>
-                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
-                  5 Mins
-                </Badge>
-              </div>
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-primary" />
@@ -276,17 +230,9 @@ export default function StudentDashboardPage() {
             </Button>
           </Card>
 
-          {/* Step 2: Problem of the Day */}
+          {/* Problem of the Day */}
           <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-sm font-mono">
-                  2
-                </div>
-                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
-                  5 Mins
-                </Badge>
-              </div>
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
                   <Code2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
@@ -297,7 +243,7 @@ export default function StudentDashboardPage() {
                 </p>
               </div>
             </div>
-            <Button asChild size="sm" className="w-full font-bold text-sm">
+            <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
               <Link href="/potd">
                 <span>Solve Today&apos;s POTD</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -305,17 +251,9 @@ export default function StudentDashboardPage() {
             </Button>
           </Card>
 
-          {/* Step 3: Spoken Voice Coach */}
+          {/* Spoken Voice Coach */}
           <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
-                  3
-                </div>
-                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
-                  3 Mins
-                </Badge>
-              </div>
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
                   <Mic className="w-4 h-4 text-primary" />
@@ -334,17 +272,9 @@ export default function StudentDashboardPage() {
             </Button>
           </Card>
 
-          {/* Step 4: Company Packs & Sandbox */}
+          {/* Architecture Lab */}
           <Card className="p-5 flex flex-col justify-between space-y-4 shadow-xs border-border hover:border-primary/40 transition-colors">
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm font-mono">
-                  4
-                </div>
-                <Badge variant="outline" className="text-sm font-mono bg-muted text-muted-foreground">
-                  10 Mins
-                </Badge>
-              </div>
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-foreground font-sans flex items-center gap-2">
                   <Cpu className="w-4 h-4 text-primary" />
@@ -374,16 +304,16 @@ export default function StudentDashboardPage() {
             <div className="flex items-center gap-2">
               <Trophy className="w-5 h-5 text-primary" />
               <h2 className="text-lg font-bold text-foreground font-sans">
-                Verified AI Report Card &amp; Spoken Telemetry
+                Verified AI Competency Report Card
               </h2>
             </div>
             <p className="text-sm text-muted-foreground">
-              Recruiter-visible 5-axis competency evaluation aggregated across your spoken defense sessions.
+              Recruiter-visible 5-axis competency evaluation aggregated across your coding challenges, interactive quizzes, system drills, and spoken defenses.
             </p>
           </div>
 
           <div className="flex items-center gap-3 self-start sm:self-center">
-            {reportCard && (
+            {reportCard && reportCard.hasActivity && (
               <div className="text-right">
                 <span className="text-sm uppercase font-mono text-muted-foreground block">
                   Composite Index
@@ -394,21 +324,15 @@ export default function StudentDashboardPage() {
                 </span>
               </div>
             )}
-            <Button asChild size="sm" className="font-bold text-sm gap-1.5 shadow-xs">
-              <Link href="/coach">
-                <Mic className="w-3.5 h-3.5" />
-                <span>Launch Voice Coach</span>
-              </Link>
-            </Button>
           </div>
         </div>
 
-        {reportCard ? (
+        {reportCard && reportCard.hasActivity ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
               {[
                 { label: 'Knowledge Depth', score: reportCard.knowledgeScore, sub: 'Algorithms & Math' },
-                { label: 'Confidence & Pace', score: reportCard.confidenceScore, sub: reportCard.speechCadence },
+                { label: 'Confidence & Pace', score: reportCard.confidenceScore, sub: reportCard.paceRating },
                 { label: 'Communication', score: reportCard.communicationScore, sub: 'STAR Structure' },
                 { label: 'Practical Examples', score: reportCard.examplesScore, sub: 'VRAM & Latency Metrics' },
                 { label: 'Industry Readiness', score: reportCard.industryLevelScore, sub: 'Senior Staff Bar' },
@@ -428,39 +352,102 @@ export default function StudentDashboardPage() {
 
             <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-sm font-mono text-muted-foreground">
               <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary" className="text-sm font-mono">
-                  Cadence: {reportCard.speechCadence}
-                </Badge>
-                <Badge variant="secondary" className="text-sm font-mono">
-                  Speech Fillers: {reportCard.fillerCount} detected (Elite Bar)
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="text-sm font-bold bg-emerald-500/10 border-emerald-500/20 text-emerald-700"
-                >
-                  ✓ Anti-Impersonation Checked
-                </Badge>
+                {reportCard.totalInterviewsCompleted > 0 && (
+                  <>
+                    <Badge variant="secondary" className="text-sm font-mono">
+                      Cadence: {reportCard.wordsPerMinute} WPM ({reportCard.paceRating})
+                    </Badge>
+                    <Badge variant="secondary" className="text-sm font-mono">
+                      Speech Fillers: {reportCard.fillerCount} detected
+                    </Badge>
+                    <Badge variant="secondary" className="text-sm font-mono">
+                      Oral Defenses: {reportCard.totalInterviewsCompleted} Completed
+                    </Badge>
+                  </>
+                )}
+                {reportCard.totalPotdCompleted > 0 && (
+                  <Badge variant="secondary" className="text-sm font-mono">
+                    POTD Challenges: {reportCard.totalPotdCompleted} Solved
+                  </Badge>
+                )}
+                {reportCard.totalQuizzesCompleted > 0 && (
+                  <Badge variant="secondary" className="text-sm font-mono">
+                    Interactive Quizzes: {reportCard.totalQuizzesCompleted} Answered
+                  </Badge>
+                )}
+                {user.streakDays > 0 && (
+                  <Badge variant="secondary" className="text-sm font-mono">
+                    Daily Streak: {user.streakDays} Days
+                  </Badge>
+                )}
+              </div>
+            </div>
+
+            {/* Verbatim Oral Defense Excerpt */}
+            {reportCard.latestDefenseExcerpt &&
+              reportCard.latestDefenseExcerpt !== 'No spoken defense sessions completed yet.' &&
+              reportCard.latestDefenseExcerpt !== 'No transcript recorded.' && (
+                <div className="p-4 rounded-xl bg-muted/40 border border-border/80 space-y-1.5">
+                  <span className="text-sm font-bold text-foreground font-mono flex items-center gap-1.5">
+                    <span>🎙️ Recent Spoken Defense Verbatim Excerpt:</span>
+                  </span>
+                  <p className="text-sm text-foreground/90 font-serif italic leading-relaxed">
+                    &ldquo;{reportCard.latestDefenseExcerpt}&rdquo;
+                  </p>
+                </div>
+              )}
+
+            {/* Key Strengths & Coaching Areas */}
+            <div className="grid sm:grid-cols-2 gap-4 text-sm pt-1">
+              <div className="p-4 rounded-xl bg-card border border-border space-y-2">
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Key Technical Strengths:</span>
+                </span>
+                <ul className="space-y-1.5 list-disc list-inside text-muted-foreground">
+                  {reportCard.strengths.map((s: string, idx: number) => (
+                    <li key={idx} className="leading-snug">
+                      {s}
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              <span className="text-sm text-primary font-bold">
-                Visible to approved enterprise recruiters
-              </span>
+              <div className="p-4 rounded-xl bg-card border border-border space-y-2">
+                <span className="font-bold text-amber-500 flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Identified Coaching Areas:</span>
+                </span>
+                <ul className="space-y-1.5 list-disc list-inside text-muted-foreground">
+                  {reportCard.areasForImprovement.map((item: string, idx: number) => (
+                    <li key={idx} className="leading-snug">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </>
         ) : (
           <div className="p-8 text-center rounded-xl bg-muted/30 border border-border space-y-3">
             <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto text-xl font-bold">
-              🎙️
+              📊
             </div>
-            <h3 className="text-base font-bold text-foreground font-sans">No Spoken Defense Records Yet</h3>
+            <h3 className="text-base font-bold text-foreground font-sans">No Interactive Challenge Records Yet</h3>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Answer today&apos;s interview question on the AI Voice Coach. Your verbal cadence, STAR structure, and technical depth will automatically generate your verified report card.
+              Complete a Problem of the Day, oral defense session, or spark quiz. Your multi-axis technical competency will automatically generate your verified report card.
             </p>
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <Button asChild variant="outline" className="font-bold text-sm shadow-xs gap-2">
+                <Link href="/potd">
+                  <Code2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  <span>Solve Problem of the Day</span>
+                </Link>
+              </Button>
               <Button asChild className="font-bold text-sm shadow-xs gap-2">
                 <Link href="/coach">
                   <Mic className="w-4 h-4" />
-                  <span>Begin Voice Coach Session</span>
+                  <span>Practice Voice Coach</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
@@ -507,11 +494,13 @@ export default function StudentDashboardPage() {
             <span className="text-sm font-mono text-muted-foreground">Cohort Bracket Position</span>
             <div className="text-base font-bold text-foreground flex items-center gap-2">
               <span className="text-primary font-mono text-lg font-black">
-                #{user.leagueRank > 0 ? user.leagueRank : 5}
+                {user.leagueRank > 0 ? `#${user.leagueRank}` : 'Unranked'}
               </span>
-              <Badge variant="outline" className="text-sm font-mono bg-emerald-500/10 text-emerald-700 border-emerald-500/20">
-                Promotion Zone (Top 5)
-              </Badge>
+              {user.leagueRank > 0 && user.leagueRank <= 5 && (
+                <Badge variant="outline" className="text-sm font-mono bg-emerald-500/10 text-emerald-700 border-emerald-500/20">
+                  Promotion Zone (Top 5)
+                </Badge>
+              )}
             </div>
           </div>
 

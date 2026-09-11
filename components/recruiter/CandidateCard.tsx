@@ -105,9 +105,15 @@ export function CandidateCard({ candidate, onInspect, onInvite }: CandidateCardP
               <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 font-mono font-black">
                 {rep.overallScore.toFixed(1)} / 10
               </Badge>
-              <Badge variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-500/20 bg-emerald-500/10 font-mono font-bold">
-                ATS: {candidate.resume.overallAtsScore}%
-              </Badge>
+              {candidate.resume.overallAtsScore > 0 ? (
+                <Badge variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-500/20 bg-emerald-500/10 font-mono font-bold">
+                  ATS: {candidate.resume.overallAtsScore}%
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-muted-foreground border-border bg-muted/40 font-mono font-medium">
+                  ATS: Not Scanned
+                </Badge>
+              )}
             </div>
           </div>
 

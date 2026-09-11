@@ -3,8 +3,8 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { db } from '@/lib/db';
-import { profiles, studentStats } from '@/lib/db/schema';
-import { eq, or, sql } from 'drizzle-orm';
+import { profiles, studentStats, resumeEvaluations } from '@/lib/db/schema';
+import { eq, or, sql, desc } from 'drizzle-orm';
 
 // Disallowed public email domains for recruiters
 const PUBLIC_EMAIL_DOMAINS = [
@@ -891,11 +891,11 @@ export async function getCurrentStudentProfileAction(): Promise<CurrentStudentPr
   let username = session.username || (email ? email.split('@')[0] : 'learner');
   let collegeOrCompany = 'AI Engineering Campus';
   let headline = 'Aspiring AI Systems Engineer';
-  let totalPoints = 415;
-  let currentStreak = 3;
-  let leagueTier = 'Silver AI Engineer';
-  let leagueRank = 5;
-  const atsScore = 84;
+  let totalPoints = 0;
+  let currentStreak = 0;
+  let leagueTier = 'Bronze AI Engineer';
+  let leagueRank = 0;
+  let atsScore = 0;
 
   if (db && (email || userId || username)) {
     try {
@@ -930,10 +930,29 @@ export async function getCurrentStudentProfileAction(): Promise<CurrentStudentPr
         });
 
         if (stats) {
-          totalPoints = stats.totalPoints || totalPoints;
-          currentStreak = stats.currentStreak || currentStreak;
-          leagueTier = stats.currentLeagueTier || leagueTier;
-          leagueRank = stats.overallRanking || leagueRank;
+          totalPoints = stats.totalPoints ?? 0;
+          currentStreak = stats.currentStreak ?? 0;
+          if (stats.currentLeagueTier) {
+            const raw = stats.currentLeagueTier.toLowerCase();
+            if (raw === 'architect') leagueTier = 'AI Architect';
+            else if (raw === 'diamond') leagueTier = 'LLM Master';
+            else if (raw === 'gold') leagueTier = 'Gold AI Engineer';
+            else if (raw === 'silver') leagueTier = 'Silver AI Engineer';
+            else leagueTier = 'Bronze AI Engineer';
+          }
+          leagueRank = stats.overallRanking ?? 0;
+        }
+
+        // Query real evaluated resume ATS score from Supabase
+        const latestResume = await db
+          .select({ score: resumeEvaluations.overallAtsScore })
+          .from(resumeEvaluations)
+          .where(eq(resumeEvaluations.userId, dbProfile.id))
+          .orderBy(desc(resumeEvaluations.createdAt))
+          .limit(1);
+
+        if (latestResume.length > 0) {
+          atsScore = latestResume[0].score;
         }
       }
     } catch (err) {

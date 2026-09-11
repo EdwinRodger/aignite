@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CandidateTalent } from '@/lib/recruiter-data';
 import {
   Award,
@@ -15,6 +15,11 @@ import {
   CheckCircle2,
   Sparkles,
   Zap,
+  Download,
+  Copy,
+  Check,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import {
   Dialog,
@@ -41,6 +46,16 @@ export function CandidateDossierModal({
 }: CandidateDossierModalProps) {
   const rep = candidate.reportCard;
   const res = candidate.resume;
+  const [showRawResume, setShowRawResume] = useState(false);
+  const [copiedResume, setCopiedResume] = useState(false);
+
+  const handleCopyResume = () => {
+    if (res.rawText) {
+      navigator.clipboard.writeText(res.rawText);
+      setCopiedResume(true);
+      setTimeout(() => setCopiedResume(false), 2000);
+    }
+  };
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
@@ -122,11 +137,11 @@ export function CandidateDossierModal({
                 <div className="flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-primary" />
                   <h3 className="text-base font-bold text-foreground font-sans">
-                    AI Interview Report Card & Speech Telemetry
+                    AI Competency Report Card &amp; Multi-Axis Telemetry
                   </h3>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Aggregated across {rep.speechMetrics.totalInterviews} simulated technical interviews and oral defenses.
+                  Aggregated across coding challenges, interactive quizzes, system drills, and spoken defenses.
                 </p>
               </div>
 
@@ -174,11 +189,11 @@ export function CandidateDossierModal({
               </span>
               <span className="px-3 py-1.5 rounded-xl bg-card border border-border text-foreground flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-amber-500" />
-                <span>Speech Fillers: Only {rep.speechMetrics.fillerCount} detected</span>
+                <span>Speech Fillers: {rep.speechMetrics.fillerCount} detected</span>
               </span>
-              <span className="px-3 py-1.5 rounded-xl bg-card border border-border text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Anti-Cheating Liveness Check: Passed</span>
+              <span className="px-3 py-1.5 rounded-xl bg-card border border-border text-foreground flex items-center gap-1.5">
+                <Trophy className="w-3.5 h-3.5 text-primary" />
+                <span>Oral Defenses: {rep.speechMetrics.totalInterviews} Completed</span>
               </span>
             </div>
 
@@ -252,73 +267,153 @@ export function CandidateDossierModal({
 
           {/* Resume & Technical Work */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-foreground font-sans flex items-center gap-1.5">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-primary" />
-                <span>ATS Resume Summary & Projects</span>
-              </h3>
-              <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono text-sm font-bold">
-                ATS Score: {res.overallAtsScore} / 100
-              </Badge>
-            </div>
-
-            <p className="text-sm text-foreground/80 leading-relaxed p-4 rounded-2xl bg-muted/40 border border-border">
-              {res.summary}
-            </p>
-
-            {/* Skills Grid */}
-            <div className="grid sm:grid-cols-2 gap-3 text-sm">
-              <div className="p-3.5 rounded-xl bg-card border border-border space-y-1.5">
-                <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
-                  Frameworks & Engines
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {res.skills.frameworks.map((s) => (
-                    <Badge key={s} variant="secondary" className="text-sm font-mono">
-                      {s}
-                    </Badge>
-                  ))}
-                </div>
+                <h3 className="text-sm font-bold text-foreground font-sans">
+                  ATS Resume & Technical Profile
+                </h3>
               </div>
-
-              <div className="p-3.5 rounded-xl bg-card border border-border space-y-1.5">
-                <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
-                  Infrastructure & Deployment
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {res.skills.infrastructure.map((s) => (
-                    <Badge key={s} variant="secondary" className="text-sm font-mono">
-                      {s}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Highlighted Projects */}
-            <div className="space-y-3">
-              <span className="text-sm font-bold text-foreground font-mono block">
-                Highlighted Production Systems Projects:
-              </span>
-              <div className="space-y-3">
-                {res.projects.map((proj, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-2xl bg-card border border-border/80 space-y-1.5 shadow-2xs"
+              <div className="flex items-center gap-2">
+                {res.resumeFileUrl && (
+                  <a
+                    href={res.resumeFileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-sm font-medium border border-border bg-card hover:bg-muted text-foreground transition-colors"
                   >
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-bold text-foreground font-mono">{proj.title}</h4>
-                      <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 font-mono">
-                        {proj.impact}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {proj.description}
-                    </p>
-                  </div>
-                ))}
+                    <Download className="w-3.5 h-3.5 text-primary" />
+                    <span>Download PDF</span>
+                  </a>
+                )}
+                {res.overallAtsScore > 0 ? (
+                  <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono text-sm font-bold">
+                    ATS Score: {res.overallAtsScore} / 100
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="bg-muted/40 border-border text-muted-foreground font-mono text-sm font-medium">
+                    ATS: Not Scanned Yet
+                  </Badge>
+                )}
               </div>
             </div>
+
+            {res.overallAtsScore > 0 || (res.projects && res.projects.length > 0) ? (
+              <>
+                <p className="text-sm text-foreground/80 leading-relaxed p-4 rounded-2xl bg-muted/40 border border-border">
+                  {res.summary}
+                </p>
+
+                {/* Skills Grid */}
+                {((res.skills.frameworks && res.skills.frameworks.length > 0) || (res.skills.infrastructure && res.skills.infrastructure.length > 0)) && (
+                  <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                    {res.skills.frameworks && res.skills.frameworks.length > 0 && (
+                      <div className="p-3.5 rounded-xl bg-card border border-border space-y-1.5">
+                        <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
+                          Frameworks & Engines
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {res.skills.frameworks.map((s) => (
+                            <Badge key={s} variant="secondary" className="text-sm font-mono">
+                              {s}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {res.skills.infrastructure && res.skills.infrastructure.length > 0 && (
+                      <div className="p-3.5 rounded-xl bg-card border border-border space-y-1.5">
+                        <span className="text-sm uppercase font-mono font-bold text-muted-foreground block">
+                          Infrastructure & Deployment
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {res.skills.infrastructure.map((s) => (
+                            <Badge key={s} variant="secondary" className="text-sm font-mono">
+                              {s}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Highlighted Projects */}
+                {res.projects && res.projects.length > 0 && (
+                  <div className="space-y-3">
+                    <span className="text-sm font-bold text-foreground font-mono block">
+                      Highlighted Production Systems Projects:
+                    </span>
+                    <div className="space-y-3">
+                      {res.projects.map((proj, idx) => (
+                        <div
+                          key={idx}
+                          className="p-4 rounded-2xl bg-card border border-border/80 space-y-1.5 shadow-2xs"
+                        >
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-sm font-bold text-foreground font-mono">{proj.title}</h4>
+                            <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 font-mono">
+                              {proj.impact}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {proj.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="p-6 rounded-2xl bg-muted/30 border border-border text-center space-y-2">
+                <FileText className="w-8 h-8 text-muted-foreground/60 mx-auto" />
+                <h4 className="text-sm font-bold text-foreground">No ATS Resume Scanned Yet</h4>
+                <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+                  This candidate has not yet submitted a resume for automated ATS evaluation. Their technical skills and speech metrics are verified through their live interview defense and challenge completions above.
+                </p>
+              </div>
+            )}
+
+            {/* Raw Resume Text Expandable Section */}
+            {res.rawText && (
+              <div className="rounded-2xl border border-border bg-card overflow-hidden">
+                <div className="p-3.5 bg-muted/40 border-b border-border flex items-center justify-between">
+                  <span className="text-sm font-bold text-foreground font-mono flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-primary" />
+                    <span>Submitted Resume Text ({res.rawText.length} characters)</span>
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleCopyResume}
+                      className="h-8 px-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground gap-1"
+                    >
+                      {copiedResume ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedResume ? 'Copied' : 'Copy Text'}</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowRawResume(!showRawResume)}
+                      className="h-8 px-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground gap-1"
+                    >
+                      {showRawResume ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                      <span>{showRawResume ? 'Collapse' : 'View Raw Resume'}</span>
+                    </Button>
+                  </div>
+                </div>
+                {showRawResume && (
+                  <div className="p-4 bg-muted/20">
+                    <pre className="text-sm font-mono text-foreground/90 whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto rounded-xl p-4 bg-card border border-border/80 select-text">
+                      {res.rawText}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

@@ -42,6 +42,8 @@ export interface CandidateTalent {
       description: string;
       impact: string;
     }[];
+    rawText?: string;
+    resumeFileUrl?: string;
   };
   contactEmail: string;
   githubUrl: string;

@@ -61,7 +61,7 @@ export default function FeedPage() {
   const [quizzes, setQuizzes] = useState<InterleavedQuiz[]>(SEED_INTERLEAVED_QUIZZES);
   const [jobs, setJobs] = useState<JobPostingFeedItem[]>(SEED_JOB_POSTINGS);
   const [userProfile, setUserProfile] = useState<UserFeedIdentity | undefined>(undefined);
-  const [isLoadingPosts, setIsLoadingPosts] = useState(false);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const [totalPoints, setTotalPoints] = useState(0);
   const [streakCount, setStreakCount] = useState(0);
   const [hasInteractedToday, setHasInteractedToday] = useState(false);
@@ -94,7 +94,11 @@ export default function FeedPage() {
     // Check guest mode flag
     if (typeof window !== 'undefined') {
       const storedGuest = localStorage.getItem('aignite_feed_guest');
-      if (storedGuest === 'true') setIsGuestMode(true);
+      if (storedGuest === 'true') {
+        queueMicrotask(() => {
+          if (isMounted) setIsGuestMode(true);
+        });
+      }
     }
 
     // Load real streak and points directly from Supabase per account
@@ -133,7 +137,6 @@ export default function FeedPage() {
       });
 
     // Fetch real feed posts from Supabase database
-    setIsLoadingPosts(true);
     getSocialFeedPostsAction()
       .then((fetchedPosts) => {
         if (isMounted && fetchedPosts && fetchedPosts.length > 0) {

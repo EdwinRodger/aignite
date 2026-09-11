@@ -99,6 +99,9 @@ export function ResumeAnalyzerClient() {
       const res = await analyzeResumeAction(resumeText, fileName || 'Pasted Resume');
       if (res.success && res.analysis) {
         setResult(res.analysis);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('aignite_user_ats_score', res.analysis.overallAtsScore.toString());
+        }
       } else {
         setError(res.error || 'Unable to complete resume analysis.');
       }
@@ -231,12 +234,15 @@ export function ResumeAnalyzerClient() {
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <h2 className="text-xl sm:text-2xl font-bold text-foreground font-sans">
                       Resume ATS Evaluation Score
                     </h2>
                     <Badge variant="success" className="text-sm font-bold font-mono">
                       Top {100 - result.percentileRank}% (Percentile {result.percentileRank})
+                    </Badge>
+                    <Badge variant="outline" className="text-sm font-bold font-mono bg-emerald-500/10 text-emerald-700 border-emerald-500/20">
+                      ✓ Synced to AI Report Card &amp; Recruiter Radar
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">

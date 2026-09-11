@@ -55,7 +55,6 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
   const [mode, setMode] = useState<'voice' | 'text'>('voice');
   const [transcript, setTranscript] = useState('');
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const [speechApiAvailable, setSpeechApiAvailable] = useState(false);
   const [micError, setMicError] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -73,19 +72,8 @@ export function VoiceRecorder({ onSubmitAnswer, isEvaluating }: VoiceRecorderPro
     transcriptRef.current = transcript;
   }, [transcript]);
 
-  // Detect Web Speech API availability on mount
+  // Clean up audio and timers on unmount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const windowWithSpeech = window as unknown as {
-        SpeechRecognition?: new () => SpeechRecognitionInstance;
-        webkitSpeechRecognition?: new () => SpeechRecognitionInstance;
-      };
-      const SpeechRecognitionConstructor =
-        windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
-
-      setSpeechApiAvailable(Boolean(SpeechRecognitionConstructor));
-    }
-
     return () => {
       isRecordingRef.current = false;
       if (timerRef.current) {

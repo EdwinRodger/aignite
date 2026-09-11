@@ -9,6 +9,9 @@ import {
   InterviewInvitation,
 } from '@/lib/recruiter-data';
 import { cookies } from 'next/headers';
+import { db } from '@/lib/db';
+import { profiles, studentStats, aiReportCards, resumeEvaluations } from '@/lib/db/schema';
+import { eq, desc } from 'drizzle-orm';
 
 export interface CandidateFilters {
   minLeagueTier?: string;
@@ -27,12 +30,192 @@ const TIER_ORDER: Record<string, number> = {
 };
 
 /**
+ * Fetches live verified student candidates from Supabase with their dynamic
+ * 5-axis report card telemetry, ATS resumes, and habit streaks.
+ */
+async function fetchLiveCandidatesFromSupabase(): Promise<CandidateTalent[]> {
+  if (!db) return TALENT_POOL_SEEDS;
+
+  try {
+    const studentProfiles = await db
+      .select()
+      .from(profiles)
+      .where(eq(profiles.role, 'student'));
+
+    if (studentProfiles.length === 0) {
+      return TALENT_POOL_SEEDS;
+    }
+
+    // Fetch all student stats
+    const allStats = await db.select().from(studentStats);
+    const statsMap = new Map(allStats.map((s) => [s.studentId, s]));
+
+    // Fetch all AI report cards
+    const allReports = await db.select().from(aiReportCards);
+    const reportsMap = new Map(allReports.map((r) => [r.studentId, r]));
+
+    // Fetch all evaluated resumes (ordered newest first)
+    const allResumes = await db
+      .select()
+      .from(resumeEvaluations)
+      .orderBy(desc(resumeEvaluations.createdAt));
+
+    const resumeMap = new Map<string, typeof resumeEvaluations.$inferSelect>();
+    for (const res of allResumes) {
+      if (res.userId && !resumeMap.has(res.userId)) {
+        resumeMap.set(res.userId, res);
+      }
+    }
+
+    const colorPalettes = [
+      'bg-blue-500/10 text-blue-600 border border-blue-500/20',
+      'bg-purple-500/10 text-purple-600 border border-purple-500/20',
+      'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20',
+      'bg-amber-500/10 text-amber-600 border border-amber-500/20',
+      'bg-rose-500/10 text-rose-600 border border-rose-500/20',
+    ];
+
+    return studentProfiles.map((p, index) => {
+      const stat = statsMap.get(p.id);
+      const rep = reportsMap.get(p.id);
+      const res = resumeMap.get(p.id);
+
+      const tierRaw = (stat?.currentLeagueTier || 'bronze').toLowerCase();
+      let leagueTier: CandidateTalent['leagueTier'] = 'bronze';
+      if (tierRaw.includes('architect')) leagueTier = 'architect';
+      else if (tierRaw.includes('diamond')) leagueTier = 'diamond';
+      else if (tierRaw.includes('gold')) leagueTier = 'gold';
+      else if (tierRaw.includes('silver')) leagueTier = 'silver';
+
+      const overallReportScore =
+        Number(rep?.overallScore) ||
+        Number(rep?.knowledgeScore) ||
+        (rep ? 5.0 : 0.0);
+
+      // Verified badges derived dynamically
+      const badges: string[] = [];
+      if (leagueTier === 'architect') {
+        badges.push('Agent Architect', 'CUDA & TensorRT Specialist');
+      } else if (leagueTier === 'diamond') {
+        badges.push('Vector Wizard', 'RAG Master');
+      } else if (leagueTier === 'gold') {
+        badges.push('RAG Master');
+      }
+      if ((stat?.currentStreak ?? 0) >= 7) {
+        badges.push('7-Day Flame Streak');
+      }
+      if ((stat?.totalPoints ?? 0) >= 100) {
+        badges.push('Applied AI Pioneer');
+      }
+
+      // Parse resume details if available
+      const parsedData = (res?.parsedData as {
+        targetRole?: string;
+        summary?: string;
+        detectedSkills?: { category: string; skills: string[] }[];
+        projects?: { title: string; description: string; impact: string }[];
+      }) || {};
+
+      const fwSkills =
+        parsedData.detectedSkills?.find((c) => c.category === 'Core Frameworks')?.skills ||
+        (res?.rawText?.includes('PyTorch')
+          ? ['PyTorch', 'Transformers', 'FastAPI']
+          : ['PyTorch', 'HuggingFace']);
+      const modelSkills =
+        parsedData.detectedSkills?.find((c) => c.category === 'Models & Architectures')?.skills ||
+        ['Llama-3', 'DeepSeek-R1'];
+      const retrievalSkills =
+        parsedData.detectedSkills?.find((c) => c.category === 'Vector & Retrieval')?.skills ||
+        ['pgvector', 'FAISS', 'RAG'];
+      const infraSkills =
+        parsedData.detectedSkills?.find((c) => c.category === 'Deployment & Infrastructure')?.skills ||
+        ['Docker', 'Linux'];
+
+      const projects =
+        parsedData.projects && parsedData.projects.length > 0
+          ? parsedData.projects
+          : res
+          ? [
+              {
+                title: 'High-Performance AI Systems Implementation',
+                description: res.rawText?.slice(0, 180) || 'Production AI application pipeline.',
+                impact: 'Verified hands-on delivery',
+              },
+            ]
+          : [];
+
+      return {
+        id: p.id,
+        fullName: p.fullName || 'AI Candidate',
+        headline: p.headline || 'Aspiring AI Systems Engineer',
+        collegeOrCompany: p.collegeOrCompany || 'Engineering Institution',
+        region: p.region || 'India',
+        avatarBg: colorPalettes[index % colorPalettes.length],
+        leagueTier,
+        leaguePoints: stat?.totalPoints ?? 0,
+        weeklyRank: stat?.overallRanking ?? (index + 1),
+        streakDays: stat?.currentStreak ?? 0,
+        verifiedBadges: badges,
+        reportCard: {
+          knowledgeScore: Number(rep?.knowledgeScore) || 0.0,
+          confidenceScore: Number(rep?.confidenceScore) || 0.0,
+          communicationScore: Number(rep?.communicationScore) || 0.0,
+          examplesScore: Number(rep?.examplesScore) || 0.0,
+          industryLevelScore: Number(rep?.industryLevelScore) || 0.0,
+          overallScore: overallReportScore,
+          speechMetrics: {
+            wordsPerMinute: rep?.wordsPerMinute ?? 130,
+            fillerCount: rep?.fillerCount ?? 0,
+            paceRating:
+              (rep?.paceRating as CandidateTalent['reportCard']['speechMetrics']['paceRating']) ||
+              'Natural & Confident',
+            totalInterviews: rep?.totalInterviewsCompleted ?? 0,
+          },
+          strengths: Array.isArray(rep?.strengths)
+            ? (rep?.strengths as string[])
+            : ['Active technical learner'],
+          improvementAreas: Array.isArray(rep?.areasForImprovement)
+            ? (rep?.areasForImprovement as string[])
+            : ['Continue building oral defense consistency'],
+          recentModelAnswerExcerpt:
+            rep?.latestDefenseExcerpt || 'Oral defense transcript pending.',
+        },
+        resume: {
+          overallAtsScore: res ? res.overallAtsScore : 0,
+          targetRole: parsedData.targetRole || 'AI/ML Systems Engineer',
+          summary:
+            parsedData.summary ||
+            res?.rawText?.slice(0, 220) ||
+            'Candidate has not yet uploaded or evaluated an ATS resume.',
+          skills: {
+            frameworks: fwSkills,
+            models: modelSkills,
+            infrastructure: infraSkills,
+            retrieval: retrievalSkills,
+          },
+          projects,
+          rawText: res?.rawText || undefined,
+          resumeFileUrl: res?.resumeFileUrl || undefined,
+        },
+        contactEmail: p.email || p.workEmail || `${p.username}@talent.aignite`,
+        githubUrl: p.githubUrl || `https://github.com/${p.username}`,
+        linkedinUrl: p.linkedinUrl || `https://linkedin.com/in/${p.username}`,
+      };
+    });
+  } catch (err) {
+    console.warn('Error fetching live candidates from Supabase:', err);
+    return TALENT_POOL_SEEDS;
+  }
+}
+
+/**
  * Fetches filtered candidate talent pool with verification safeguards.
  */
 export async function getCandidateTalentPoolAction(
   filters?: CandidateFilters
 ): Promise<{ success: boolean; candidates: CandidateTalent[] }> {
-  let list = [...TALENT_POOL_SEEDS];
+  const liveList = await fetchLiveCandidatesFromSupabase();
+  let list = [...liveList];
 
   if (filters) {
     if (filters.minLeagueTier && filters.minLeagueTier !== 'all') {
@@ -80,7 +263,8 @@ export async function getCandidateTalentPoolAction(
 export async function getCandidateDossierAction(
   candidateId: string
 ): Promise<{ success: boolean; candidate?: CandidateTalent; error?: string }> {
-  const candidate = TALENT_POOL_SEEDS.find((c) => c.id === candidateId);
+  const liveList = await fetchLiveCandidatesFromSupabase();
+  const candidate = liveList.find((c) => c.id === candidateId);
   if (!candidate) {
     return { success: false, error: 'Candidate profile not found' };
   }

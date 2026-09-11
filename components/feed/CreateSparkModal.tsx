@@ -78,10 +78,7 @@ export function CreateSparkModal({
 
   // Load identity from Supabase profile on mount
   useEffect(() => {
-    if (initialProfile) {
-      setProfile(initialProfile);
-      return;
-    }
+    if (initialProfile) return;
 
     getCurrentStudentFeedIdentityAction()
       .then((data) => {

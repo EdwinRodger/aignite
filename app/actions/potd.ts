@@ -9,6 +9,7 @@ import {
   getStudentStreakData,
   recordStudentActivityAndIncrementStreak,
 } from '@/lib/session-user';
+import { calculateAndSyncUserReportCard } from '@/lib/report-card';
 
 /**
  * Fetch today's featured Problem of the Day challenge directly from Supabase.
@@ -244,6 +245,9 @@ export async function submitPotdSolutionAction(
           const currentData = await getStudentStreakData();
           updatedStreak = currentData.currentStreak;
         }
+
+        // Live sync report card with POTD problem-solving telemetry
+        await calculateAndSyncUserReportCard(studentId);
       } catch (dbErr) {
         console.warn('Error recording POTD submission in Supabase:', dbErr);
       }

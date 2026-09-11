@@ -2,7 +2,7 @@
 
 import { DAILY_COACH_QUESTIONS, CoachQuestion, CoachEvaluationReport } from '@/lib/coach-data';
 import { db } from '@/lib/db';
-import { dailyCoachQuestions, dailyCoachSubmissions, aiReportCards } from '@/lib/db/schema';
+import { dailyCoachQuestions, dailyCoachSubmissions } from '@/lib/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import {
@@ -10,6 +10,7 @@ import {
   getStudentStreakData,
   recordStudentActivityAndIncrementStreak,
 } from '@/lib/session-user';
+import { calculateAndSyncUserReportCard } from '@/lib/report-card';
 
 /**
  * Fetch all available interview coach questions directly from Supabase.
@@ -260,36 +261,11 @@ Return JSON matching this schema:
           const streakResult = await recordStudentActivityAndIncrementStreak(studentId, 25);
           updatedStreak = streakResult.currentStreak;
 
-          // Upsert AI report card in Supabase
-          await db
-            .insert(aiReportCards)
-            .values({
-              studentId,
-              knowledgeScore: evaluationReport.scores.knowledgeScore.toFixed(1),
-              confidenceScore: evaluationReport.scores.confidenceScore.toFixed(1),
-              communicationScore: evaluationReport.scores.communicationScore.toFixed(1),
-              examplesScore: evaluationReport.scores.examplesScore.toFixed(1),
-              industryLevelScore: evaluationReport.scores.industryReadinessScore.toFixed(1),
-              totalInterviewsCompleted: 1,
-              strengths: evaluationReport.keyStrengths,
-              areasForImprovement: evaluationReport.areasForImprovement,
-              aiSummaryFeedback: evaluationReport.keyStrengths[0] || 'Good verbal response.',
-              updatedAt: new Date(),
-            })
-            .onConflictDoUpdate({
-              target: aiReportCards.studentId,
-              set: {
-                knowledgeScore: evaluationReport.scores.knowledgeScore.toFixed(1),
-                confidenceScore: evaluationReport.scores.confidenceScore.toFixed(1),
-                communicationScore: evaluationReport.scores.communicationScore.toFixed(1),
-                examplesScore: evaluationReport.scores.examplesScore.toFixed(1),
-                industryLevelScore: evaluationReport.scores.industryReadinessScore.toFixed(1),
-                strengths: evaluationReport.keyStrengths,
-                areasForImprovement: evaluationReport.areasForImprovement,
-                updatedAt: new Date(),
-              },
-            });
+          // Dynamically compute and sync full rolling AI report card in Supabase
+          await calculateAndSyncUserReportCard(studentId);
         } else {
+          // Even if not passed, sync the activity to report card
+          await calculateAndSyncUserReportCard(studentId);
           const currentData = await getStudentStreakData();
           updatedStreak = currentData.currentStreak;
         }
