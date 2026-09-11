@@ -6,6 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
+import { triggerHaptic } from '@/lib/mobileBridge';
+
 interface QuizOption {
   text: string;
   isCorrect: boolean;
@@ -26,6 +28,7 @@ export function MicroQuizCard() {
     setSelectedIdx(index);
 
     if (options[index].isCorrect) {
+      triggerHaptic('success');
       setPointsEarned(true);
       try {
         const prefersReducedMotion =
@@ -44,6 +47,8 @@ export function MicroQuizCard() {
       } catch {
         // Fallback
       }
+    } else {
+      triggerHaptic('error');
     }
   };
 

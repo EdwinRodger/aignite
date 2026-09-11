@@ -1,277 +1,198 @@
-# Mobile App Architecture (React Native WebView) - AIgnite
+# Mobile App Architecture (React Native Expo WebView) - AIgnite
 > **Project**: AIgnite (*pronounced ignite, 'A' is silent*)  
-> **Mobile Technology**: React Native / Expo with `react-native-webview`  
-> **Target Stores**: Google Play Store (Android) & Apple App Store (iOS)  
+> **Mobile Technology**: Expo (React Native) with `react-native-webview`  
+> **Mobile Directory**: `aignite_mobile/` (Separate clean repo/directory structure)  
+> **Default Production URL**: `https://aignite-sih.vercel.app`  
+> **Target Stores / Distribution**: Android APK & Google Play (AAB), iOS TestFlight / App Store  
 
 ---
 
 ## 1. Overview & Strategy
 
-To maximize development velocity for **Smart India Hackathon 2026** while maintaining native hardware access, AIgnite’s mobile app is implemented as a **High-Performance React Native WebView Shell**.
+To maximize development velocity for **Smart India Hackathon 2026** while maintaining native hardware access and rapid iteration:
 
-This approach gives:
-- **100% Feature Parity**: Any new games, modules, or simulator updates in the Next.js web app immediately appear in the mobile app without app store re-submissions.
-- **Native Hardware Integration**: Full access to native microphones, push notifications (FCM / APNs) for daily streak reminders, haptic engines, and safe area insets.
+AIgnite's mobile companion is engineered as a **High-Performance React Native Expo WebView Shell** that remains **100% compatible with Expo Go** during development, and can produce local or cloud standalone Android APKs via EAS.
+
+### Why this approach?
+- **100% Feature Parity**: Any new games, modules, error hunters, or pipeline simulators updated in the Next.js web application immediately appear in the mobile app without requiring app store resubmissions.
+- **Expo Go Compatible**: Developers and judges can instantly launch the app by scanning an Expo Go QR code on physical Android devices without needing Android Studio or native SDK compilation.
+- **Native Hardware Integration**: Full access to native microphones (`expo-av`) for the Daily AI Voice Mock Interview Coach, tactile haptics (`expo-haptics`) for 5-second quiz checks, and hardware back-button history navigation.
+- **Zero Monorepo Contamination**: Kept in the clean companion folder `aignite_mobile/`, preserving Vercel CI/CD pipelines and web git history.
 
 ```mermaid
 graph TD
-    subgraph "React Native Native Layer"
-        RNRoot["React Native App.tsx"]
-        PermManager["react-native-permissions\n(Microphone & Camera)"]
-        NotifService["Expo Notifications / FCM\n(Streak Reminders at 8:00 AM)"]
-        Haptics["expo-haptics\n(Success & Error Vibrate)"]
-        Storage["AsyncStorage\n(Persisted Session & Tokens)"]
-        RNWebView["react-native-webview\n(Hardware Acceleration Enabled)"]
+    subgraph "Expo Native Container (aignite_mobile)"
+        AppRoot["Expo App.tsx"]
+        ExpoAV["expo-av (Mic Permission Request)"]
+        Haptics["expo-haptics (Tactile Feedback)"]
+        Storage["AsyncStorage (Session & Landing Route)"]
+        BackHandler["Android BackHandler (Navigation History)"]
+        RNWebView["react-native-webview (Hardware Accelerated)"]
     end
 
-    subgraph "Bridge Protocol"
+    subgraph "Two-Way Bridge Protocol"
         JSBridge["postMessage / onMessage Bridge"]
     end
 
-    subgraph "Web Layer (Next.js)"
-        WebClient["AIgnite Responsive PWA / Web"]
-        MicCapture["Web Audio / MediaRecorder"]
-        StreakTracker["Streak & League UI"]
+    subgraph "Web Layer (Next.js - https://aignite-sih.vercel.app)"
+        WebClient["AIgnite Responsive Web App"]
+        SpeechCoach["Web Audio / Voice Mock Interview"]
+        MicroQuiz["5-Second Quizzes (MicroQuizCard)"]
+        BridgeHelper["lib/mobileBridge.ts"]
     end
 
-    RNRoot --> RNWebView
-    RNRoot --> PermManager
-    RNRoot --> NotifService
-    RNRoot --> Haptics
-    RNRoot --> Storage
+    AppRoot --> RNWebView
+    AppRoot --> ExpoAV
+    AppRoot --> Haptics
+    AppRoot --> Storage
+    AppRoot --> BackHandler
 
-    RNWebView <--> JSBridge <--> WebClient
-    WebClient --> MicCapture
-    WebClient --> StreakTracker
+    RNWebView <--> JSBridge <--> BridgeHelper
+    BridgeHelper --> WebClient
+    WebClient --> SpeechCoach
+    WebClient --> MicroQuiz
 ```
 
 ---
 
-## 2. Directory Structure (`mobile/`)
+## 2. Directory Structure (`aignite_mobile/`)
 
 ```text
-mobile/
-├── App.tsx                     # Entry point & WebView host
-├── app.json                    # Expo / React Native configuration
-├── src/
-│   ├── components/
-│   │   ├── LoadingScreen.tsx   # Native splash while webview initializes
-│   │   ├── OfflineNotice.tsx   # Native banner when internet disconnected
-│   │   └── NativeHeader.tsx    # Native notch & safe area wrapper
-│   ├── bridge/
-│   │   ├── messageHandler.ts   # Parses messages sent from Next.js web app
-│   │   └── messageSender.ts    # Dispatches native events into webview
-│   ├── hooks/
-│   │   ├── usePermissions.ts   # Native Mic/Camera permission checker
-│   │   └── useNotifications.ts # Registers FCM push tokens
-│   └── utils/
-│       └── haptics.ts          # Native vibration triggers
-├── package.json
-└── tsconfig.json
+aignite_mobile/
+├── App.tsx                     # Expo WebView host, bridge handler & back button navigation
+├── app.json                    # Expo configuration, Android permissions & audio plugins
+├── eas.json                    # EAS configuration for standalone Android APK & AAB builds
+├── package.json                # Expo SDK dependencies (expo-av, expo-haptics, webview, async-storage)
+├── tsconfig.json               # Strict TypeScript configuration
+└── assets/                     # App icons and adaptive launcher drawables
 ```
 
 ---
 
 ## 3. Bridge Communication Protocol
 
-The web application and native container communicate via bidirectional JSON messages through `window.ReactNativeWebView.postMessage(JSON.stringify(payload))` and `WebView.onMessage`.
+The web application and native Expo container communicate via bidirectional JSON messages through:
+- **Web -> Native**: `window.ReactNativeWebView.postMessage(JSON.stringify(payload))`
+- **Native -> Web**: `WebView.onMessage` handler in `App.tsx`
 
 ### 3.1. Message Schema
 ```typescript
-interface BridgeMessage<T = unknown> {
-  type: BridgeEventType;
-  payload: T;
-}
-
-type BridgeEventType =
-  // Web -> Native
-  | 'REQUEST_MIC_PERMISSION'
-  | 'TRIGGER_HAPTIC'
-  | 'REGISTER_FCM_TOKEN'
-  | 'SHARE_REPORT_CARD'
-  | 'OPEN_EXTERNAL_URL'
-  
-  // Native -> Web
-  | 'MIC_PERMISSION_RESULT'
-  | 'FCM_TOKEN_DELIVERED'
-  | 'NETWORK_STATUS_CHANGED';
+export type MobileBridgeEvent =
+  | { type: 'TRIGGER_HAPTIC'; payload: { style?: 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' } }
+  | { type: 'SET_DEFAULT_LANDING'; payload: { path: string } }
+  | { type: 'REQUEST_MIC_PERMISSION' }
+  | { type: 'SHARE_REPORT_CARD'; payload: { title: string; url: string; score?: number } }
+  | { type: 'OPEN_EXTERNAL_URL'; payload: { url: string } };
 ```
 
 ### 3.2. Web-Side Bridge Client Helper (`lib/mobileBridge.ts`)
+
+In the Next.js project (`aignite/lib/mobileBridge.ts`):
 ```typescript
-export const sendNativeMessage = (type: string, payload?: any) => {
-  if (typeof window !== 'undefined' && (window as any).ReactNativeWebView) {
-    (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type, payload }));
-  }
-};
-
-// Example usage in Next.js component:
-export const triggerSuccessHaptic = () => {
-  sendNativeMessage('TRIGGER_HAPTIC', { style: 'success' });
-};
-```
-
----
-
-## 4. Native Permissions Implementation (Microphone for Coach)
-
-### 4.1. Android (`AndroidManifest.xml`)
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-<uses-permission android:name="android.permission.CAMERA" />
-```
-
-### 4.2. iOS (`Info.plist`)
-```xml
-<key>NSMicrophoneUsageDescription</key>
-<string>AIgnite requires microphone access for the Daily AI Interview Coach and Mock Interviews.</string>
-<key>NSCameraUsageDescription</key>
-<string>AIgnite requires camera access for interactive AI video mock interview evaluations.</string>
-```
-
-### 4.3. React Native WebView Implementation (`App.tsx`)
-```tsx
-import React, { useRef, useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, ActivityIndicator, View } from 'react-native';
-import { WebView } from 'react-native-webview';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Haptics from 'expo-haptics';
-
-const BASE_URL = 'https://aignite.vercel.app';
-const DEFAULT_MOBILE_PATH = '/feed'; // Instagram-style interactive AI feed by default
-
-export default function App() {
-  const webViewRef = useRef<WebView>(null);
-  const [initialUrl, setInitialUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function loadLandingPreference() {
-      try {
-        const savedPath = await AsyncStorage.getItem('@user_default_landing');
-        // Default to /feed for 5-10 min instant micro-learning if not explicitly configured
-        setInitialUrl(`${BASE_URL}${savedPath || DEFAULT_MOBILE_PATH}`);
-      } catch (err) {
-        setInitialUrl(`${BASE_URL}${DEFAULT_MOBILE_PATH}`);
-      }
-    }
-    loadLandingPreference();
-  }, []);
-
-  const handleMessage = async (event: any) => {
-    try {
-      const { type, payload } = JSON.parse(event.nativeEvent.data);
-      switch (type) {
-        // User changed default opening screen preference in Settings
-        case 'SET_DEFAULT_LANDING':
-          if (payload?.path) {
-            await AsyncStorage.setItem('@user_default_landing', payload.path);
-          }
-          break;
-
-        // Instant haptic feedback for 5-second micro-quizzes in feed
-        case 'TRIGGER_HAPTIC':
-          if (payload?.style === 'error') {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-          } else if (payload?.style === 'success') {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          } else {
-            Haptics.selectionAsync(); // Light tap click
-          }
-          break;
-
-        case 'REGISTER_FCM_TOKEN':
-          // Pass FCM push token up to Supabase
-          break;
-      }
-    } catch (err) {
-      console.error('Bridge error:', err);
-    }
-  };
-
-  if (!initialUrl) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6366F1" />
-      </View>
-    );
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0B0F17" />
-      <WebView
-        ref={webViewRef}
-        source={{ 
-          uri: initialUrl,
-          headers: { 'X-Platform': 'aignite-mobile-app' }
-        }}
-        style={styles.webview}
-        // Essential props for Audio/Video Mock Interviews & Video Feeds
-        mediaPlaybackRequiresUserAction={false}
-        allowsInlineMediaPlayback={true}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        onMessage={handleMessage}
-        // Android specific hardware permissions grant for mic
-        onPermissionRequest={(request) => {
-          request.grant(request.resources);
-        }}
-        geolocationEnabled={false}
-      />
-    </SafeAreaView>
-  );
+export function isMobileApp(): boolean {
+  if (typeof window === 'undefined') return false;
+  return Boolean(window.ReactNativeWebView);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0B0F17',
-  },
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: '#0B0F17',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  webview: {
-    flex: 1,
-    backgroundColor: '#0B0F17',
-  },
-});
+export function sendNativeMessage(event: MobileBridgeEvent): void {
+  if (typeof window !== 'undefined' && window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(JSON.stringify(event));
+  }
+}
+
+export function triggerHaptic(style: 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' = 'light'): void {
+  sendNativeMessage({
+    type: 'TRIGGER_HAPTIC',
+    payload: { style },
+  });
+}
+```
+
+#### Example Usage in Feed Quiz:
+```typescript
+import { triggerHaptic } from '@/lib/mobileBridge';
+
+// When user selects a correct quiz option:
+triggerHaptic('success');
+
+// When user selects an incorrect quiz option:
+triggerHaptic('error');
 ```
 
 ---
 
-## 5. Habit Notifications & Streak Retention
+## 4. Hardware Permissions & Android Configuration
 
-To ensure high daily engagement (a core scoring metric for SIH judges):
-- **Notification Schedule**: Every morning at 8:00 AM local time.
-- **Message Content**:
-  > 🔥 *Keep your 6-day streak alive! Today's AI question is ready: "What is the difference between LoRA and QLoRA?" Tap to record your 45-second answer.*
-- **Deep Linking**: Tapping the notification deep-links straight to `/coach` or `/feed` inside the WebView.
-- **Micro-Breaks Notification (Optional 2:00 PM Afternoon Nudge)**:
-  > ⚡ *Got 3 minutes while standing in line? Check today's trending DeepSeek-R1 paper in AI Feed & solve a 5-second quiz.*
+### 4.1. Audio & Microphone for AI Voice Mock Interview Coach
+
+The app needs audio recording permissions for the AI Voice Coach to capture answers and send audio tokens for scoring.
+
+1. **Expo Config Plugin & Android Manifest** (`app.json`):
+   ```json
+   {
+     "expo": {
+       "android": {
+         "package": "com.aignite.app",
+         "permissions": [
+           "android.permission.INTERNET",
+           "android.permission.RECORD_AUDIO",
+           "android.permission.MODIFY_AUDIO_SETTINGS"
+         ]
+       },
+       "plugins": [
+         [
+           "expo-av",
+           {
+             "microphonePermission": "Allow AIgnite to access your microphone for the Daily AI Voice Mock Interview Coach."
+           }
+         ]
+       ]
+     }
+   }
+   ```
+
+2. **Upfront Runtime Permission Request** in `App.tsx`:
+   Using `Audio.requestPermissionsAsync()` from `expo-av` allows Expo Go to request Android system microphone permission upfront so the web app's `navigator.mediaDevices.getUserMedia()` operates seamlessly.
 
 ---
 
-## 6. Mobile OTP Sign-In UX & Keyboard Autofill
+## 5. Running the App
 
-By adopting **Supabase Email OTP login**, mobile users bypass awkward virtual-keyboard password entry:
+### 5.1. Testing in Expo Go (Fastest & Zero Setup)
+1. Install **Expo Go** from the Google Play Store on your Android smartphone.
+2. In your terminal:
+   ```bash
+   cd aignite_mobile
+   npx expo start
+   ```
+3. Scan the generated QR code in your terminal with the Expo Go app (or camera app).
+4. The AIgnite app loads directly from `https://aignite-sih.vercel.app`.
 
-1. **One-Tap Code Autofill**:
-   - The OTP verification page in the Next.js app specifies:
-     ```html
-     <input 
-       type="text" 
-       inputMode="numeric" 
-       autoComplete="one-time-code" 
-       maxLength={6} 
-       pattern="\d{6}" 
-     />
-     ```
-   - Both iOS QuickType and Android keyboard automatically display the 6-digit code received via email, allowing 1-tap submission.
-2. **Persistent Session Management**:
-   - `react-native-webview` retains cookies across app closes via `domStorageEnabled={true}` and native cookie managers.
-   - Once verified, the user remains logged in perpetually until manual sign-out, eliminating repetitive logins during daily 5-minute chores.
+### 5.2. Testing with Local Development Server
+To connect the mobile app to your local Next.js server (`http://192.168.x.x:3000`) instead of production:
+- In `aignite_mobile/App.tsx`, update:
+  ```typescript
+  const DEFAULT_PRODUCTION_URL = 'http://192.168.1.5:3000'; // replace with your local IPv4
+  ```
+- Run `npx expo start` and connect.
+
+---
+
+## 6. Generating Standalone Android APK (for SIH Judges)
+
+When you are ready to distribute a standalone Android `.apk` installer file:
+
+1. Install EAS CLI:
+   ```bash
+   npm install -g eas-cli
+   ```
+2. Authenticate with Expo:
+   ```bash
+   eas login
+   ```
+3. Build the preview APK:
+   ```bash
+   cd aignite_mobile
+   eas build -p android --profile preview
+   ```
+4. Once the cloud build completes, download the `.apk` directly to any Android device or share the download link with evaluators.

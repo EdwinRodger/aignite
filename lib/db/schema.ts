@@ -87,26 +87,33 @@ export const coursePacks = pgTable('course_packs', {
 // 5. AIgnite Pulse / AI Feed & Instant Micro-Quizzes
 export const feedPosts = pgTable('feed_posts', {
   id: uuid('id').defaultRandom().primaryKey(),
+  authorId: uuid('author_id').references(() => profiles.id, { onDelete: 'set null' }),
+  authorName: text('author_name').default('AIgnite Pulse').notNull(),
+  authorHandle: text('author_handle').default('@aignite_pulse').notNull(),
+  authorAvatarUrl: text('author_avatar_url'),
+  sourceType: text('source_type', { enum: ['news', 'user', 'lab'] }).default('news').notNull(),
   title: text('title').notNull(),
   summary: text('summary').notNull(),
   keyTakeaway: text('key_takeaway'),
   sourceName: text('source_name'),
   sourceUrl: text('source_url'),
-  mediaUrl: text('media_url').notNull(),
-  mediaType: text('media_type').default('image').notNull(),
+  mediaUrl: text('media_url'),
+  mediaType: text('media_type', { enum: ['video', 'image', 'none'] }).default('none').notNull(),
   category: text('category').default('GenAI').notNull(),
-  likesCount: integer('likes_count').default(0),
+  likesCount: integer('likes_count').default(0).notNull(),
+  commentsCount: integer('comments_count').default(0).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
 export const feedPostQuizzes = pgTable('feed_post_quizzes', {
   id: uuid('id').defaultRandom().primaryKey(),
-  postId: uuid('post_id').references(() => feedPosts.id, { onDelete: 'cascade' }).notNull(),
+  postId: uuid('post_id').references(() => feedPosts.id, { onDelete: 'cascade' }),
+  category: text('category').default('General AI').notNull(),
   questionText: text('question_text').notNull(),
   options: jsonb('options').$type<string[]>().notNull(),
   correctOptionIndex: integer('correct_option_index').notNull(),
   explanation: text('explanation').notNull(),
-  pointsAwarded: integer('points_awarded').default(5),
+  pointsAwarded: integer('points_awarded').default(5).notNull(),
 });
 
 export const feedUserInteractions = pgTable('feed_user_interactions', {
@@ -162,17 +169,21 @@ export const resumeEvaluations = pgTable('resume_evaluations', {
 // 8. Job Postings & Applications
 export const jobPostings = pgTable('job_postings', {
   id: uuid('id').defaultRandom().primaryKey(),
-  recruiterId: uuid('recruiter_id').references(() => profiles.id, { onDelete: 'cascade' }).notNull(),
+  recruiterId: uuid('recruiter_id').references(() => profiles.id, { onDelete: 'set null' }),
   companyName: text('company_name').notNull(),
   companyLogoUrl: text('company_logo_url'),
   title: text('title').notNull(),
   roleCategory: text('role_category').notNull(),
   description: text('description').notNull(),
+  employmentType: text('employment_type').default('Full-Time'),
   minimumLeagueTier: text('minimum_league_tier').default('bronze'),
   requiredBadges: jsonb('required_badges').$type<string[]>(),
+  skillsRequired: jsonb('skills_required').$type<string[]>(),
   minReportCardScore: numeric('min_report_card_score', { precision: 3, scale: 1 }).default('6.0'),
   salaryRange: text('salary_range'),
   location: text('location').default('Remote / Hybrid'),
+  applyUrl: text('apply_url'),
+  showInFeed: boolean('show_in_feed').default(true),
   isActive: boolean('is_active').default(true),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });

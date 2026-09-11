@@ -45,7 +45,8 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Core Workflow',
     items: [
       { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, isProtected: true },
-      { label: 'Daily AI Sparks', href: '/feed', icon: Sparkles, isProtected: false },
+      { label: 'AI Sparks Feed', href: '/feed', icon: Sparkles, isProtected: false },
+      { label: 'Deep Dives', href: '/deep-dives', icon: Cpu, isProtected: false },
       { label: 'Voice Coach', href: '/coach', icon: Mic },
     ],
   },

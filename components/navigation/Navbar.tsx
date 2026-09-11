@@ -16,6 +16,7 @@ import {
   KeyRound,
   LayoutDashboard,
   ChevronDown,
+  Cpu,
 } from 'lucide-react';
 import { getAuthUserAction } from '@/app/actions/auth';
 import { Button } from '@/components/ui/button';
@@ -175,9 +176,26 @@ export function Navbar() {
                     <Flame className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-foreground">AIgnite Pulse (Sparks)</div>
+                    <div className="text-sm font-bold text-foreground">AI Sparks (Social Feed)</div>
                     <div className="text-sm text-muted-foreground leading-snug">
-                      5-minute architectural micro-quizzes
+                      Short video demos, news & streaks
+                    </div>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem asChild className="p-2.5 rounded-xl cursor-pointer">
+                <Link
+                  href="/deep-dives"
+                  className="flex items-start gap-3 w-full"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Cpu className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-foreground">Architecture Deep-Dives</div>
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      Systems diagrams & paper synthesizer
                     </div>
                   </div>
                 </Link>
