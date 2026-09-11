@@ -78,10 +78,10 @@ export function WeeklyChallengesCard({
   };
 
   return (
-    <Card className="rounded-3xl border-border shadow-xl">
-      <CardHeader className="p-5 sm:p-6 border-b border-border/60 pb-3 flex flex-row items-center justify-between space-y-0">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+    <Card className="rounded-2xl sm:rounded-3xl border-border shadow-lg">
+      <CardHeader className="p-4 sm:p-6 border-b border-border/60 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 space-y-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
             <Zap className="w-4 h-4" />
           </div>
           <div>
@@ -92,12 +92,12 @@ export function WeeklyChallengesCard({
           </div>
         </div>
 
-        <Badge variant="outline" className="text-sm font-mono font-bold text-primary bg-primary/10 border-primary/20">
+        <Badge variant="outline" className="text-sm font-mono font-bold text-primary bg-primary/10 border-primary/20 self-start sm:self-auto">
           {completedIds.length}/{challenges.length} Done
         </Badge>
       </CardHeader>
 
-      <CardContent className="p-5 sm:p-6 space-y-3">
+      <CardContent className="p-4 sm:p-6 space-y-3">
         {challenges.length === 0 ? (
           <div className="p-6 text-center rounded-2xl bg-muted/30 border border-border/70 space-y-2">
             <p className="text-sm font-semibold text-foreground">No Challenges Active This Week</p>

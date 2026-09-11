@@ -673,12 +673,9 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* THE AI INTERVIEW LEAGUE & REPORT CARD */}
         {/* ========================================================================= */}
-        {/* ========================================================================= */}
-        {/* THE AI INTERVIEW LEAGUE & REPORT CARD */}
-        {/* ========================================================================= */}
         <section className="py-16 border-t border-border bg-muted/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
               {/* Left Column: The League System */}
               <div className="lg:col-span-6 space-y-5">
                 <Badge variant="outline" className="gap-2 px-3 py-1 bg-primary/10 border-primary/20 text-sm font-bold text-primary">
@@ -695,10 +692,12 @@ export default async function HomePage() {
 
                 {/* Division Tiers */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-                  {leagueTiers.map((tier) => (
+                  {leagueTiers.map((tier, idx) => (
                     <Card
                       key={tier.name}
-                      className="flex items-center gap-3 p-3 hover:border-primary/30 transition-colors shadow-none"
+                      className={`flex items-center gap-3 p-3 hover:border-primary/30 transition-colors shadow-none ${
+                        idx === 4 ? 'sm:col-span-2' : ''
+                      }`}
                     >
                       <span className="text-xl">{tier.icon}</span>
                       <div>
@@ -1065,7 +1064,7 @@ export default async function HomePage() {
                   Compete with peers from your university, state, across India, and globally. Rank based on daily consistency (flame streak) or verified engineering score (XP).
                 </p>
               </div>
-              <Button asChild size="lg" className="font-bold text-sm shadow-xs gap-2 shrink-0">
+              <Button asChild size="lg" className="font-bold text-sm shadow-xs gap-2 shrink-0 w-full sm:w-auto justify-center">
                 <Link href="/league">
                   <span>View Full Division Leagues</span>
                   <ArrowRight className="w-3.5 h-3.5" />

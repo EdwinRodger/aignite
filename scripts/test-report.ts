@@ -45,7 +45,7 @@ async function main() {
     console.table(resumes.map(r => ({
       userId: r.userId,
       atsScore: r.overallAtsScore,
-      targetRole: r.targetRole,
+      targetRole: r.parsedData?.targetRole,
       hasParsedData: Boolean(r.parsedData),
     })));
 
@@ -55,7 +55,7 @@ async function main() {
       studentId: s.studentId,
       points: s.totalPoints,
       streak: s.currentStreak,
-      tier: s.leagueTier,
+      tier: s.currentLeagueTier,
     })));
   }
   process.exit(0);
