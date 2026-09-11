@@ -144,7 +144,7 @@ export default async function HomePage() {
       title: 'Coding Challenges & Lab',
       badge: 'Interactive Sandbox',
       description: 'Drag-and-drop RAG pipeline sequencer, PyTorch error hunter, and inference architecture tuner.',
-      href: '/games/pipeline-bubble',
+      href: '/challenges',
       icon: Boxes,
       iconColor: 'text-purple-600 dark:text-purple-400',
       iconBg: 'bg-purple-500/10 border-purple-500/20',

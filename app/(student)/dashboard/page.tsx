@@ -548,15 +548,15 @@ export default function StudentDashboardPage() {
           </Link>
 
           <Link
-            href="/games/pipeline-bubble"
+            href="/challenges"
             className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors space-y-2 block shadow-xs"
           >
             <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
               <CircleDot className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-foreground font-sans">Practice Games</h3>
+            <h3 className="text-base font-bold text-foreground font-sans">Interactive Challenges</h3>
             <p className="text-sm text-muted-foreground">
-              Master RAG pipeline sequencing, PyTorch bug hunting, and hardware trade-offs.
+              Master RAG pipeline sequencing, vector bug hunting, and architecture trade-offs.
             </p>
           </Link>
 

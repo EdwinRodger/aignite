@@ -58,15 +58,7 @@ const NAV_SECTIONS: NavSection[] = [
       { label: 'Company Packs', href: '/packs', icon: Boxes },
       { label: 'Architecture Sandbox', href: '/sandbox', icon: Cpu, isProtected: true },
       { label: 'Career Roadmap', href: '/roadmap', icon: Route },
-    ],
-  },
-  {
-    title: 'Interactive Games',
-    items: [
-      { label: 'Pipeline Bubble', href: '/games/pipeline-bubble', icon: CircleDot },
-      { label: 'Error Code Hunter', href: '/games/error-hunter', icon: Bug },
-      { label: 'Decision Simulator', href: '/games/decision-simulator', icon: Scale },
-      { label: 'Micro-Quiz', href: '/games/micro-quiz', icon: HelpCircle },
+      { label: 'Challenges', href: '/challenges', icon: Sparkles },
     ],
   },
   {
@@ -175,6 +167,7 @@ export function AppSidebar() {
       isMounted = false;
     };
   }, []);
+
 
   const handleSignOut = async () => {
     setIsSigningOut(true);

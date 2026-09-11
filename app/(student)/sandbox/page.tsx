@@ -94,10 +94,10 @@ export default function SandboxPage() {
       <div className="space-y-3 pt-4">
         <div className="space-y-0.5">
           <h2 className="text-lg font-bold text-foreground font-sans">
-            Interactive Practice Games
+            Interactive AI Challenges
           </h2>
           <p className="text-sm text-muted-foreground">
-            Targeted hands-on mini-games to master specific system design, debugging, and trade-off mechanics.
+            Targeted hands-on challenges to master system design, vector retrieval, and architecture trade-offs.
           </p>
         </div>
 
@@ -115,8 +115,8 @@ export default function SandboxPage() {
               </p>
             </div>
             <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
-              <Link href="/games/pipeline-bubble">
-                <span>Play Bubble Game</span>
+              <Link href="/challenges?challenge=pipeline-bubble">
+                <span>Launch Bubble Challenge</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Link>
             </Button>
@@ -131,12 +131,12 @@ export default function SandboxPage() {
                 Error Code Hunter
               </h3>
               <p className="text-sm text-muted-foreground">
-                Inspect broken PyTorch training loops and patch silent gradient accumulation bugs.
+                Inspect vector retrieval functions and patch silent top-k ranking bugs.
               </p>
             </div>
             <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
-              <Link href="/games/error-hunter">
-                <span>Hunt Bugs</span>
+              <Link href="/challenges?challenge=error-hunter">
+                <span>Debug Code</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Link>
             </Button>
@@ -151,12 +151,12 @@ export default function SandboxPage() {
                 Decision Simulator
               </h3>
               <p className="text-sm text-muted-foreground">
-                Evaluate model selection tradeoffs under strict GPU VRAM and latency constraints.
+                Evaluate RAG model and index selection tradeoffs under strict SLA limits.
               </p>
             </div>
             <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
-              <Link href="/games/decision-simulator">
-                <span>Run Simulator</span>
+              <Link href="/challenges?challenge=decision-simulator">
+                <span>Simulate Architecture</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Link>
             </Button>
@@ -168,15 +168,15 @@ export default function SandboxPage() {
                 <HelpCircle className="w-4 h-4" />
               </div>
               <h3 className="text-base font-bold text-foreground font-sans">
-                5-Second Micro-Quiz
+                Timed Micro-Quiz
               </h3>
               <p className="text-sm text-muted-foreground">
-                Rapid-fire architectural questions on GRPO, FlashAttention-3, and KV cache.
+                20-second rapid drills on vector databases, chunking, and RAG fundamentals.
               </p>
             </div>
             <Button asChild variant="outline" size="sm" className="w-full font-bold text-sm">
-              <Link href="/games/micro-quiz">
-                <span>Start Micro-Quiz</span>
+              <Link href="/challenges?challenge=micro-quiz">
+                <span>Start Timed Quiz</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Link>
             </Button>
